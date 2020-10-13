@@ -12,7 +12,7 @@ Nine Men's Morris is an old game that involves two players taking turns placing 
 - Thomas Yang: [@ImDatAsian](https://github.com/ImDatAsian)
 
 ### Technology Used
-Built with **Unity game engine**. 
+Built with **Unity game engine**. Using [The Official raywenderlich.com C# Style Guide](https://github.com/raywenderlich/c-sharp-style-guide).
 
 ### To Do
 - Code needs clean comments.
