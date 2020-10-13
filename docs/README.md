@@ -21,4 +21,4 @@ Built with **Unity game engine**.
 - Certain functions within the Intersection class needs to be moved to the BoardManager class.
 
 ### License
-This projected is licensed under the terms of the [MIT license](LICENSE.md).
+This projected is licensed under the terms of the [MIT license](LICENSE).
