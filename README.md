@@ -5,11 +5,11 @@ This project is an implementation of Nine Men's Morris created as a team (named 
 Nine Men's Morris is an old game that involves two players taking turns placing and moving their pieces ("men") in order to remove their opponent's pieces to win. You can read more about the history and rules of the game at its [Wikipedia article](https://en.wikipedia.org/wiki/Nine_men%27s_morris).
 
 ### Team
-- Ken Dozier: @KDozier83
-- Zach Gharst: @ZDGharst
-- Joseph Soria: @jksria
-- Thomas Tran: @Thomas-Tran-UMKC
-- Thomas Yang: @ImDatAsian
+- Ken Dozier: [@KDozier83](https://github.com/KDozier83)
+- Zach Gharst: [@ZDGharst](https://github.com/ZDGharst)
+- Joseph Soria: [@jksria](https://github.com/jksria)
+- Thomas Tran: [@Thomas-Tran-UMKC](https://github.com/Thomas-Tran-UMKC)
+- Thomas Yang: [@ImDatAsian](https://github.com/ImDatAsian)
 
 ### Technology Used
 Built with **Unity game engine**. 
@@ -21,4 +21,4 @@ Built with **Unity game engine**.
 - Certain functions within the Intersection class needs to be moved to the BoardManager class.
 
 ### License
-This projected is licensed under the terms of the MIT license.
+This projected is licensed under the terms of the [MIT license](LICENSE.md).
