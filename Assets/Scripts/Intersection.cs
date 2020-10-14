@@ -39,7 +39,7 @@ public class Intersection : MonoBehaviour
         if (BoardManager.currentPlayer == Player.White)
         {
             BoardManager.BoardState[row, column] = Cell.White;
-            s.color = new Color(255, 255, 255);
+            s.color = new Color(255, 255, 255, 1);
             BoardManager.currentPlayer = Player.Black;
             BoardManager.whiteUnplacedPieces--;
         }
@@ -47,7 +47,7 @@ public class Intersection : MonoBehaviour
         else
         {
             BoardManager.BoardState[row, column] = Cell.Black;
-            s.color = new Color(0, 0, 0);
+            s.color = new Color(0, 0, 0, 1);
             BoardManager.currentPlayer = Player.White;
             BoardManager.blackUnplacedPieces--;
         }
