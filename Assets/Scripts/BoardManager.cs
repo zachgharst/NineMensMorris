@@ -68,7 +68,7 @@ public class BoardManager : MonoBehaviour
             for (int j = 0; j < 7; j++)
             {
                 if (BoardState[i, j] != Cell.Invalid)
-                    BoardState[i, j] == Cell.Vacant;
+                    BoardState[i, j] = Cell.Vacant;
             }
         }
         foreach (Intersection i in Resources.FindObjectsOfTypeAll(typeof(Intersection)) as Intersection[])
