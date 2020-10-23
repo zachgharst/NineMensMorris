@@ -104,17 +104,12 @@ public class BoardManager : MonoBehaviour
         s.color = new Color(0, 0, 0, 0);
     }
 
-    public static void SwapPlayers()
+    public static Player GetOppositePlayer()
     {
         if (currentPlayer == Player.White)
-            currentPlayer = Player.Black;
-        else
-            currentPlayer = Player.White;
-    }
+            return Player.Black;
 
-    void CheckMillWithinCenter(int row, int column)
-    {
-
+        return Player.White;
     }
 
     public static bool CheckMill(Player p, int row, int column)
@@ -225,7 +220,7 @@ public class BoardManager : MonoBehaviour
 
         millFormed = CheckMill(currentPlayer, row, column);
         if (millFormed != true)
-            SwapPlayers();
+            currentPlayer = GetOppositePlayer();
     }
 
     public static void Phase2()
@@ -254,7 +249,7 @@ public class BoardManager : MonoBehaviour
             whiteRemainingPieces--;
         }
 
-        SwapPlayers();
+        currentPlayer = GetOppositePlayer();
     }
 
     void GameOver()
