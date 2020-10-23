@@ -34,11 +34,19 @@ public class Intersection : MonoBehaviour
 
     void OnMouseDown()
     {
-        Cell cellCast = BoardManager.currentPlayer == Player.White ? Cell.White : Cell.Black;
+        Cell currentPlayerCell = BoardManager.currentPlayer == Player.White ? Cell.White : Cell.Black;
+        Cell oppositePlayerCell = BoardManager.currentPlayer == Player.White ? Cell.Black : Cell.White;
 
-        if (BoardManager.millFormed == true && BoardManager.BoardState[row, column] != cellCast)
+        if (BoardManager.millFormed == true)
         {
-            BoardManager.Mill();
+            if(BoardManager.BoardState[row, column] == oppositePlayerCell)
+            {
+                BoardManager.Mill();
+            }
+            else
+            {
+                print("Please click on an opposing piece");
+            }
         }
 
         else if (BoardManager.blackUnplacedPieces > 0)

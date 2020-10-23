@@ -140,7 +140,10 @@ public class BoardManager : MonoBehaviour
                 }
             }
             if(piecesInLine == 3)
+            {
+                millFormed = true;
                 print("Mill formed within row");
+            }
 
             /* Check column for a mill. */
             piecesInLine = 0;
@@ -152,7 +155,10 @@ public class BoardManager : MonoBehaviour
                 }
             }
             if (piecesInLine == 3)
-                print("Mill formed within column");
+            {
+                millFormed = true;
+                print("Mill formed within row");
+            }
         }
     }
 
@@ -176,7 +182,8 @@ public class BoardManager : MonoBehaviour
             blackUnplacedPieces--;
         }
         
-        SwapPlayers();
+        if (millFormed != true)
+            SwapPlayers();
     }
 
     public static void Phase2()
@@ -191,7 +198,8 @@ public class BoardManager : MonoBehaviour
 
     public static void Mill()
     {
-        return;
+        millFormed = false;
+        SwapPlayers();
     }
 
     void GameOver()
