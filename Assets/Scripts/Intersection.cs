@@ -24,7 +24,7 @@ public class Intersection : MonoBehaviour
     public int row;
     public int column;
 
-    public static Intersection CreateComponent(GameObject location, int r, int c)
+    public static Intersection CreateComponent(GameObject location, int c, int r)
     {
         Intersection i = location.AddComponent<Intersection>();
         i.row = r;
@@ -38,14 +38,14 @@ public class Intersection : MonoBehaviour
 
         if (BoardManager.millFormed == true && BoardManager.BoardState[row, column] != cellCast)
         {
-            Mill();
+            BoardManager.Mill();
         }
 
         else if (BoardManager.blackUnplacedPieces > 0)
         {
             if (BoardManager.BoardState[row, column] != Cell.Vacant)
                 return;
-            BoardManager.Phase1(gameObject, row, column);
+            BoardManager.Phase1Action(gameObject, row, column);
         }
 
         else if (BoardManager.blackRemainingPieces > 3 && BoardManager.whiteRemainingPieces > 3)

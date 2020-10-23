@@ -104,9 +104,48 @@ public class BoardManager : MonoBehaviour
         s.color = new Color(0, 0, 0, 0);
     }
 
-    void CheckMill(int row, int column)
+    void CheckMillWithinCenter(int row, int column)
     {
 
+    }
+
+    static void CheckMill(int row, int column)
+    {
+        /* If we're in row 4 or column d, we have six spaces to check instead of three; special case. */
+        if (row == 3 || column == 3)
+        {
+
+        }
+
+        /* The general case. */
+        else
+        {
+            Cell cellCast = currentPlayer == Player.White ? Cell.White : Cell.Black;
+
+            /* Check row for a mill. */
+            int piecesInLine = 0;
+            for (int i = 0; i < 7; i++)
+            {
+                if (BoardState[row, i] == cellCast)
+                {
+                    piecesInLine++;
+                }
+            }
+            if(piecesInLine == 3)
+                print("Mill formed within row");
+
+            /* Check column for a mill. */
+            piecesInLine = 0;
+            for (int i = 0; i < 7; i++)
+            {
+                if (BoardState[i, column] == cellCast)
+                {
+                    piecesInLine++;
+                }
+            }
+            if (piecesInLine == 3)
+                print("Mill formed within column");
+        }
     }
 
     public static void Phase1(GameObject g, int row, int column)
@@ -117,6 +156,7 @@ public class BoardManager : MonoBehaviour
         {
             BoardManager.BoardState[row, column] = Cell.White;
             s.color = new Color(255, 255, 255, 1);
+            CheckMill(row, column);
             BoardManager.currentPlayer = Player.Black;
             BoardManager.whiteUnplacedPieces--;
         }
@@ -125,24 +165,23 @@ public class BoardManager : MonoBehaviour
         {
             BoardManager.BoardState[row, column] = Cell.Black;
             s.color = new Color(0, 0, 0, 1);
+            CheckMill(row, column);
             BoardManager.currentPlayer = Player.White;
             BoardManager.blackUnplacedPieces--;
         }
-
-        CheckMill(row, column);
     }
 
-    void Phase2()
+    public static void Phase2()
     {
         return;
     }
 
-    void Phase3()
+    public static void Phase3()
     {
         return;
     }
 
-    void Mill()
+    public static void Mill()
     {
         return;
     }
