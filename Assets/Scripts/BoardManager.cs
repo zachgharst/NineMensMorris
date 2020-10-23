@@ -104,6 +104,14 @@ public class BoardManager : MonoBehaviour
         s.color = new Color(0, 0, 0, 0);
     }
 
+    public static void SwapPlayers()
+    {
+        if (currentPlayer == Player.White)
+            currentPlayer = Player.Black;
+        else
+            currentPlayer = Player.White;
+    }
+
     void CheckMillWithinCenter(int row, int column)
     {
 
@@ -148,27 +156,27 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public static void Phase1(GameObject g, int row, int column)
+    public static void Phase1Action(GameObject g, int row, int column)
     {
         var s = g.GetComponent<SpriteRenderer>();
 
-        if (BoardManager.currentPlayer == Player.White)
+        if (currentPlayer == Player.White)
         {
-            BoardManager.BoardState[row, column] = Cell.White;
+            BoardState[row, column] = Cell.White;
             s.color = new Color(255, 255, 255, 1);
             CheckMill(row, column);
-            BoardManager.currentPlayer = Player.Black;
-            BoardManager.whiteUnplacedPieces--;
+            whiteUnplacedPieces--;
         }
 
         else
         {
-            BoardManager.BoardState[row, column] = Cell.Black;
+            BoardState[row, column] = Cell.Black;
             s.color = new Color(0, 0, 0, 1);
             CheckMill(row, column);
-            BoardManager.currentPlayer = Player.White;
-            BoardManager.blackUnplacedPieces--;
+            blackUnplacedPieces--;
         }
+        
+        SwapPlayers();
     }
 
     public static void Phase2()
