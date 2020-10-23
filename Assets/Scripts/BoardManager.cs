@@ -119,13 +119,13 @@ public class BoardManager : MonoBehaviour
 
     static void CheckMill(int row, int column)
     {
-        /* If we're in row 4 or column d, we have six spaces to check instead of three; special case. */
-        if (row == 3 || column == 3)
+        /* If we're in row 4, we have six spaces to check instead of three; special case. */
+        if (row == 3)
         {
 
         }
 
-        /* The general case. */
+        /* The general case for rows. */
         else
         {
             Cell cellCast = currentPlayer == Player.White ? Cell.White : Cell.Black;
@@ -139,14 +139,26 @@ public class BoardManager : MonoBehaviour
                     piecesInLine++;
                 }
             }
-            if(piecesInLine == 3)
+            if (piecesInLine == 3)
             {
                 millFormed = true;
                 print("Mill formed within row");
             }
+        }
 
-            /* Check column for a mill. */
-            piecesInLine = 0;
+        /* If we're in column d, we have six spaces to check instead of three; special case. */
+        if (column == 3)
+        {
+
+        }
+
+        /* The general case for columns. */
+        else
+        {
+            Cell cellCast = currentPlayer == Player.White ? Cell.White : Cell.Black;
+
+            /* Check row for a mill. */
+            int piecesInLine = 0;
             for (int i = 0; i < 7; i++)
             {
                 if (BoardState[i, column] == cellCast)
@@ -157,7 +169,7 @@ public class BoardManager : MonoBehaviour
             if (piecesInLine == 3)
             {
                 millFormed = true;
-                print("Mill formed within row");
+                print("Mill formed within column");
             }
         }
     }
@@ -196,9 +208,22 @@ public class BoardManager : MonoBehaviour
         return;
     }
 
-    public static void Mill()
+    public static void Mill(GameObject g, int row, int column)
     {
         millFormed = false;
+
+        BoardState[row, column] = Cell.Vacant;
+        g.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
+
+        if(currentPlayer == Player.White)
+        {
+            blackRemainingPieces--;
+        }
+        else
+        {
+            whiteRemainingPieces--;
+        }
+
         SwapPlayers();
     }
 

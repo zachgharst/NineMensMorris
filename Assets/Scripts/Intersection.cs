@@ -41,7 +41,7 @@ public class Intersection : MonoBehaviour
         {
             if(BoardManager.BoardState[row, column] == oppositePlayerCell)
             {
-                BoardManager.Mill();
+                BoardManager.Mill(gameObject, row, column);
             }
             else
             {
