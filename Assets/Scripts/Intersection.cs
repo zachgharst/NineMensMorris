@@ -44,7 +44,24 @@ public class Intersection : MonoBehaviour
             /* If a mill has been formed, then the click must be on an opposing cell. */
             if(BoardManager.BoardState[row, column] == oppositePlayerCell)
             {
-                BoardManager.Mill(gameObject, row, column);
+                /* Piece removed can't be part of a mill... */
+                if (!BoardManager.CheckMill(BoardManager.GetOppositePlayer(), row, column))
+                {
+                    BoardManager.Mill(gameObject, row, column);          
+                }
+                /* ...unless all opposing pieces are part of mills. */
+                else
+                {
+                    bool allPiecesAreInAMill = false; // TODO
+                    if (allPiecesAreInAMill)
+                    {
+                        BoardManager.Mill(gameObject, row, column)
+                    }
+                    else
+                    {
+                        print("Please click on a piece not part of a mill.");
+                    }
+                }
             }
             else
             {
