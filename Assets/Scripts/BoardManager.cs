@@ -104,6 +104,49 @@ public class BoardManager : MonoBehaviour
         s.color = new Color(0, 0, 0, 0);
     }
 
+    void CheckMill(int row, int column)
+    {
+
+    }
+
+    public static void Phase1(GameObject g, int row, int column)
+    {
+        var s = g.GetComponent<SpriteRenderer>();
+
+        if (BoardManager.currentPlayer == Player.White)
+        {
+            BoardManager.BoardState[row, column] = Cell.White;
+            s.color = new Color(255, 255, 255, 1);
+            BoardManager.currentPlayer = Player.Black;
+            BoardManager.whiteUnplacedPieces--;
+        }
+
+        else
+        {
+            BoardManager.BoardState[row, column] = Cell.Black;
+            s.color = new Color(0, 0, 0, 1);
+            BoardManager.currentPlayer = Player.White;
+            BoardManager.blackUnplacedPieces--;
+        }
+
+        CheckMill(row, column);
+    }
+
+    void Phase2()
+    {
+        return;
+    }
+
+    void Phase3()
+    {
+        return;
+    }
+
+    void Mill()
+    {
+        return;
+    }
+
     void GameOver()
     {
         return;
