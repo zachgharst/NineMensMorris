@@ -21,24 +21,27 @@ using UnityEngine;
 
 public class Intersection : MonoBehaviour
 {
-    public int row;
-    public int column;
-
+    private int row;
+    private int column;
+    
+    /* Special pointer constructor. */
     public static Intersection CreateComponent(GameObject location, int c, int r)
     {
         Intersection i = location.AddComponent<Intersection>();
-        i.row = r;
         i.column = c;
+        i.row = r;
         return i;
     }
 
     void OnMouseDown()
     {
-        Cell currentPlayerCell = BoardManager.currentPlayer == Player.White ? Cell.White : Cell.Black;
+        /* Get the cell equivalent for the opposite player. */
         Cell oppositePlayerCell = BoardManager.currentPlayer == Player.White ? Cell.Black : Cell.White;
 
+        /* A mill has been formed and this click represents the removal of a piece. */
         if (BoardManager.millFormed == true)
         {
+            /* If a mill has been formed, then the click must be on an opposing cell. */
             if(BoardManager.BoardState[row, column] == oppositePlayerCell)
             {
                 BoardManager.Mill(gameObject, row, column);
@@ -49,6 +52,7 @@ public class Intersection : MonoBehaviour
             }
         }
 
+        /* If black has unplayed pieces, still in phase 1. */
         else if (BoardManager.blackUnplacedPieces > 0)
         {
             if (BoardManager.BoardState[row, column] != Cell.Vacant)
@@ -56,11 +60,13 @@ public class Intersection : MonoBehaviour
             BoardManager.Phase1Action(gameObject, row, column);
         }
 
+        /* If both players have played all their pieces, and their remaining pieces are below 3, phase 2. */
         else if (BoardManager.blackRemainingPieces > 3 && BoardManager.whiteRemainingPieces > 3)
         {
             BoardManager.Phase2();
         }
 
+        /* If none of these conditions are fulfilled, must be phase 3. */
         else
         {
             BoardManager.Phase3();

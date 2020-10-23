@@ -61,6 +61,21 @@ public class BoardManager : MonoBehaviour
 
     }
 
+    private void CreateIntersections(int x, int y)
+    {
+        GameObject g = new GameObject((char)(x + 97) + "" + (y + 1));
+        g.transform.position = new Vector2(x - 3, y - 3);
+        g.transform.SetParent(this.transform);
+
+        Intersection.CreateComponent(g, x, y);
+
+        g.AddComponent<BoxCollider>();
+
+        var s = g.AddComponent<SpriteRenderer>();
+        s.sprite = man;
+        s.color = new Color(0, 0, 0, 0);
+    }
+
     void ResetBoard()
     {
         for (int i = 0; i < 7; i++)
@@ -87,21 +102,6 @@ public class BoardManager : MonoBehaviour
 
         blackUnplacedPieces = 9;
         blackRemainingPieces = 9;
-    }
-
-    private void CreateIntersections(int x, int y)
-    {
-        GameObject g = new GameObject((char)(x + 97) + "" + (y + 1));
-        g.transform.position = new Vector2(x - 3, y - 3);
-        g.transform.SetParent(this.transform);
-
-        Intersection.CreateComponent(g, x, y);
-
-        g.AddComponent<BoxCollider>();
-
-        var s = g.AddComponent<SpriteRenderer>();
-        s.sprite = man;
-        s.color = new Color(0, 0, 0, 0);
     }
 
     public static Player GetOppositePlayer()
