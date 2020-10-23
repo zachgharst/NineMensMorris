@@ -33,7 +33,7 @@ public class Intersection : MonoBehaviour
         return i;
     }
 
-    void OnMouseDown()
+    public void OnMouseDown()
     {
         /* Get the cell equivalent for the opposite player. */
         Cell oppositePlayerCell = BoardManager.currentPlayer == Player.White ? Cell.Black : Cell.White;
@@ -55,7 +55,7 @@ public class Intersection : MonoBehaviour
                     bool allPiecesAreInAMill = false; // TODO
                     if (allPiecesAreInAMill)
                     {
-                        BoardManager.Mill(gameObject, row, column)
+                        BoardManager.Mill(gameObject, row, column);
                     }
                     else
                     {
