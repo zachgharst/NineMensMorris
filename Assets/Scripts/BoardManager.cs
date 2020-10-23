@@ -48,7 +48,7 @@ public class BoardManager : MonoBehaviour
         {  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant },
     };
 
-    void InitGame()
+    private void InitGame()
     {
         for (int i = 0; i < 7; i++)
         {
@@ -61,22 +61,28 @@ public class BoardManager : MonoBehaviour
 
     }
 
+    /* Create intersections at game start. */
     private void CreateIntersections(int x, int y)
     {
+        /* Create a blank object with the name and position corresponding to the location of the intersection. */
         GameObject g = new GameObject((char)(x + 97) + "" + (y + 1));
         g.transform.position = new Vector2(x - 3, y - 3);
         g.transform.SetParent(this.transform);
 
+        /* Speciality constructor. */
         Intersection.CreateComponent(g, x, y);
 
+        /* Make intersection clickable. */
         g.AddComponent<BoxCollider>();
 
+        /* Add sprite details to intersection. */
         var s = g.AddComponent<SpriteRenderer>();
         s.sprite = man;
         s.color = new Color(0, 0, 0, 0);
     }
 
-    void ResetBoard()
+    /* Reset the game back to a fresh start. */
+    private void ResetBoard()
     {
         for (int i = 0; i < 7; i++)
         {
@@ -108,7 +114,6 @@ public class BoardManager : MonoBehaviour
     {
         if (currentPlayer == Player.White)
             return Player.Black;
-
         return Player.White;
     }
 
@@ -200,6 +205,7 @@ public class BoardManager : MonoBehaviour
         return intersectionPartOfMill;
     }
 
+    /* Phase 1: Player is adding a piece to the board. */
     public static void Phase1Action(GameObject g, int row, int column)
     {
         var s = g.GetComponent<SpriteRenderer>();
@@ -233,13 +239,12 @@ public class BoardManager : MonoBehaviour
         return;
     }
 
+    /* Remove piece after validating that the piece can be removed by milling player. */
     public static void Mill(GameObject g, int row, int column)
     {
-        millFormed = false;
-
+        /* Remove the piece from the board, set the cell to vacant, and reduce the remaining pieces of that player. */
         BoardState[row, column] = Cell.Vacant;
         g.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
-
         if(currentPlayer == Player.White)
         {
             blackRemainingPieces--;
@@ -249,26 +254,29 @@ public class BoardManager : MonoBehaviour
             whiteRemainingPieces--;
         }
 
+        /* Consume the mill and swap control. */
+        millFormed = false;
         currentPlayer = GetOppositePlayer();
     }
 
-    void GameOver()
+    private void GameOver()
     {
         return;
     }
 
-    void Start()
+    private void Start()
     {
         InitGame();
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown("r"))
         {
             ResetBoard();
         }
 
+        /* Could move this to the Mill() method. */
         if (whiteRemainingPieces < 3 || blackRemainingPieces < 3)
             GameOver();
     }
