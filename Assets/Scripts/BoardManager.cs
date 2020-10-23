@@ -117,19 +117,35 @@ public class BoardManager : MonoBehaviour
 
     }
 
-    static void CheckMill(int row, int column)
+    public static bool CheckMill(Player p, int row, int column)
     {
+        Cell cellCast = p == Player.White ? Cell.White : Cell.Black;
+        bool intersectionPartOfMill = false;
+
         /* If we're in row 4, we have six spaces to check instead of three; special case. */
         if (row == 3)
         {
-
+            if(column < 3)
+            {
+                if(BoardState[3, 0] == cellCast && BoardState[3, 1] == cellCast && BoardState[3, 2] == cellCast)
+                {
+                    intersectionPartOfMill = true;
+                    print("Mill formed within the special row on the left");
+                }
+            }
+            else
+            {
+                if (BoardState[3, 4] == cellCast && BoardState[3, 5] == cellCast && BoardState[3, 6] == cellCast)
+                {
+                    intersectionPartOfMill = true;
+                    print("Mill formed within the special row on the right");
+                }
+            }
         }
 
         /* The general case for rows. */
         else
         {
-            Cell cellCast = currentPlayer == Player.White ? Cell.White : Cell.Black;
-
             /* Check row for a mill. */
             int piecesInLine = 0;
             for (int i = 0; i < 7; i++)
@@ -141,7 +157,7 @@ public class BoardManager : MonoBehaviour
             }
             if (piecesInLine == 3)
             {
-                millFormed = true;
+                intersectionPartOfMill = true;
                 print("Mill formed within row");
             }
         }
@@ -149,14 +165,27 @@ public class BoardManager : MonoBehaviour
         /* If we're in column d, we have six spaces to check instead of three; special case. */
         if (column == 3)
         {
-
+            if (row < 3)
+            {
+                if (BoardState[0, 3] == cellCast && BoardState[1, 3] == cellCast && BoardState[2, 3] == cellCast)
+                {
+                    intersectionPartOfMill = true;
+                    print("Mill formed within the special column on the bottom");
+                }
+            }
+            else
+            {
+                if (BoardState[4, 3] == cellCast && BoardState[5, 3] == cellCast && BoardState[6, 3] == cellCast)
+                {
+                    intersectionPartOfMill = true;
+                    print("Mill formed within the special column on the top");
+                }
+            }
         }
 
         /* The general case for columns. */
         else
         {
-            Cell cellCast = currentPlayer == Player.White ? Cell.White : Cell.Black;
-
             /* Check row for a mill. */
             int piecesInLine = 0;
             for (int i = 0; i < 7; i++)
@@ -168,10 +197,12 @@ public class BoardManager : MonoBehaviour
             }
             if (piecesInLine == 3)
             {
-                millFormed = true;
+                intersectionPartOfMill = true;
                 print("Mill formed within column");
             }
         }
+
+        return intersectionPartOfMill;
     }
 
     public static void Phase1Action(GameObject g, int row, int column)
@@ -182,7 +213,6 @@ public class BoardManager : MonoBehaviour
         {
             BoardState[row, column] = Cell.White;
             s.color = new Color(255, 255, 255, 1);
-            CheckMill(row, column);
             whiteUnplacedPieces--;
         }
 
@@ -190,10 +220,10 @@ public class BoardManager : MonoBehaviour
         {
             BoardState[row, column] = Cell.Black;
             s.color = new Color(0, 0, 0, 1);
-            CheckMill(row, column);
             blackUnplacedPieces--;
         }
-        
+
+        millFormed = CheckMill(currentPlayer, row, column);
         if (millFormed != true)
             SwapPlayers();
     }
