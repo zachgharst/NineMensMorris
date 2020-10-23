@@ -15,10 +15,9 @@ Nine Men's Morris is an old game that involves two players taking turns placing 
 Built with **Unity game engine**. Using [The Official raywenderlich.com C# Style Guide](https://github.com/raywenderlich/c-sharp-style-guide).
 
 ### To Do
-- Code needs clean comments.
 - Adhere to style guide.
-- Someone who knows C# needs to go in and make things public/private/protected as appropriate.
-- Certain functions within the Intersection class needs to be moved to the BoardManager class.
+- Milling function should allow you to mill an opponent's piece if all of their pieces are in mills.
+- Phase 2 moving.
 
 ### License
 This project is licensed under the terms of the [MIT license](LICENSE).
