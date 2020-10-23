@@ -52,8 +52,7 @@ public class Intersection : MonoBehaviour
                 /* ...unless all opposing pieces are part of mills. */
                 else
                 {
-                    bool allPiecesAreInAMill = false; // TODO
-                    if (allPiecesAreInAMill)
+                    if (false) // TODO: Check if all pieces are part of a mill; if so, then it can be removed.
                     {
                         BoardManager.Mill(gameObject, row, column);
                     }
