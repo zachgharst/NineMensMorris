@@ -226,11 +226,14 @@ public class BoardManager : MonoBehaviour
 
         millFormed = CheckMill(currentPlayer, row, column);
         if (millFormed != true)
+        {
             currentPlayer = GetOppositePlayer();
+        }
     }
 
     public static void Phase2()
     {
+
         return;
     }
 
