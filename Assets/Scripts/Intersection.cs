@@ -72,16 +72,14 @@ public class Intersection : MonoBehaviour
         else if (BoardManager.blackUnplacedPieces > 0)
         {
             if (BoardManager.BoardState[row, column] != Cell.Vacant)
-            {
                 return;
-            }
             BoardManager.Phase1Action(gameObject, row, column);
         }
 
         /* If both players have played all their pieces, and their remaining pieces are below 3, phase 2. */
         else if (BoardManager.blackRemainingPieces > 3 && BoardManager.whiteRemainingPieces > 3)
         {
-            BoardManager.Phase2Action(gameObject, row, column);
+            BoardManager.Phase2();
         }
 
         /* If none of these conditions are fulfilled, must be phase 3. */
