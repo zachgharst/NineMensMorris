@@ -31,10 +31,35 @@ public class TextManager : MonoBehaviour
 
     void Update()
     {
-        string playersTurn = BoardManager.currentPlayer == Player.White ? "White" : "Black";
-        textTest.text = BoardManager.blackUnplacedPieces.ToString() + " pieces remaining for black" +
-            "\n\n\n\n\n\n\n\n\n\n\n\nPhase 1\n" +
-            playersTurn + "'s turn\n\n\n\n\n\n\n\n\n\n\n\n" +
-            BoardManager.whiteUnplacedPieces.ToString() + " pieces remaining for white";
+        /* Phase 1 text.*/
+        if (BoardManager.blackUnplacedPieces > 0)
+        {
+            string playersTurn = BoardManager.currentPlayer == Player.White ? "White" : "Black";
+            textTest.text = BoardManager.blackUnplacedPieces.ToString() + " pieces remaining for black" +
+                "\n\n\n\n\n\n\n\n\n\n\n\nPhase 1\n" +
+                playersTurn + "'s turn\n\n\n\n\n\n\n\n\n\n\n\n" +
+                BoardManager.whiteUnplacedPieces.ToString() + " pieces remaining for white";
+        }
+
+        /* Phase 2 text.*/
+        else if (BoardManager.blackRemainingPieces > 3 && BoardManager.whiteRemainingPieces > 3)
+        {
+            string playersTurn = BoardManager.currentPlayer == Player.White ? "White" : "Black";
+            textTest.text = BoardManager.blackUnplacedPieces.ToString() + " pieces remaining for black" +
+                "\n\n\n\n\n\n\n\n\n\n\n\nPhase 2\n" +
+                playersTurn + "'s turn\n\n\n\n\n\n\n\n\n\n\n\n" +
+                BoardManager.whiteUnplacedPieces.ToString() + " pieces remaining for white";
+        }
+
+        /* Phase 3 text.*/
+        else
+        {
+            string playersTurn = BoardManager.currentPlayer == Player.White ? "White" : "Black";
+            textTest.text = BoardManager.blackUnplacedPieces.ToString() + " pieces remaining for black" +
+                "\n\n\n\n\n\n\n\n\n\n\n\nPhase 3\n" +
+                playersTurn + "'s turn\n\n\n\n\n\n\n\n\n\n\n\n" +
+                BoardManager.whiteUnplacedPieces.ToString() + " pieces remaining for white";
+        }
+
     }
 }
