@@ -233,7 +233,7 @@ public class BoardManager : MonoBehaviour
 
     public static void Phase2Action(GameObject g, int row, int column)
     {
-
+        movingPiece = true;
         return;
     }
 
