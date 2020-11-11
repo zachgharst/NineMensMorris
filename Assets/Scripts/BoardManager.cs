@@ -1,5 +1,5 @@
 /*
-	UMKC CS 449: Nine Men's Morris implementation
+    UMKC CS 449: Nine Men's Morris implementation
     Copyright (C) 2020 Forgetful Wanderers
 
     This program is free software: you can redistribute it and/or modify
@@ -15,8 +15,10 @@
     https://github.com/ZDGharst/UMKC_ForgetfulWanderers/
 */
 
-﻿using System.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public enum Cell { Invalid, Vacant, White, Black };
@@ -113,7 +115,9 @@ public class BoardManager : MonoBehaviour
     public static Player GetOppositePlayer()
     {
         if (currentPlayer == Player.White)
+        {
             return Player.Black;
+        }
         return Player.White;
     }
 
@@ -231,10 +235,23 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public static void Phase2Action(GameObject g, int row, int column)
+    public static void Phase2Selection(GameObject g, int row, int column)
     {
-        movingPiece = true;
         return;
+    }
+
+    public static void Phase2Movement(GameObject g, int row, int column)
+    {
+        var s = g.GetComponent<SpriteRenderer>();
+
+
+
+
+        millFormed = CheckMill(currentPlayer, row, column);
+        if (millFormed != true)
+        {
+            currentPlayer = GetOppositePlayer();
+        }
     }
 
     public static void Phase3()
