@@ -60,7 +60,6 @@ public class BoardManager : MonoBehaviour
                     CreateIntersections(i, j);
             }
         }
-
     }
 
     /* Create intersections at game start. */
@@ -207,6 +206,25 @@ public class BoardManager : MonoBehaviour
         }
 
         return intersectionPartOfMill;
+    }
+
+    /* A man that is part of a mill can only be removed if all pieces of that player are part of a mill. This method checks to see if all pieces that a player owns are part of a mill. */
+    public static bool AllMenInMill()
+    {
+        Player playerToCheck = GetOppositePlayer();
+        Cell oppositePlayerCell = BoardManager.currentPlayer == Player.White ? Cell.Black : Cell.White;
+
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                if (BoardState[i, j] == oppositePlayerCell && !CheckMill(playerToCheck, i, j))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /* Phase 1: Player is adding a piece to the board. */
