@@ -45,20 +45,20 @@ public class TextManager : MonoBehaviour
         else if (BoardManager.blackRemainingPieces > 3 && BoardManager.whiteRemainingPieces > 3)
         {
             string playersTurn = BoardManager.currentPlayer == Player.White ? "White" : "Black";
-            textTest.text = BoardManager.blackUnplacedPieces.ToString() + " pieces remaining for black" +
+            textTest.text = BoardManager.blackRemainingPieces.ToString() + " pieces remaining for black" +
                 "\n\n\n\n\n\n\n\n\n\n\n\nPhase 2\n" +
                 playersTurn + "'s turn\n\n\n\n\n\n\n\n\n\n\n\n" +
-                BoardManager.whiteUnplacedPieces.ToString() + " pieces remaining for white";
+                BoardManager.whiteRemainingPieces.ToString() + " pieces remaining for white";
         }
 
         /* Phase 3 text.*/
         else
         {
             string playersTurn = BoardManager.currentPlayer == Player.White ? "White" : "Black";
-            textTest.text = BoardManager.blackUnplacedPieces.ToString() + " pieces remaining for black" +
+            textTest.text = BoardManager.blackRemainingPieces.ToString() + " pieces remaining for black" +
                 "\n\n\n\n\n\n\n\n\n\n\n\nPhase 3\n" +
                 playersTurn + "'s turn\n\n\n\n\n\n\n\n\n\n\n\n" +
-                BoardManager.whiteUnplacedPieces.ToString() + " pieces remaining for white";
+                BoardManager.whiteRemainingPieces.ToString() + " pieces remaining for white";
         }
 
     }
