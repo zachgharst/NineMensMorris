@@ -207,13 +207,14 @@ public class BoardManager : MonoBehaviour
     /* A man that is part of a mill can only be removed if all pieces of that player are part of a mill. This method checks to see if all pieces that a player owns are part of a mill. */
     public static bool AllMenInMill()
     {
+        Player playerToCheck = GetOppositePlayer();
         Cell oppositePlayerCell = BoardManager.currentPlayer == Player.White ? Cell.Black : Cell.White;
 
         for (int i = 0; i < 7; i++)
         {
             for (int j = 0; j < 7; j++)
             {
-                if (BoardState[i, j] == oppositePlayerCell && !CheckMill(GetOppositePlayer(), i, j))
+                if (BoardState[i, j] == oppositePlayerCell && !CheckMill(playerToCheck, i, j))
                 {
                     return false;
                 }
