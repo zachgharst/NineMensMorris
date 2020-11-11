@@ -255,14 +255,54 @@ public class BoardManager : MonoBehaviour
 
     public static void Phase2Selection(GameObject g, int row, int column)
     {
-        return;
+        var s = g.GetComponent<SpriteRenderer>();
+        
+        if(BoardState[row, column] == Cell.Black || BoardState[row, column] == Cell.White)
+        {
+            BoardState[row, column] = Cell.Vacant;
+            s.color = new Color(0, 0, 0, 0);
+            movingPiece = true;
+        }
+
+        else
+        {
+            print("Invaild spot, please try again.");
+        }
+
     }
 
     public static void Phase2Movement(GameObject g, int row, int column)
     {
         var s = g.GetComponent<SpriteRenderer>();
 
+        if (currentPlayer == Player.White)
+        {
+            
+            if (BoardState[row, column] == Cell.Vacant)
+            {
+                BoardState[row, column] = Cell.White;
+                s.color = new Color(255, 255, 255, 1);
+                movingPiece = false;
+            }
+            else
+            {
+                print("Invaild spot, please try again.");
+            }
+        }
 
+        else
+        {
+            if (BoardState[row, column] == Cell.Vacant)
+            {
+                BoardState[row, column] = Cell.Black;
+                s.color = new Color(0, 0, 0, 1);
+                movingPiece = false;
+            }
+            else
+            {
+                print("Invaild spot, please try again.");
+            }
+        }
 
 
         millFormed = CheckMill(currentPlayer, row, column);

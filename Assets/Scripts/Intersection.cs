@@ -37,6 +37,7 @@ public class Intersection : MonoBehaviour
     {
         /* Get the cell equivalent for the opposite player. */
         Cell oppositePlayerCell = BoardManager.currentPlayer == Player.White ? Cell.Black : Cell.White;
+        Cell currentPlayerCell = BoardManager.currentPlayer == Player.White ? Cell.White : Cell.Black;
 
         /* A mill has been formed then this click represents the removal of a piece. */
         if (BoardManager.millFormed == true)
@@ -78,15 +79,19 @@ public class Intersection : MonoBehaviour
             BoardManager.Phase1Action(gameObject, row, column);
         }
 
-        else if (BoardManager.blackRemainingPieces > 3 && BoardManager.whiteRemainingPieces > 3)
-        {
-            BoardManager.Phase2Selection(gameObject, row, column);
-        }
-
-        /* If both players have played all their pieces, and their remaining pieces are below 3, phase 2. */
+        /* If moving piece is set to true, then pieces can be moved in phase 2. */
         else if (BoardManager.movingPiece == true)
         {
             BoardManager.Phase2Movement(gameObject, row, column);
+        }
+        
+        /* If both players have played all their pieces, and their remaining pieces are below 3, phase 2. */
+        else if (BoardManager.blackRemainingPieces > 3 && BoardManager.whiteRemainingPieces > 3)
+        {
+            if (BoardManager.BoardState[row, column] == currentPlayerCell)
+            {
+                BoardManager.Phase2Selection(gameObject, row, column);
+            }
         }
 
         /* If none of these conditions are fulfilled, must be phase 3. */
