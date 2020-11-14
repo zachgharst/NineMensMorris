@@ -275,40 +275,48 @@ public class BoardManager : MonoBehaviour
     {
         var s = g.GetComponent<SpriteRenderer>();
 
-        if (currentPlayer == Player.White)
+        if (currentPlayer == Player.White)  // white's turn after picking up a piece
         {
-            
+
             if (BoardState[row, column] == Cell.Vacant)
             {
                 BoardState[row, column] = Cell.White;
                 s.color = new Color(255, 255, 255, 1);
                 movingPiece = false;
+
+                millFormed = CheckMill(currentPlayer, row, column);
+                if (millFormed != true)
+                {
+                    currentPlayer = GetOppositePlayer();
+                }
             }
+
             else
             {
                 print("Invaild spot, please try again.");
             }
         }
 
-        else
+        else                                // black's turn after picking up a piece
         {
+
             if (BoardState[row, column] == Cell.Vacant)
             {
                 BoardState[row, column] = Cell.Black;
                 s.color = new Color(0, 0, 0, 1);
                 movingPiece = false;
+
+                millFormed = CheckMill(currentPlayer, row, column);
+                if (millFormed != true)
+                {
+                    currentPlayer = GetOppositePlayer();
+                }
             }
+
             else
             {
                 print("Invaild spot, please try again.");
             }
-        }
-
-
-        millFormed = CheckMill(currentPlayer, row, column);
-        if (millFormed != true)
-        {
-            currentPlayer = GetOppositePlayer();
         }
     }
 

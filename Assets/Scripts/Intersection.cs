@@ -85,7 +85,7 @@ public class Intersection : MonoBehaviour
             BoardManager.Phase2Movement(gameObject, row, column);
         }
         
-        /* If both players have played all their pieces, and their remaining pieces are below 3, phase 2. */
+        /* If both players have placed all their pieces, and both player's remaining pieces are above 3, phase 2. */
         else if (BoardManager.blackRemainingPieces > 3 && BoardManager.whiteRemainingPieces > 3)
         {
             if (BoardManager.BoardState[row, column] == currentPlayerCell)
