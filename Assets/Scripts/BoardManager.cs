@@ -253,6 +253,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    /* Phase 2: Player is selecting a piece from the board to be moved. */
     public static void Phase2Selection(GameObject g, int row, int column)
     {
         var s = g.GetComponent<SpriteRenderer>();
@@ -271,52 +272,36 @@ public class BoardManager : MonoBehaviour
 
     }
 
+    /* Phase 2: Player is selecting an intersection to move the piece onto. */
     public static void Phase2Movement(GameObject g, int row, int column)
     {
         var s = g.GetComponent<SpriteRenderer>();
 
-        if (currentPlayer == Player.White)  // white's turn after picking up a piece
+        if (BoardState[row, column] == Cell.Vacant)
         {
-
-            if (BoardState[row, column] == Cell.Vacant)
+            if(currentPlayer == Player.White)
             {
                 BoardState[row, column] = Cell.White;
                 s.color = new Color(255, 255, 255, 1);
-                movingPiece = false;
-
-                millFormed = CheckMill(currentPlayer, row, column);
-                if (millFormed != true)
-                {
-                    currentPlayer = GetOppositePlayer();
-                }
             }
 
             else
-            {
-                print("Invaild spot, please try again.");
-            }
-        }
-
-        else                                // black's turn after picking up a piece
-        {
-
-            if (BoardState[row, column] == Cell.Vacant)
             {
                 BoardState[row, column] = Cell.Black;
                 s.color = new Color(0, 0, 0, 1);
-                movingPiece = false;
-
-                millFormed = CheckMill(currentPlayer, row, column);
-                if (millFormed != true)
-                {
-                    currentPlayer = GetOppositePlayer();
-                }
             }
 
-            else
+            movingPiece = false;
+
+            millFormed = CheckMill(currentPlayer, row, column);
+            if (millFormed != true)
             {
-                print("Invaild spot, please try again.");
+                currentPlayer = GetOppositePlayer();
             }
+        }
+        else
+        {
+            print("Invaild spot, please try again.");
         }
     }
 
