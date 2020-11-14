@@ -80,24 +80,35 @@ public class Intersection : MonoBehaviour
         }
 
         /* If moving piece is set to true, then pieces can be moved in phase 2. */
+        // adding phase 3's flying check here
         else if (BoardManager.movingPiece == true)
         {
+            /* Flying condition for black */
+            if (BoardManager.blackRemainingPieces == 3)
+            {
+                BoardManager.isBlackPhase3 = true;
+            }
+            // Flying condition for white
+            else if (BoardManager.whiteRemainingPieces == 3)
+            {
+                BoardManager.isWhitePhase3 = true;
+            }
+
             BoardManager.Phase2Movement(gameObject, row, column);
         }
         
         /* If both players have placed all their pieces, and both player's remaining pieces are above 3, phase 2. */
-        else if (BoardManager.blackRemainingPieces > 3 && BoardManager.whiteRemainingPieces > 3)
+        else // if (BoardManager.blackRemainingPieces > 3 && BoardManager.whiteRemainingPieces > 3)
         {
+
             if (BoardManager.BoardState[row, column] == currentPlayerCell)
             {
                 BoardManager.Phase2Selection(gameObject, row, column);
             }
         }
 
-        /* If none of these conditions are fulfilled, must be phase 3. */
-        else
-        {
-            BoardManager.Phase3();
-        }
+
+
+
     }
 }
