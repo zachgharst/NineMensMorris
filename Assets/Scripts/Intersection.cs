@@ -89,7 +89,7 @@ public class Intersection : MonoBehaviour
                 BoardManager.isBlackPhase3 = true;
             }
             // Flying condition for white
-            else if (BoardManager.whiteRemainingPieces == 3)
+            if (BoardManager.whiteRemainingPieces == 3)
             {
                 BoardManager.isWhitePhase3 = true;
             }
