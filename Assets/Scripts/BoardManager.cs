@@ -288,18 +288,31 @@ public class BoardManager : MonoBehaviour
         if (currentPlayer == Player.White)  // white's turn after picking up a piece
         {
 
-            if (BoardState[row, column] == Cell.Vacant 
-                && !checkSamePosition(row, tempRow, column, tempCol)
-                && isAdjacent(tempRow, tempCol, row, column))
+            if (BoardState[row, column] == Cell.Vacant && !checkSamePosition(row, tempRow, column, tempCol))
             {
-                BoardState[row, column] = Cell.White;
-                s.color = new Color(255, 255, 255, 1);
-                movingPiece = false;
-
-                millFormed = CheckMill(currentPlayer, row, column);
-                if (millFormed != true)
+                if (!isWhitePhase3 && isAdjacent(tempRow, tempCol, row, column))
                 {
-                    currentPlayer = GetOppositePlayer();
+                    BoardState[row, column] = Cell.White;
+                    s.color = new Color(255, 255, 255, 1);
+                    movingPiece = false;
+
+                    millFormed = CheckMill(currentPlayer, row, column);
+                    if (millFormed != true)
+                    {
+                        currentPlayer = GetOppositePlayer();
+                    }
+                }
+                else if (isWhitePhase3)
+                {
+                    BoardState[row, column] = Cell.White;
+                    s.color = new Color(255, 255, 255, 1);
+                    movingPiece = false;
+
+                    millFormed = CheckMill(currentPlayer, row, column);
+                    if (millFormed != true)
+                    {
+                        currentPlayer = GetOppositePlayer();
+                    }
                 }
             }
 
@@ -321,23 +334,41 @@ public class BoardManager : MonoBehaviour
 
             if (BoardState[row, column] == Cell.Vacant && !checkSamePosition(row, tempRow, column, tempCol))
             {
-                BoardState[row, column] = Cell.Black;
-                s.color = new Color(0, 0, 0, 1);
-                movingPiece = false;
-
-                millFormed = CheckMill(currentPlayer, row, column);
-                if (millFormed != true)
+                if (!isBlackPhase3 && isAdjacent(tempRow, tempCol, row, column))
                 {
-                    currentPlayer = GetOppositePlayer();
+                    BoardState[row, column] = Cell.Black;
+                    s.color = new Color(0, 0, 0, 1);
+                    movingPiece = false;
+
+                    millFormed = CheckMill(currentPlayer, row, column);
+                    if (millFormed != true)
+                    {
+                        currentPlayer = GetOppositePlayer();
+                    }
+                }
+                else if (isBlackPhase3)
+                {
+                    BoardState[row, column] = Cell.Black;
+                    s.color = new Color(0, 0, 0, 1);
+                    movingPiece = false;
+
+                    millFormed = CheckMill(currentPlayer, row, column);
+                    if (millFormed != true)
+                    {
+                        currentPlayer = GetOppositePlayer();
+                    }
                 }
             }
 
-            else
+            else if (checkSamePosition(row, tempRow, column, tempCol))
             {
                 BoardState[row, column] = Cell.Black;
                 s.color = new Color(0, 0, 0, 1);
                 movingPiece = false;
+            }
 
+            else
+            {
                 print("Invaild spot, please try again.");
             }
         }
@@ -397,286 +428,262 @@ public class BoardManager : MonoBehaviour
             // PLEASE ignore this thing, I couldn't think of a way to get it working with multi-dimensional arrays
     public static bool isAdjacent(int row, int column, int tarRow, int tarCol)
     {
-        if (tarRow == 0 && tarCol == 6)                 // a7
+        if (tarRow == 6 && tarCol == 0)                 // a7
         {
             int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 3, 6 };
+            int[] neighbor1 = new int[] { 6, 3 };
+            int[] neighbor2 = new int[] { 3, 0 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 6 && tarCol == 3)                 // d7
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 6, 0 };
+            int[] neighbor2 = new int[] { 6, 6 };
+            int[] neighbor3 = new int[] { 5, 3 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 6 && tarCol == 6)                 // g7
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 6, 3 };
+            int[] neighbor2 = new int[] { 3, 6 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 5 && tarCol == 1)                 // b6
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 5, 3 };
+            int[] neighbor2 = new int[] { 3, 1 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 5 && tarCol == 3)                 // d6
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 6, 3 };
+            int[] neighbor2 = new int[] { 5, 1 };
+            int[] neighbor3 = new int[] { 5, 5 };
+            int[] neighbor4 = new int[] { 4, 3 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3) || src.SequenceEqual(neighbor4))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 5 && tarCol == 5)                 // f6
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 5, 3 };
+            int[] neighbor2 = new int[] { 3, 5 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 4 && tarCol == 2)                 // c5
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 4, 3 };
+            int[] neighbor2 = new int[] { 3, 2 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 4 && tarCol == 3)                 // d5
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 5, 3 };
+            int[] neighbor2 = new int[] { 4, 2 };
+            int[] neighbor3 = new int[] { 4, 4 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 4 && tarCol == 4)                 // e5
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 4, 3 };
+            int[] neighbor2 = new int[] { 3, 4 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 3 && tarCol == 0)                 // a4
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 6, 0};
+            int[] neighbor2 = new int[] { 3, 1};
+            int[] neighbor3 = new int[] { 0, 0};
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 3 && tarCol == 1)                 // b4
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 5, 1 };
+            int[] neighbor2 = new int[] { 3, 0 };
+            int[] neighbor3 = new int[] { 3, 2 };
+            int[] neighbor4 = new int[] { 1, 1 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3) || src.SequenceEqual(neighbor4))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 3 && tarCol == 2)                 // c4
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 4, 2 };
+            int[] neighbor2 = new int[] { 3, 1 };
+            int[] neighbor3 = new int[] { 2, 2 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 3 && tarCol == 4)                 // e4
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 4, 4 };
+            int[] neighbor2 = new int[] { 3, 5};
+            int[] neighbor3 = new int[] { 2, 4};
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 3 && tarCol == 5)                 // f4
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 5, 5};
+            int[] neighbor2 = new int[] { 3, 4};
+            int[] neighbor3 = new int[] { 3, 6};
+            int[] neighbor4 = new int[] { 1, 5};
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3) || src.SequenceEqual(neighbor4))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 3 && tarCol == 6)                 // g4
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 6, 6 };
+            int[] neighbor2 = new int[] { 3, 5 };
+            int[] neighbor3 = new int[] { 0, 6 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 2 && tarCol == 2)                 // c3
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 3, 2 };
+            int[] neighbor2 = new int[] { 2, 3 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 2 && tarCol == 3)                 // d3
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 2, 2 };
+            int[] neighbor2 = new int[] { 2, 4 };
+            int[] neighbor3 = new int[] { 1, 3 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 2 && tarCol == 4)                 // e3
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 2, 3 };
+            int[] neighbor2 = new int[] { 3, 4 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 1 && tarCol == 1)                 // b2
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 3, 1 };
+            int[] neighbor2 = new int[] { 1, 3};
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 1 && tarCol == 3)                 // d2
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 2, 3 };
+            int[] neighbor2 = new int[] { 1, 1 };
+            int[] neighbor3 = new int[] { 1, 5 };
+            int[] neighbor4 = new int[] { 0, 3 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3) || src.SequenceEqual(neighbor4))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 1 && tarCol == 5)                 // f2
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 3, 5 };
+            int[] neighbor2 = new int[] { 1, 3 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
+            {
+                return true;
+            }
+        }
+        if (tarRow == 0 && tarCol == 0)                 // a1
+        {
+            int[] src = new int[] { row, column };
+            int[] neighbor1 = new int[] { 3, 0 };
             int[] neighbor2 = new int[] { 0, 3 };
             if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
             {
                 return true;
             }
         }
-
-        if (tarRow == 3 && tarCol == 6)                 // c7
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 0, 6 };
-            int[] neighbor2 = new int[] { 6, 6 };
-            int[] neighbor3 = new int[] { 3, 6 };
-            if (src == neighbor1 || src == neighbor2 || src == neighbor3)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 6 && tarCol == 6)                 // g7
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 3, 6 };
-            int[] neighbor2 = new int[] { 6, 3 };
-            if (src == neighbor1 || src == neighbor2)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 1 && tarCol == 5)                 // b6
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 3, 5 };
-            int[] neighbor2 = new int[] { 1, 3 };
-            if (src == neighbor1 || src == neighbor2)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 3 && tarCol == 5)                 // d6
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 3, 6 };
-            int[] neighbor2 = new int[] { 1, 5 };
-            int[] neighbor3 = new int[] { 5, 5 };
-            int[] neighbor4 = new int[] { 3, 4 };
-            if (src == neighbor1 || src == neighbor2 || src == neighbor3 || src == neighbor4)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 5 && tarCol == 5)                 // f6
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 3, 5 };
-            int[] neighbor2 = new int[] { 5, 3 };
-            if (src == neighbor1 || src == neighbor2)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 2 && tarCol == 4)                 // c5
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 3, 4 };
-            int[] neighbor2 = new int[] { 2, 3 };
-            if (src == neighbor1 || src == neighbor2)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 3 && tarCol == 4)                 // d5
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 3, 5 };
-            int[] neighbor2 = new int[] { 2, 4 };
-            int[] neighbor3 = new int[] { 4, 4 };
-            if (src == neighbor1 || src == neighbor2 || src == neighbor3)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 4 && tarCol == 4)                 // e5
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 3, 4 };
-            int[] neighbor2 = new int[] { 4, 3 };
-            if (src == neighbor1 || src == neighbor2)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 0 && tarCol == 3)                 // a4
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 0, 6 };
-            int[] neighbor2 = new int[] { 1, 3 };
-            int[] neighbor3 = new int[] { 0, 0 };
-            if (src == neighbor1 || src == neighbor2 || src == neighbor3)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 1 && tarCol == 3)                 // b4
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 1, 5 };
-            int[] neighbor2 = new int[] { 0, 3 };
-            int[] neighbor3 = new int[] { 2, 3 };
-            int[] neighbor4 = new int[] { 1, 1 };
-            if (src == neighbor1 || src == neighbor2 || src == neighbor3 || src == neighbor4)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 2 && tarCol == 3)                 // c4
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 2, 4 };
-            int[] neighbor2 = new int[] { 1, 3 };
-            int[] neighbor3 = new int[] { 2, 2 };
-            if (src == neighbor1 || src == neighbor2 || src == neighbor3)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 4 && tarCol == 3)                 // e4
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 4, 4 };
-            int[] neighbor2 = new int[] { 5, 3 };
-            int[] neighbor3 = new int[] { 4, 2 };
-            if (src == neighbor1 || src == neighbor2 || src == neighbor3)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 5 && tarCol == 3)                 // f4
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 5, 5 };
-            int[] neighbor2 = new int[] { 4, 3 };
-            int[] neighbor3 = new int[] { 6, 3 };
-            int[] neighbor4 = new int[] { 5, 1 };
-            if (src == neighbor1 || src == neighbor2 || src == neighbor3 || src == neighbor4)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 6 && tarCol == 3)                 // g4
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 6, 0 };
-            int[] neighbor2 = new int[] { 5, 3 };
-            int[] neighbor3 = new int[] { 6, 6 };
-            if (src == neighbor1 || src == neighbor2 || src == neighbor3)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 2 && tarCol == 2)                 // c3
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 2, 3 };
-            int[] neighbor2 = new int[] { 3, 2 };
-            if (src == neighbor1 || src == neighbor2)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 3 && tarCol == 2)                 // d3
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 2, 2 };
-            int[] neighbor2 = new int[] { 4, 2 };
-            int[] neighbor3 = new int[] { 3, 1 };
-            if (src == neighbor1 || src == neighbor2 || src == neighbor3)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 4 && tarCol == 2)                 // e3
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 4, 3 };
-            int[] neighbor2 = new int[] { 3, 2 };
-            if (src == neighbor1 || src == neighbor2)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 1 && tarCol == 1)                 // b2
+        if (tarRow == 0 && tarCol == 3)                 // d1
         {
             int[] src = new int[] { row, column };
             int[] neighbor1 = new int[] { 1, 3 };
-            int[] neighbor2 = new int[] { 3, 1 };
-            if (src == neighbor1 || src == neighbor2)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 3 && tarCol == 1)                 // d2
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 3, 2 };
-            int[] neighbor2 = new int[] { 1, 1 };
-            int[] neighbor3 = new int[] { 5, 1 };
-            int[] neighbor4 = new int[] { 3, 0 };
-            if (src == neighbor1 || src == neighbor2 || src == neighbor3 || src == neighbor4)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 5 && tarCol == 1)                 // f2
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 5, 3 };
-            int[] neighbor2 = new int[] { 3, 1 };
-            if (src == neighbor1 || src == neighbor2)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 0 && tarCol == 0)                 // a1
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 0, 3 };
-            int[] neighbor2 = new int[] { 3, 0 };
-            if (src == neighbor1 || src == neighbor2)
-            {
-                return true;
-            }
-        }
-
-        if (tarRow == 3 && tarCol == 0)                 // d1
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 3, 1 };
             int[] neighbor2 = new int[] { 0, 0 };
-            int[] neighbor3 = new int[] { 6, 0 };
-            if (src == neighbor1 || src == neighbor2 || src == neighbor3)
+            int[] neighbor3 = new int[] { 0, 6 };
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3))
             {
                 return true;
             }
         }
-
-        if (tarRow == 6 && tarCol == 0)                 // g1
+        if (tarRow == 0 && tarCol == 6)                 // g1
         {
             int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 6, 3 };
-            int[] neighbor2 = new int[] { 3, 0 };
-            if (src == neighbor1 || src == neighbor2)
+            int[] neighbor1 = new int[] { 3, 6};
+            int[] neighbor2 = new int[] { 0, 3};
+            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
             {
                 return true;
             }
         }
-
-        return true;
+        return false;
     }
 }
