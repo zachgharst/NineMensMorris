@@ -240,10 +240,15 @@ public class BoardManager : MonoBehaviour
         /* Check the neighbor to the left. */
         for(int i = col - 1; i >= 0; i--)
         {
-            if(BoardState[row, i] != Cell.Invalid)
+            if (row == 3 && i == 3)
             {
-                if(BoardState[row, i] == Cell.Vacant)
+                break;
+            }
+            if (BoardState[row, i] != Cell.Invalid)
+            {
+                if (BoardState[row, i] == Cell.Vacant)
                 {
+                    print("Vacant neighbor to the left");
                     return true;
                 }
                 break;
@@ -253,10 +258,15 @@ public class BoardManager : MonoBehaviour
         /* Check the neighbor to the right. */
         for(int i = col + 1; i <= 7; i++)
         {
-            if(BoardState[row, i] != Cell.Invalid)
+            if (row == 3 && i == 3)
             {
-                if(BoardState[row, i] == Cell.Vacant)
+                break;
+            }
+            if (BoardState[row, i] != Cell.Invalid)
+            {
+                if (BoardState[row, i] == Cell.Vacant)
                 {
+                    print("Vacant neighbor to the right");
                     return true;
                 }
                 break;
@@ -266,10 +276,15 @@ public class BoardManager : MonoBehaviour
         /* Check the neighbor above. */
         for(int i = row + 1; i <= 7; i++)
         {
-            if(BoardState[i, col] != Cell.Invalid)
+            if (i == 3 && col == 3)
             {
-                if(BoardState[i, col] == Cell.Vacant)
+                break;
+            }
+            if (BoardState[i, col] != Cell.Invalid)
+            {
+                if (BoardState[i, col] == Cell.Vacant)
                 {
+                    print("Vacant neighbor above");
                     return true;
                 }
                 break;
@@ -279,10 +294,15 @@ public class BoardManager : MonoBehaviour
         /* Check the neighbor below. */
         for(int i = row - 1; i >= 0; i--)
         {
-            if(BoardState[i, col] != Cell.Invalid)
+            if (i == 3 && col == 3)
             {
-                if(BoardState[i, col] == Cell.Vacant)
+                break;
+            }
+            if (BoardState[i, col] != Cell.Invalid)
+            {
+                if (BoardState[i, col] == Cell.Vacant)
                 {
+                    print("Vacant neighbor below");
                     return true;
                 }
                 break;
@@ -488,7 +508,7 @@ public class BoardManager : MonoBehaviour
 
         if (Input.GetKeyDown("c"))
         {
-            print(HasAvailableVacantNeighbor(0, 0));
+            print(HasAvailableVacantNeighbor(2, 3));
         }
         /* Could move this to the Mill() method. */
         if (whiteRemainingPieces < 3 || blackRemainingPieces < 3)
