@@ -95,12 +95,17 @@ public class Intersection : MonoBehaviour
         {
             if (BoardManager.BoardState[row, column] == currentPlayerCell)
             {
-                BoardManager.PieceSelection(gameObject, row, column);
+                if ((BoardManager.currentPlayer == Player.White && BoardManager.isWhitePhase3) ||
+                    (BoardManager.currentPlayer == Player.Black && BoardManager.isBlackPhase3) ||
+                    (BoardManager.HasAvailableVacantNeighbor(row, column)))
+                {
+                    BoardManager.PieceSelection(gameObject, row, column);
+                }
+                else
+                {
+                    print("This piece has no vacant spaces to move to.");
+                }
             }
         }
-
-
-
-
     }
 }

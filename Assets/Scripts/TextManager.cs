@@ -1,5 +1,5 @@
 /*
-	UMKC CS 449: Nine Men's Morris implementation
+    UMKC CS 449: Nine Men's Morris implementation
     Copyright (C) 2020 Forgetful Wanderers
 
     This program is free software: you can redistribute it and/or modify

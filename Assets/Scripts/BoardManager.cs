@@ -515,6 +515,7 @@ public class BoardManager : MonoBehaviour
     private static void GameOver(Player p)
     {
         print("Game over! The winner is: " + p);
+
         return;
     }
 
