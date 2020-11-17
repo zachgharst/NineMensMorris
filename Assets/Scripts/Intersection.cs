@@ -76,7 +76,7 @@ public class Intersection : MonoBehaviour
             {
                 return;
             }   
-            BoardManager.Phase1Action(gameObject, row, column);
+            BoardManager.Phase1Placement(gameObject, row, column);
         }
 
         /* If moving piece is set to true, then pieces can be moved in phase 2. */
@@ -94,7 +94,7 @@ public class Intersection : MonoBehaviour
                 BoardManager.isWhitePhase3 = true;
             }
 
-            BoardManager.Phase2Movement(gameObject, row, column);
+            BoardManager.PieceMovement(gameObject, row, column);
         }
         
         /* If both players have placed all their pieces, and both player's remaining pieces are above 3, phase 2. */
@@ -103,7 +103,7 @@ public class Intersection : MonoBehaviour
 
             if (BoardManager.BoardState[row, column] == currentPlayerCell)
             {
-                BoardManager.Phase2Selection(gameObject, row, column);
+                BoardManager.PieceSelection(gameObject, row, column);
             }
         }
 

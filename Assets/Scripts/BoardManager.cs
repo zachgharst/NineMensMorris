@@ -232,6 +232,7 @@ public class BoardManager : MonoBehaviour
         return true;
     }
 
+    /* Returns true if there is at least one neighbor that is vacant to the input intersection. */
     public static bool HasAvailableVacantNeighbor(int row, int col)
     {
         /* Check the neighbor to the left. */
@@ -305,6 +306,7 @@ public class BoardManager : MonoBehaviour
         return false;
     }
 
+    /* Checks if a player has any moves available. */
     public static bool CheckAvailableMove(Player p)
     {
         Cell playerCell = p == Player.White ? Cell.White : Cell.Black;
@@ -333,7 +335,7 @@ public class BoardManager : MonoBehaviour
     }
 
     /* Phase 1: Player is adding a piece to the board. */
-    public static void Phase1Action(GameObject g, int row, int column)
+    public static void Phase1Placement(GameObject g, int row, int column)
     {
         var s = g.GetComponent<SpriteRenderer>();
 
@@ -358,7 +360,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public static void Phase2Selection(GameObject g, int row, int column)
+    public static void PieceSelection(GameObject g, int row, int column)
     {
         var s = g.GetComponent<SpriteRenderer>();
         tempRow = row;      // used for checking selected piece's starting position
@@ -378,7 +380,7 @@ public class BoardManager : MonoBehaviour
 
     }
 
-    public static void Phase2Movement(GameObject g, int row, int column)
+    public static void PieceMovement(GameObject g, int row, int column)
     {
         var s = g.GetComponent<SpriteRenderer>();
 
