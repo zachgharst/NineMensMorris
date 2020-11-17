@@ -519,13 +519,18 @@ public class BoardManager : MonoBehaviour
         turn++;
     }
 
+    /* Initiates game over sequence; draw if no player. */
+    private static void GameOver()
+    {
+        print("The game is a draw.");
+
+        return;
+    }
+
     /* Initiates game over sequence; parameter p is the winning player. */
     private static void GameOver(Player p)
     {
-        if(p == null)
-        {
-            print("The game is a draw.");
-        }
+
         print("Game over! The winner is: " + p);
 
         return;
@@ -555,7 +560,7 @@ public class BoardManager : MonoBehaviour
 
         if(turn > 100)
         {
-            GameOver(null);
+            GameOver();
         }
     }
 
