@@ -30,7 +30,6 @@ public class BoardManager : MonoBehaviour
     public static Player currentPlayer = Player.White;
     public static bool millFormed = false;
     public static bool movingPiece = false;
-    public static int[] pieceSelected = { -1, -1 };
 
     public static int whiteUnplacedPieces = 9;
     public static int whiteRemainingPieces = 9;
@@ -107,8 +106,6 @@ public class BoardManager : MonoBehaviour
         currentPlayer = Player.White;
         millFormed = false;
         movingPiece = false;
-        pieceSelected[0] = -1;
-        pieceSelected[1] = -1;
 
         whiteUnplacedPieces = 9;
         whiteRemainingPieces = 9;
@@ -312,8 +309,8 @@ public class BoardManager : MonoBehaviour
     {
         Cell playerCell = p == Player.White ? Cell.White : Cell.Black;
         if( (blackUnplacedPieces > 0) ||
-            (p == Player.White && whiteRemainingPieces <= 3) ||
-            (p == Player.Black && blackRemainingPieces <= 3) )
+            (p == Player.White && isWhitePhase3) ||
+            (p == Player.Black && isBlackPhase3) )
         {
             return true;
 
