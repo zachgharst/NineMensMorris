@@ -235,10 +235,10 @@ public class BoardManager : MonoBehaviour
         return true;
     }
 
-    public static bool availableVacantNeighbor(int row, int col)
+    public static bool HasAvailableVacantNeighbor(int row, int col)
     {
         /* Check the neighbor to the left. */
-        for(int i = col; i >= 0; i--)
+        for(int i = col - 1; i >= 0; i--)
         {
             if(BoardState[row, i] != Cell.Invalid)
             {
@@ -251,7 +251,7 @@ public class BoardManager : MonoBehaviour
         }
 
         /* Check the neighbor to the right. */
-        for(int i = col; i <= 7; i++)
+        for(int i = col + 1; i <= 7; i++)
         {
             if(BoardState[row, i] != Cell.Invalid)
             {
@@ -264,7 +264,7 @@ public class BoardManager : MonoBehaviour
         }
 
         /* Check the neighbor above. */
-        for(int i = row; i <= 7; i++)
+        for(int i = row + 1; i <= 7; i++)
         {
             if(BoardState[i, col] != Cell.Invalid)
             {
@@ -277,7 +277,7 @@ public class BoardManager : MonoBehaviour
         }
 
         /* Check the neighbor below. */
-        for(int i = row; i >= 0; i--)
+        for(int i = row - 1; i >= 0; i--)
         {
             if(BoardState[i, col] != Cell.Invalid)
             {
@@ -292,10 +292,12 @@ public class BoardManager : MonoBehaviour
         return false;
     }
 
-    public static bool checkAvailableMove(Player p)
+    public static bool CheckAvailableMove(Player p)
     {
         if(blackUnplacedPieces > 0)
             return true;
+
+        return false;
     }
 
     /* Phase 1: Player is adding a piece to the board. */
@@ -484,6 +486,10 @@ public class BoardManager : MonoBehaviour
             ResetBoard();
         }
 
+        if (Input.GetKeyDown("c"))
+        {
+            print(HasAvailableVacantNeighbor(0, 0));
+        }
         /* Could move this to the Mill() method. */
         if (whiteRemainingPieces < 3 || blackRemainingPieces < 3)
             GameOver();
