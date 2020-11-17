@@ -358,6 +358,16 @@ public class BoardManager : MonoBehaviour
         {
             currentPlayer = GetOppositePlayer();
         }
+
+        /* During the transition to phase 2, check if white has any available moves going
+         * into their turn. If they don't, black wins. */
+        if (blackUnplacedPieces == 0)
+        {
+            if(!CheckAvailableMove(Player.White))
+            {
+                GameOver(Player.Black);
+            }
+        }
     }
 
     /* Phase 2/3: Player is selecting a piece to move. */
@@ -411,6 +421,12 @@ public class BoardManager : MonoBehaviour
             {
                 print("Invalid spot, please try again.");
             }
+
+            /* After moving a piece, check if the opposing player has been locked in. */
+            if (!CheckAvailableMove(Player.Black))
+            {
+                GameOver(Player.White);
+            }
         }
 
         else
@@ -439,11 +455,17 @@ public class BoardManager : MonoBehaviour
             {
                 print("Invalid spot, please try again.");
             }
+
+            /* After moving a piece, check if the opposing player has been locked in. */
+            if (!CheckAvailableMove(Player.White))
+            {
+                GameOver(Player.Black);
+            }
         }
     }
 
     /* Remove piece after validating that the piece can be removed by milling player. 
-     Then, check for phase 3 condition or GameOver condition. */
+     * Then, check for phase 3 condition or GameOver condition. */
     public static void Mill(GameObject g, int row, int column)
     {
         /* Remove the piece from the board, set the cell to vacant, and reduce the remaining pieces of that player. */
@@ -469,7 +491,7 @@ public class BoardManager : MonoBehaviour
                 isBlackPhase3 = true;
             }
 
-            if (blackRemainingPieces < 3 || CheckAvailableMove(Player.Black))
+            if (blackRemainingPieces < 3 || !CheckAvailableMove(Player.Black))
             {
                 GameOver(Player.White);
             }
@@ -481,7 +503,7 @@ public class BoardManager : MonoBehaviour
                 isWhitePhase3 = true;
             }
 
-            if (whiteRemainingPieces < 3 || CheckAvailableMove(Player.White))
+            if (whiteRemainingPieces < 3 || !CheckAvailableMove(Player.White))
             {
                 GameOver(Player.Black);
             }
@@ -490,8 +512,9 @@ public class BoardManager : MonoBehaviour
     }
 
     /* Initiates game over sequence; parameter p is the winning player. */
-    private void GameOver(Player p)
+    private static void GameOver(Player p)
     {
+        print("Game over! The winner is: " + p);
         return;
     }
 
