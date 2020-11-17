@@ -36,8 +36,8 @@ public class Intersection : MonoBehaviour
     public void OnMouseDown()
     {
         /* Get the cell equivalent for the opposite player. */
-        Cell oppositePlayerCell = BoardManager.currentPlayer == Player.White ? Cell.Black : Cell.White;
         Cell currentPlayerCell = BoardManager.currentPlayer == Player.White ? Cell.White : Cell.Black;
+        Cell oppositePlayerCell = BoardManager.currentPlayer == Player.White ? Cell.Black : Cell.White;
 
         /* A mill has been formed then this click represents the removal of a piece. */
         if (BoardManager.millFormed == true)
@@ -80,7 +80,6 @@ public class Intersection : MonoBehaviour
         }
 
         /* If moving piece is set to true, then pieces can be moved in phase 2. */
-        // adding phase 3's flying check here
         else if (BoardManager.movingPiece == true)
         {
             if (BoardManager.BoardState[row, column] != Cell.Vacant)
@@ -91,10 +90,9 @@ public class Intersection : MonoBehaviour
             BoardManager.PieceMovement(gameObject, row, column);
         }
         
-        /* If both players have placed all their pieces, and both player's remaining pieces are above 3, phase 2. */
-        else // if (BoardManager.blackRemainingPieces > 3 && BoardManager.whiteRemainingPieces > 3)
+        /* Last possible combination: selecting a piece in phase 2/3. */
+        else
         {
-
             if (BoardManager.BoardState[row, column] == currentPlayerCell)
             {
                 BoardManager.PieceSelection(gameObject, row, column);
