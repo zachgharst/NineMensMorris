@@ -311,8 +311,13 @@ public class BoardManager : MonoBehaviour
     public static bool CheckAvailableMove(Player p)
     {
         Cell playerCell = p == Player.White ? Cell.White : Cell.Black;
-        if(blackUnplacedPieces > 0)
+        if( (blackUnplacedPieces > 0) ||
+            (p == Player.White && whiteRemainingPieces <= 3) ||
+            (p == Player.Black && blackRemainingPieces <= 3) )
+        {
             return true;
+
+        }
 
         for (int i = 0; i < 7; i++)
         {
