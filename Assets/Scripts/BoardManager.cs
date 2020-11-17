@@ -522,6 +522,10 @@ public class BoardManager : MonoBehaviour
     /* Initiates game over sequence; parameter p is the winning player. */
     private static void GameOver(Player p)
     {
+        if(p == null)
+        {
+            print("The game is a draw.");
+        }
         print("Game over! The winner is: " + p);
 
         return;
@@ -547,6 +551,11 @@ public class BoardManager : MonoBehaviour
         if (Input.GetKeyDown("r"))
         {
             ResetBoard();
+        }
+
+        if(turn > 100)
+        {
+            GameOver(null);
         }
     }
 
