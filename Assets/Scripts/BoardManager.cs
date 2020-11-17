@@ -360,10 +360,11 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    /* Phase 2/3: Player is selecting a piece to move. */
     public static void PieceSelection(GameObject g, int row, int column)
     {
         var s = g.GetComponent<SpriteRenderer>();
-        tempRow = row;      // used for checking selected piece's starting position
+        tempRow = row;
         tempCol = column;
 
         if(BoardState[row, column] == Cell.Black || BoardState[row, column] == Cell.White)
@@ -377,9 +378,9 @@ public class BoardManager : MonoBehaviour
         {
             print("Invaild spot, please try again.");
         }
-
     }
 
+    /* Phase 2/3: Player is moving a piece they have already selected. */
     public static void PieceMovement(GameObject g, int row, int column)
     {
         var s = g.GetComponent<SpriteRenderer>();
@@ -387,7 +388,7 @@ public class BoardManager : MonoBehaviour
         if (currentPlayer == Player.White)  // white's turn after picking up a piece
         {
 
-            if (BoardState[row, column] == Cell.Vacant && !checkSamePosition(row, tempRow, column, tempCol))
+            if (BoardState[row, column] == Cell.Vacant && !CheckSamePosition(row, tempRow, column, tempCol))
             {
                 if (!isWhitePhase3 && isAdjacent(tempRow, tempCol, row, column))
                 {
@@ -415,7 +416,7 @@ public class BoardManager : MonoBehaviour
                 }
             }
 
-            else if(checkSamePosition(row, tempRow, column, tempCol))
+            else if(CheckSamePosition(row, tempRow, column, tempCol))
             {
                 BoardState[row, column] = Cell.White;
                 s.color = new Color(255, 255, 255, 1);
@@ -431,7 +432,7 @@ public class BoardManager : MonoBehaviour
         else                                // black's turn after picking up a piece
         {
 
-            if (BoardState[row, column] == Cell.Vacant && !checkSamePosition(row, tempRow, column, tempCol))
+            if (BoardState[row, column] == Cell.Vacant && !CheckSamePosition(row, tempRow, column, tempCol))
             {
                 if (!isBlackPhase3 && isAdjacent(tempRow, tempCol, row, column))
                 {
@@ -459,7 +460,7 @@ public class BoardManager : MonoBehaviour
                 }
             }
 
-            else if (checkSamePosition(row, tempRow, column, tempCol))
+            else if (CheckSamePosition(row, tempRow, column, tempCol))
             {
                 BoardState[row, column] = Cell.Black;
                 s.color = new Color(0, 0, 0, 1);
@@ -498,7 +499,7 @@ public class BoardManager : MonoBehaviour
         return;
     }
 
-    public static bool checkSamePosition(int r1, int r2, int c1, int c2)
+    public static bool CheckSamePosition(int r1, int r2, int c1, int c2)
     {
         if (r1 == r2 && c1 == c2)
         {
@@ -519,16 +520,8 @@ public class BoardManager : MonoBehaviour
         {
             ResetBoard();
         }
-
-        if (Input.GetKeyDown("c"))
-        {
-            print("White move available: " + CheckAvailableMove(Player.White));
-            print("Black move available: " + CheckAvailableMove(Player.Black));
-        }
-        /* Could move this to the Mill() method. */
-        if (whiteRemainingPieces < 3 || blackRemainingPieces < 3)
-            GameOver();
     }
+
             // PLEASE ignore this thing, I couldn't think of a way to get it working with multi-dimensional arrays
     public static bool isAdjacent(int row, int column, int tarRow, int tarCol)
     {
