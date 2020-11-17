@@ -1,19 +1,19 @@
 /*
-    UMKC CS 449: Nine Men's Morris implementation
-    Copyright (C) 2020 Forgetful Wanderers
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    https://github.com/ZDGharst/UMKC_ForgetfulWanderers/
-*/
+ *  UMKC CS 449: Nine Men's Morris implementation
+ *  Copyright (C) 2020 Forgetful Wanderers
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  https://github.com/ZDGharst/UMKC_ForgetfulWanderers/
+ */
 
 using System;
 using System.Collections;
@@ -64,7 +64,9 @@ public class BoardManager : MonoBehaviour
             for (int j = 0; j < 7; j++)
             {
                 if (BoardState[i, j] == Cell.Vacant)
+                {
                     CreateIntersections(i, j);
+                }
             }
         }
     }
@@ -97,7 +99,9 @@ public class BoardManager : MonoBehaviour
             for (int j = 0; j < 7; j++)
             {
                 if (BoardState[i, j] != Cell.Invalid)
+                {
                     BoardState[i, j] = Cell.Vacant;
+                }
             }
         }
         foreach (Intersection i in Resources.FindObjectsOfTypeAll(typeof(Intersection)) as Intersection[])
