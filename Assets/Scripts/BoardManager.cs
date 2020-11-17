@@ -27,6 +27,8 @@ public enum Player { White, Black };
 
 public class BoardManager : MonoBehaviour
 {
+    public static int turn = 0;
+
     public static Player currentPlayer = Player.White;
     public static bool millFormed = false;
     public static bool movingPiece = false;
@@ -103,6 +105,7 @@ public class BoardManager : MonoBehaviour
             i.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
         }
 
+        turn = 0;
         currentPlayer = Player.White;
         millFormed = false;
         movingPiece = false;
@@ -357,6 +360,7 @@ public class BoardManager : MonoBehaviour
         if (millFormed != true)
         {
             currentPlayer = GetOppositePlayer();
+            turn++;
         }
 
         /* During the transition to phase 2, check if white has any available moves going
@@ -414,6 +418,7 @@ public class BoardManager : MonoBehaviour
                 if (millFormed != true)
                 {
                     currentPlayer = GetOppositePlayer();
+                    turn++;
                 }
             }
 
@@ -448,6 +453,7 @@ public class BoardManager : MonoBehaviour
                 if (millFormed != true)
                 {
                     currentPlayer = GetOppositePlayer();
+                    turn++;
                 }
             }
 
@@ -508,7 +514,9 @@ public class BoardManager : MonoBehaviour
                 GameOver(Player.Black);
             }
         }
+
         currentPlayer = GetOppositePlayer();
+        turn++;
     }
 
     /* Initiates game over sequence; parameter p is the winning player. */
