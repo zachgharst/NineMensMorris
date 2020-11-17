@@ -385,42 +385,26 @@ public class BoardManager : MonoBehaviour
     {
         var s = g.GetComponent<SpriteRenderer>();
 
-        if (currentPlayer == Player.White)  // white's turn after picking up a piece
+        if (currentPlayer == Player.White)
         {
-
-            if (BoardState[row, column] == Cell.Vacant && !CheckSamePosition(row, tempRow, column, tempCol))
-            {
-                if (!isWhitePhase3 && isAdjacent(tempRow, tempCol, row, column))
-                {
-                    BoardState[row, column] = Cell.White;
-                    s.color = new Color(255, 255, 255, 1);
-                    movingPiece = false;
-
-                    millFormed = CheckMill(currentPlayer, row, column);
-                    if (millFormed != true)
-                    {
-                        currentPlayer = GetOppositePlayer();
-                    }
-                }
-                else if (isWhitePhase3)
-                {
-                    BoardState[row, column] = Cell.White;
-                    s.color = new Color(255, 255, 255, 1);
-                    movingPiece = false;
-
-                    millFormed = CheckMill(currentPlayer, row, column);
-                    if (millFormed != true)
-                    {
-                        currentPlayer = GetOppositePlayer();
-                    }
-                }
-            }
-
-            else if(CheckSamePosition(row, tempRow, column, tempCol))
+            if (CheckSamePosition(row, tempRow, column, tempCol))
             {
                 BoardState[row, column] = Cell.White;
                 s.color = new Color(255, 255, 255, 1);
                 movingPiece = false;
+            }
+
+            else if (isWhitePhase3 || isAdjacent(tempRow, tempCol, row, column))
+            {
+                BoardState[row, column] = Cell.White;
+                s.color = new Color(255, 255, 255, 1);
+                movingPiece = false;
+
+                millFormed = CheckMill(currentPlayer, row, column);
+                if (millFormed != true)
+                {
+                    currentPlayer = GetOppositePlayer();
+                }
             }
 
             else
@@ -431,40 +415,24 @@ public class BoardManager : MonoBehaviour
 
         else                                // black's turn after picking up a piece
         {
-
-            if (BoardState[row, column] == Cell.Vacant && !CheckSamePosition(row, tempRow, column, tempCol))
-            {
-                if (!isBlackPhase3 && isAdjacent(tempRow, tempCol, row, column))
-                {
-                    BoardState[row, column] = Cell.Black;
-                    s.color = new Color(0, 0, 0, 1);
-                    movingPiece = false;
-
-                    millFormed = CheckMill(currentPlayer, row, column);
-                    if (millFormed != true)
-                    {
-                        currentPlayer = GetOppositePlayer();
-                    }
-                }
-                else if (isBlackPhase3)
-                {
-                    BoardState[row, column] = Cell.Black;
-                    s.color = new Color(0, 0, 0, 1);
-                    movingPiece = false;
-
-                    millFormed = CheckMill(currentPlayer, row, column);
-                    if (millFormed != true)
-                    {
-                        currentPlayer = GetOppositePlayer();
-                    }
-                }
-            }
-
-            else if (CheckSamePosition(row, tempRow, column, tempCol))
+            if (CheckSamePosition(row, tempRow, column, tempCol))
             {
                 BoardState[row, column] = Cell.Black;
                 s.color = new Color(0, 0, 0, 1);
                 movingPiece = false;
+            }
+
+            else if (isBlackPhase3 || isAdjacent(tempRow, tempCol, row, column))
+            {
+                BoardState[row, column] = Cell.Black;
+                s.color = new Color(0, 0, 0, 1);
+                movingPiece = false;
+
+                millFormed = CheckMill(currentPlayer, row, column);
+                if (millFormed != true)
+                {
+                    currentPlayer = GetOppositePlayer();
+                }
             }
 
             else

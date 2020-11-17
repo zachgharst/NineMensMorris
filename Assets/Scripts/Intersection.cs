@@ -83,6 +83,10 @@ public class Intersection : MonoBehaviour
         // adding phase 3's flying check here
         else if (BoardManager.movingPiece == true)
         {
+            if (BoardManager.BoardState[row, column] != Cell.Vacant)
+            {
+                return;
+            }
             /* Flying condition for black */
             if (BoardManager.blackRemainingPieces == 3)
             {
