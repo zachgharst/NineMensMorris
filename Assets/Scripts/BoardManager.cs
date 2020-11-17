@@ -235,6 +235,69 @@ public class BoardManager : MonoBehaviour
         return true;
     }
 
+    public static bool availableVacantNeighbor(int row, int col)
+    {
+        /* Check the neighbor to the left. */
+        for(int i = col; i >= 0; i--)
+        {
+            if(BoardState[row, i] != Cell.Invalid)
+            {
+                if(BoardState[row, i] == Cell.Vacant)
+                {
+                    return true;
+                }
+                break;
+            }
+        }
+
+        /* Check the neighbor to the right. */
+        for(int i = col; i <= 7; i++)
+        {
+            if(BoardState[row, i] != Cell.Invalid)
+            {
+                if(BoardState[row, i] == Cell.Vacant)
+                {
+                    return true;
+                }
+                break;
+            }
+        }
+
+        /* Check the neighbor above. */
+        for(int i = row; i <= 7; i++)
+        {
+            if(BoardState[i, col] != Cell.Invalid)
+            {
+                if(BoardState[i, col] == Cell.Vacant)
+                {
+                    return true;
+                }
+                break;
+            }
+        }
+
+        /* Check the neighbor below. */
+        for(int i = row; i >= 0; i--)
+        {
+            if(BoardState[i, col] != Cell.Invalid)
+            {
+                if(BoardState[i, col] == Cell.Vacant)
+                {
+                    return true;
+                }
+                break;
+            }
+        }
+
+        return false;
+    }
+
+    public static bool checkAvailableMove(Player p)
+    {
+        if(blackUnplacedPieces > 0)
+            return true;
+    }
+
     /* Phase 1: Player is adding a piece to the board. */
     public static void Phase1Action(GameObject g, int row, int column)
     {
