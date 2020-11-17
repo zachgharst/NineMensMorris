@@ -87,16 +87,6 @@ public class Intersection : MonoBehaviour
             {
                 return;
             }
-            /* Flying condition for black */
-            if (BoardManager.blackRemainingPieces == 3)
-            {
-                BoardManager.isBlackPhase3 = true;
-            }
-            // Flying condition for white
-            if (BoardManager.whiteRemainingPieces == 3)
-            {
-                BoardManager.isWhitePhase3 = true;
-            }
 
             BoardManager.PieceMovement(gameObject, row, column);
         }

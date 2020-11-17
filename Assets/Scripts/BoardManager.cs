@@ -409,11 +409,11 @@ public class BoardManager : MonoBehaviour
 
             else
             {
-                print("Invaild spot, please try again.");
+                print("Invalid spot, please try again.");
             }
         }
 
-        else                                // black's turn after picking up a piece
+        else
         {
             if (CheckSamePosition(row, tempRow, column, tempCol))
             {
@@ -437,12 +437,13 @@ public class BoardManager : MonoBehaviour
 
             else
             {
-                print("Invaild spot, please try again.");
+                print("Invalid spot, please try again.");
             }
         }
     }
 
-    /* Remove piece after validating that the piece can be removed by milling player. */
+    /* Remove piece after validating that the piece can be removed by milling player. 
+     Then, check for phase 3 condition or GameOver condition. */
     public static void Mill(GameObject g, int row, int column)
     {
         /* Remove the piece from the board, set the cell to vacant, and reduce the remaining pieces of that player. */
@@ -459,10 +460,37 @@ public class BoardManager : MonoBehaviour
 
         /* Consume the mill and swap control. */
         millFormed = false;
+
+        /* Check phase 3 and game over conditions. */
+        if(currentPlayer == Player.White)
+        {
+            if(blackRemainingPieces == 3)
+            {
+                isBlackPhase3 = true;
+            }
+
+            if (blackRemainingPieces < 3 || CheckAvailableMove(Player.Black))
+            {
+                GameOver(Player.White);
+            }
+        }
+        else
+        {
+            if (whiteRemainingPieces == 3)
+            {
+                isWhitePhase3 = true;
+            }
+
+            if (whiteRemainingPieces < 3 || CheckAvailableMove(Player.White))
+            {
+                GameOver(Player.Black);
+            }
+        }
         currentPlayer = GetOppositePlayer();
     }
 
-    private void GameOver()
+    /* Initiates game over sequence; parameter p is the winning player. */
+    private void GameOver(Player p)
     {
         return;
     }
