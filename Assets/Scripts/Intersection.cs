@@ -21,8 +21,8 @@ using UnityEngine;
 
 public class Intersection : MonoBehaviour
 {
-    private int row;
-    private int column;
+    public int row;
+    public int column;
     
     /* Special pointer constructor. */
     public static Intersection CreateComponent(GameObject location, int c, int r)

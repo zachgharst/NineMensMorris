@@ -58,22 +58,24 @@ public class BoardManager : MonoBehaviour
         {  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant },
     };
 
-    private void InitGame()
+    public  static void InitGame()
     {
+        GameObject g = GameObject.Find("BoardManager");
+        BoardManager b = g.GetComponent<BoardManager>();
         for (int i = 0; i < 7; i++)
         {
             for (int j = 0; j < 7; j++)
             {
                 if (BoardState[i, j] == Cell.Vacant)
                 {
-                    CreateIntersections(i, j);
+                    b.CreateIntersections(i, j);
                 }
             }
         }
     }
 
     /* Create intersections at game start. */
-    private void CreateIntersections(int x, int y)
+    public void CreateIntersections(int x, int y)
     {
         /* Create a blank object with the name and position corresponding to the location of the intersection. */
         GameObject g = new GameObject((char)(x + 97) + "" + (y + 1));
@@ -92,8 +94,13 @@ public class BoardManager : MonoBehaviour
         s.color = new Color(0, 0, 0, 0);
     }
 
+    public static GameObject FindIntersection(string str)
+    {
+        return GameObject.Find(str);
+    }
+
     /* Reset the game back to a fresh start. */
-    private void ResetBoard()
+    public static void ResetBoard()
     {
         for (int i = 0; i < 7; i++)
         {
@@ -566,7 +573,22 @@ public class BoardManager : MonoBehaviour
             ResetBoard();
         }
 
-        if(turn > 100)
+        if (Input.GetKeyDown("c"))
+        {
+            GameObject g;
+
+            string[] moves = { "a1", "a4", "d1", "b4", "g1" };
+
+            for (int i = 0; i < moves.Length; i++)
+            {
+                g = FindIntersection(moves[i]);
+                var intersection = g.GetComponent<Intersection>();
+                print("(" + intersection.column + ", " + intersection.row + ")");
+                Phase1Placement(g, intersection.row, intersection.column);
+            }
+        }
+
+        if (turn > 100)
         {
             GameOver();
         }
