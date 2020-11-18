@@ -122,6 +122,8 @@ public class BoardManager : MonoBehaviour
         blackUnplacedPieces = 9;
         blackRemainingPieces = 9;
         isBlackPhase3 = false;
+
+        gameOver = false;
     }
 
     public static Player GetOppositePlayer()
@@ -527,7 +529,7 @@ public class BoardManager : MonoBehaviour
     /* Initiates game over sequence; draw if no player. */
     private static void GameOver()
     {
-        print("The game is a draw.");
+        print("The game is a draw. Press R to start a new game.");
 
         return;
     }
@@ -536,7 +538,7 @@ public class BoardManager : MonoBehaviour
     private static void GameOver(Player p)
     {
 
-        print("Game over! The winner is: " + p);
+        print("Game over! The winner is: " + p + ". Press R to start a new game.");
         gameOver = true;
 
         return;
