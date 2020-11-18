@@ -39,8 +39,13 @@ public class Intersection : MonoBehaviour
         Cell currentPlayerCell = BoardManager.currentPlayer == Player.White ? Cell.White : Cell.Black;
         Cell oppositePlayerCell = BoardManager.currentPlayer == Player.White ? Cell.Black : Cell.White;
 
+        if (BoardManager.gameOver == true)
+        {
+            // disables further moving of pieces
+        }
+
         /* A mill has been formed then this click represents the removal of a piece. */
-        if (BoardManager.millFormed == true)
+        else if (BoardManager.millFormed == true)
         {
             /* If a mill has been formed, then the click must be on an opposing cell. */
             if(BoardManager.BoardState[row, column] == oppositePlayerCell)

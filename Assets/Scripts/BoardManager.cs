@@ -43,6 +43,7 @@ public class BoardManager : MonoBehaviour
 
     public static int tempRow;
     public static int tempCol;
+    public static bool gameOver = false;
 
 
     public Sprite man;
@@ -536,6 +537,7 @@ public class BoardManager : MonoBehaviour
     {
 
         print("Game over! The winner is: " + p);
+        gameOver = true;
 
         return;
     }
