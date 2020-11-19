@@ -73,6 +73,7 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+        ResetBoard();
     }
 
     /* Create intersections at game start. */
@@ -116,6 +117,8 @@ public class BoardManager : MonoBehaviour
         foreach (Intersection i in Resources.FindObjectsOfTypeAll(typeof(Intersection)) as Intersection[])
         {
             i.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
+        //    i.GetComponent<SpriteRenderer>().drawMode = SpriteDrawMode.Sliced;
+        //    i.GetComponent<SpriteRenderer>().size = new Vector2(3.5f, 1.5f);
         }
 
         turn = 0;
