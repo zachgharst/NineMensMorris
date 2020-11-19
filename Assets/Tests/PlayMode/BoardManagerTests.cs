@@ -70,5 +70,49 @@ namespace Tests
 
             Assert.IsTrue(BoardManager.millFormed);
         }
+
+        [Test]
+        public void CheckWinConditionOne()
+        {
+            GameObject g;
+
+            BoardManager.blackUnplacedPieces = 3;
+            BoardManager.whiteUnplacedPieces = 3;
+            string[] moves = { "a1", "b2", "d1", "d2", "g1", "d2" };
+            BoardManager.blackRemainingPieces = 3;
+            BoardManager.whiteRemainingPieces = 3;
+
+            for (int i = 0; i < moves.Length; i++)
+            {
+                g = BoardManager.FindIntersection(moves[i]);
+                Intersection intersection = g.GetComponent<Intersection>();
+                intersection.OnMouseDown();
+            }
+
+
+
+            Assert.IsTrue(BoardManager.gameOver);
+        }
+
+        [Test]
+        public void CheckWinConditionTwo()
+        {
+            GameObject g;
+
+
+            string[] moves = { "a7", "a1", "a4", "g7", "d7", "b2", "b6", "f6", "b4", "c4", "d6", "d5", "c5", "e3", "c3", "d3", "e5", "e4" };
+
+
+            for (int i = 0; i < moves.Length; i++)
+            {
+                g = BoardManager.FindIntersection(moves[i]);
+                Intersection intersection = g.GetComponent<Intersection>();
+                intersection.OnMouseDown();
+            }
+
+
+
+            Assert.IsTrue(BoardManager.gameOver);
+        }
     }
 }
