@@ -153,7 +153,7 @@ namespace Tests
             Intersection intersection = g.GetComponent<Intersection>();
             intersection.OnMouseDown();
 
-            Assert.AreEqual(whiteUnplacedPieces, 8);
+            Assert.AreEqual(BoardManager.whiteUnplacedPieces, 8);
             Assert.AreNotEqual(BoardManager.BoardState[0, 0], Cell.Vacant);
         }
 

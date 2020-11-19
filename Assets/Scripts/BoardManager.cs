@@ -47,6 +47,7 @@ public class BoardManager : MonoBehaviour
 
 
     public Sprite man;
+    public Sprite manSelected;
 
     public static Cell[,] BoardState = {
         {  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant },
@@ -359,14 +360,14 @@ public class BoardManager : MonoBehaviour
         if (currentPlayer == Player.White)
         {
             BoardState[row, column] = Cell.White;
-            s.color = new Color(255, 255, 255, 1);
+            s.color = new Color(1, 1, 1, 1);
             whiteUnplacedPieces--;
         }
 
         else
         {
             BoardState[row, column] = Cell.Black;
-            s.color = new Color(0, 0, 0, 1);
+            s.color = new Color(0.3f, 0.3f, 0.3f, 1);
             blackUnplacedPieces--;
         }
 
@@ -418,14 +419,14 @@ public class BoardManager : MonoBehaviour
             if (CheckSamePosition(row, tempRow, column, tempCol))
             {
                 BoardState[row, column] = Cell.White;
-                s.color = new Color(255, 255, 255, 1);
+                s.color = new Color(1, 1, 1, 1);
                 movingPiece = false;
             }
 
             else if (isWhitePhase3 || isAdjacent(tempRow, tempCol, row, column))
             {
                 BoardState[row, column] = Cell.White;
-                s.color = new Color(255, 255, 255, 1);
+                s.color = new Color(1, 1, 1, 1);
                 movingPiece = false;
 
                 millFormed = CheckMill(currentPlayer, row, column);
@@ -453,14 +454,14 @@ public class BoardManager : MonoBehaviour
             if (CheckSamePosition(row, tempRow, column, tempCol))
             {
                 BoardState[row, column] = Cell.Black;
-                s.color = new Color(0, 0, 0, 1);
+                s.color = new Color(0.3f, 0.3f, 0.3f, 1);
                 movingPiece = false;
             }
 
             else if (isBlackPhase3 || isAdjacent(tempRow, tempCol, row, column))
             {
                 BoardState[row, column] = Cell.Black;
-                s.color = new Color(0, 0, 0, 1);
+                s.color = new Color(0.3f, 0.3f, 0.3f, 1);
                 movingPiece = false;
 
                 millFormed = CheckMill(currentPlayer, row, column);
