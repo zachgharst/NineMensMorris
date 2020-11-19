@@ -45,9 +45,9 @@ public class BoardManager : MonoBehaviour
     public static int tempCol;
     public static bool gameOver = false;
 
-
     public Sprite man;
     public Sprite manSelected;
+    public static GameObject lastSelected;
 
     public static Cell[,] BoardState = {
         {  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant },
@@ -392,14 +392,18 @@ public class BoardManager : MonoBehaviour
     /* Phase 2/3: Player is selecting a piece to move. */
     public static void PieceSelection(GameObject g, int row, int column)
     {
+        GameObject go2 = GameObject.Find("BoardManager");
+        BoardManager b = go2.GetComponent<BoardManager>();
         var s = g.GetComponent<SpriteRenderer>();
+
+        lastSelected = g;
         tempRow = row;
         tempCol = column;
 
         if(BoardState[row, column] == Cell.Black || BoardState[row, column] == Cell.White)
         {
             BoardState[row, column] = Cell.Vacant;
-            s.color = new Color(0, 0, 0, 0);
+            s.sprite = b.manSelected;
             movingPiece = true;
         }
 
@@ -412,22 +416,30 @@ public class BoardManager : MonoBehaviour
     /* Phase 2/3: Player is moving a piece they have already selected. */
     public static void PieceMovement(GameObject g, int row, int column)
     {
+        GameObject go2 = GameObject.Find("BoardManager");
+        BoardManager b = go2.GetComponent<BoardManager>();
         var s = g.GetComponent<SpriteRenderer>();
 
         if (currentPlayer == Player.White)
         {
+
             if (CheckSamePosition(row, tempRow, column, tempCol))
             {
                 BoardState[row, column] = Cell.White;
-                s.color = new Color(1, 1, 1, 1);
                 movingPiece = false;
+
+                s.color = new Color(1, 1, 1, 1);
+                s.sprite = b.man;
             }
 
             else if (isWhitePhase3 || isAdjacent(tempRow, tempCol, row, column))
             {
                 BoardState[row, column] = Cell.White;
-                s.color = new Color(1, 1, 1, 1);
                 movingPiece = false;
+
+                s.color = new Color(1, 1, 1, 1);
+                lastSelected.GetComponent<SpriteRenderer>().sprite = b.man;
+                lastSelected.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
 
                 millFormed = CheckMill(currentPlayer, row, column);
                 if (millFormed != true)
@@ -454,15 +466,20 @@ public class BoardManager : MonoBehaviour
             if (CheckSamePosition(row, tempRow, column, tempCol))
             {
                 BoardState[row, column] = Cell.Black;
-                s.color = new Color(0.3f, 0.3f, 0.3f, 1);
                 movingPiece = false;
+
+                s.color = new Color(0.3f, 0.3f, 0.3f, 1);
+                s.sprite = b.man;
             }
 
             else if (isBlackPhase3 || isAdjacent(tempRow, tempCol, row, column))
             {
                 BoardState[row, column] = Cell.Black;
-                s.color = new Color(0.3f, 0.3f, 0.3f, 1);
                 movingPiece = false;
+
+                s.color = new Color(0.3f, 0.3f, 0.3f, 1);
+                lastSelected.GetComponent<SpriteRenderer>().sprite = b.man;
+                lastSelected.GetComponent<SpriteRenderer>().color = new Color(0, 0, 0, 0);
 
                 millFormed = CheckMill(currentPlayer, row, column);
                 if (millFormed != true)
