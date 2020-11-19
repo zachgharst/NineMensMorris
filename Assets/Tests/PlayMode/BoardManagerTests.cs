@@ -96,18 +96,17 @@ namespace Tests
 
             BoardManager.blackUnplacedPieces = 3;
             BoardManager.whiteUnplacedPieces = 3;
-            string[] moves = { "a1", "b2", "d1", "d2", "g1", "d2" };
             BoardManager.blackRemainingPieces = 3;
             BoardManager.whiteRemainingPieces = 3;
 
+            string[] moves = { "a1", "b2", "d1", "d2", "g1", "d2" };
+            
             for (int i = 0; i < moves.Length; i++)
             {
                 g = BoardManager.FindIntersection(moves[i]);
                 Intersection intersection = g.GetComponent<Intersection>();
                 intersection.OnMouseDown();
             }
-
-
 
             Assert.IsTrue(BoardManager.gameOver);
         }
@@ -117,9 +116,7 @@ namespace Tests
         {
             GameObject g;
 
-
             string[] moves = { "a7", "a1", "a4", "g7", "d7", "b2", "b6", "f6", "b4", "c4", "d6", "d5", "c5", "e3", "c3", "d3", "e5", "e4" };
-
 
             for (int i = 0; i < moves.Length; i++)
             {
@@ -127,8 +124,6 @@ namespace Tests
                 Intersection intersection = g.GetComponent<Intersection>();
                 intersection.OnMouseDown();
             }
-
-
 
             Assert.IsTrue(BoardManager.gameOver);
         }
@@ -137,10 +132,7 @@ namespace Tests
         public void CheckWindConitionFalse()
         {
             GameObject g;
-
-
             string[] moves = { "a7", "a1", "a4" };
-
 
             for (int i = 0; i < moves.Length; i++)
             {
@@ -149,25 +141,20 @@ namespace Tests
                 intersection.OnMouseDown();
             }
 
-
-
             Assert.IsFalse(BoardManager.gameOver);
         }
 
         [Test]
         public void CheckValidMovePhase1()
         {
-
-
             Assert.AreEqual(BoardManager.BoardState[0, 0], Cell.Vacant);
 
             GameObject g = BoardManager.FindIntersection("a1");
             Intersection intersection = g.GetComponent<Intersection>();
             intersection.OnMouseDown();
 
+            Assert.AreEqual(whiteUnplacedPieces, 8);
             Assert.AreNotEqual(BoardManager.BoardState[0, 0], Cell.Vacant);
-
-
         }
 
         [Test]
