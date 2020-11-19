@@ -73,6 +73,23 @@ namespace Tests
         }
 
         [Test]
+        public void CheckMillFalse()
+        {
+            GameObject g;
+
+            string[] moves = { "a1", "a4", "a7" };
+
+            for (int i = 0; i < moves.Length; i++)
+            {
+                g = BoardManager.FindIntersection(moves[i]);
+                Intersection intersection = g.GetComponent<Intersection>();
+                intersection.OnMouseDown();
+            }
+
+            Assert.IsFalse(BoardManager.millFormed);
+        }
+
+        [Test]
         public void CheckWinConditionOne()
         {
             GameObject g;
@@ -114,6 +131,27 @@ namespace Tests
 
 
             Assert.IsTrue(BoardManager.gameOver);
+        }
+
+        [Test]
+        public void CheckWindConitionFalse()
+        {
+            GameObject g;
+
+
+            string[] moves = { "a7", "a1", "a4" };
+
+
+            for (int i = 0; i < moves.Length; i++)
+            {
+                g = BoardManager.FindIntersection(moves[i]);
+                Intersection intersection = g.GetComponent<Intersection>();
+                intersection.OnMouseDown();
+            }
+
+
+
+            Assert.IsFalse(BoardManager.gameOver);
         }
 
         [Test]
