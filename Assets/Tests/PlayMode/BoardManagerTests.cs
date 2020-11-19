@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -113,6 +114,78 @@ namespace Tests
 
 
             Assert.IsTrue(BoardManager.gameOver);
+        }
+
+        [Test]
+        public void CheckValidMovePhase1()
+        {
+
+
+            Assert.AreEqual(BoardManager.BoardState[0, 0], Cell.Vacant);
+
+            GameObject g = BoardManager.FindIntersection("a1");
+            Intersection intersection = g.GetComponent<Intersection>();
+            intersection.OnMouseDown();
+
+            Assert.AreNotEqual(BoardManager.BoardState[0, 0], Cell.Vacant);
+
+
+        }
+
+        [Test]
+        public void CheckValidMovePhase2()
+        {
+
+            GameObject g;
+
+            string[] moves = { "a1", "a4", "d2", "b4", "g1", "d1", "b2", "a7", "d7", "f2", "g7", "d3", "c3", "c4", "d5", "f6", "e3", "e5", "d2", "c5" };
+
+            for (int i = 0; i < moves.Length; i++)
+            {
+                g = BoardManager.FindIntersection(moves[i]);
+                Intersection intersection = g.GetComponent<Intersection>();
+                intersection.OnMouseDown();
+            }
+
+            Assert.AreNotEqual(BoardManager.BoardState[0, 6], Cell.Vacant);
+            Assert.AreEqual(BoardManager.BoardState[2, 4], Cell.Vacant);
+        }
+
+        [Test]
+        public void CheckValidMovePhase3()
+        {
+            GameObject g;
+
+            BoardManager.isBlackPhase3 = true;
+            BoardManager.isWhitePhase3 = true;
+            BoardManager.blackRemainingPieces = 3;
+            BoardManager.whiteRemainingPieces = 3;
+            BoardManager.whiteUnplacedPieces = 0;
+            BoardManager.blackUnplacedPieces = 0;
+
+
+
+            BoardManager.BoardState[0, 0] = Cell.Black;
+            BoardManager.BoardState[1, 1] = Cell.Black;
+            BoardManager.BoardState[3, 1] = Cell.Black;
+            BoardManager.BoardState[0, 6] = Cell.White;
+            BoardManager.BoardState[3, 2] = Cell.White;
+            BoardManager.BoardState[5, 1] = Cell.White;
+
+            string[] moves = { "a1", "g7", "g1", "f6" };
+            BoardManager.currentPlayer = Player.Black;
+
+            for (int i = 0; i < moves.Length; i++)
+            {
+                g = BoardManager.FindIntersection(moves[i]);
+                Intersection intersection = g.GetComponent<Intersection>();
+                intersection.OnMouseDown();
+            }
+
+            Assert.AreEqual(BoardManager.BoardState[6, 6], Cell.Black);
+            Assert.AreEqual(BoardManager.BoardState[5, 5], Cell.White);
+            Assert.AreEqual(BoardManager.BoardState[0, 0], Cell.Vacant);
+            Assert.AreEqual(BoardManager.BoardState[0, 6], Cell.Vacant);
         }
     }
 }
