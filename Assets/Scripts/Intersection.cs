@@ -1,19 +1,19 @@
 /*
-	UMKC CS 449: Nine Men's Morris implementation
-    Copyright (C) 2020 Forgetful Wanderers
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    https://github.com/ZDGharst/UMKC_ForgetfulWanderers/
-*/
+ *  UMKC CS 449: Nine Men's Morris implementation
+ *  Copyright (C) 2020 Forgetful Wanderers
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  https://github.com/ZDGharst/UMKC_ForgetfulWanderers/
+ */
 
 ﻿using System.Collections;
 using System.Collections.Generic;
@@ -23,74 +23,94 @@ public class Intersection : MonoBehaviour
 {
     public int row;
     public int column;
-
-    public static Intersection CreateComponent(GameObject location, int r, int c)
+    
+    /* Special pointer constructor. */
+    public static Intersection CreateComponent(GameObject location, int c, int r)
     {
         Intersection i = location.AddComponent<Intersection>();
-        i.row = r;
         i.column = c;
+        i.row = r;
         return i;
     }
 
-    void Phase1()
+    public void OnMouseDown()
     {
-        var s = gameObject.GetComponent<SpriteRenderer>();
+        /* Get the cell equivalent for the opposite player. */
+        Cell currentPlayerCell = BoardManager.currentPlayer == Player.White ? Cell.White : Cell.Black;
+        Cell oppositePlayerCell = BoardManager.currentPlayer == Player.White ? Cell.Black : Cell.White;
 
-        if (BoardManager.currentPlayer == Player.White)
+        if (BoardManager.gameOver == true)
         {
-            BoardManager.BoardState[row, column] = Cell.White;
-            s.color = new Color(255, 255, 255, 1);
-            BoardManager.currentPlayer = Player.Black;
-            BoardManager.whiteUnplacedPieces--;
+            // disables further moving of pieces
         }
 
-        else
+        /* A mill has been formed then this click represents the removal of a piece. */
+        else if (BoardManager.millFormed == true)
         {
-            BoardManager.BoardState[row, column] = Cell.Black;
-            s.color = new Color(0, 0, 0, 1);
-            BoardManager.currentPlayer = Player.White;
-            BoardManager.blackUnplacedPieces--;
+            /* If a mill has been formed, then the click must be on an opposing cell. */
+            if(BoardManager.BoardState[row, column] == oppositePlayerCell)
+            {
+                /* Piece removed can't be part of a mill... */
+                if (!BoardManager.CheckMill(BoardManager.GetOppositePlayer(), row, column))
+                {
+                    BoardManager.Mill(gameObject, row, column);          
+                }
+                /* ...unless all opposing pieces are part of mills. */
+                else
+                {
+                    if (BoardManager.AllMenInMill())
+                    {
+                        BoardManager.Mill(gameObject, row, column);
+                    }
+                    else
+                    {
+                        print("There exists a piece not part of a mill. Please click on a piece not part of a mill.");
+                    }
+                }
+            }
+            else
+            {
+                print("Please click on an opposing piece");
+            }
         }
 
-//        CheckMill(row, column);
-    }
-
-    void Phase2()
-    {
-        return;
-    }
-
-    void Phase3()
-    {
-        return;
-    }
-
-    void Mill()
-    {
-        return;
-    }
-
-    void OnMouseDown()
-    {
-        Cell cellCast = BoardManager.currentPlayer == Player.White ? Cell.White : Cell.Black;
-
-        if (BoardManager.millFormed == true && BoardManager.BoardState[row, column] != cellCast)
-        {
-            Mill();
-        }
+        /* If black has unplayed pieces, still in phase 1. */
         else if (BoardManager.blackUnplacedPieces > 0)
         {
             if (BoardManager.BoardState[row, column] != Cell.Vacant)
+            {
                 return;
-            Phase1();
+            }   
+            BoardManager.Phase1Placement(gameObject, row, column);
         }
-        else if (BoardManager.blackRemainingPieces > 3 && BoardManager.whiteRemainingPieces > 3)
+
+        /* If moving piece is set to true, then pieces can be moved in phase 2. */
+        else if (BoardManager.movingPiece == true)
         {
-            Phase2();
+            if (BoardManager.BoardState[row, column] != Cell.Vacant)
+            {
+                return;
+            }
+
+            BoardManager.PieceMovement(gameObject, row, column);
         }
+        
+        /* Last possible combination: selecting a piece in phase 2/3. */
         else
         {
-            Phase3();
+            if (BoardManager.BoardState[row, column] == currentPlayerCell)
+            {
+                if ((BoardManager.currentPlayer == Player.White && BoardManager.isWhitePhase3) ||
+                    (BoardManager.currentPlayer == Player.Black && BoardManager.isBlackPhase3) ||
+                    (BoardManager.HasAvailableVacantNeighbor(row, column)))
+                {
+                    BoardManager.PieceSelection(gameObject, row, column);
+                }
+                else
+                {
+                    print("This piece has no vacant spaces to move to.");
+                }
+            }
         }
     }
 }
