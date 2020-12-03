@@ -33,6 +33,8 @@ public class BoardManager : MonoBehaviour
     public static Player currentPlayer = Player.White;
     public static bool millFormed = false;
     public static bool movingPiece = false;
+    public static bool compOppActive = false;
+    public static bool compOppTurn = false;
 
     public static int whiteUnplacedPieces = 9;
     public static int whiteRemainingPieces = 9;
@@ -366,6 +368,11 @@ public class BoardManager : MonoBehaviour
             BoardState[row, column] = Cell.White;
             s.color = new Color(1, 1, 1, 1);
             whiteUnplacedPieces--;
+
+            if (compOppTurn == true)
+            {
+                compOppActive = true;
+            }
         }
 
         else
@@ -390,6 +397,11 @@ public class BoardManager : MonoBehaviour
             {
                 GameOver(Player.Black);
             }
+        }
+
+        if (currentPlayer == Player.Black && compOppActive == true)
+        {
+            ComputerTurn();
         }
     }
 
@@ -526,9 +538,9 @@ public class BoardManager : MonoBehaviour
         millFormed = false;
 
         /* Check phase 3 and game over conditions. */
-        if(currentPlayer == Player.White)
+        if (currentPlayer == Player.White)
         {
-            if(blackRemainingPieces == 3)
+            if (blackRemainingPieces == 3)
             {
                 isBlackPhase3 = true;
             }
@@ -553,6 +565,11 @@ public class BoardManager : MonoBehaviour
 
         currentPlayer = GetOppositePlayer();
         turn++;
+
+        if (compOppTurn == true)
+        {
+            ComputerTurn();
+        }
     }
 
     /* Computer AI Oppenent */
@@ -560,6 +577,8 @@ public class BoardManager : MonoBehaviour
     {
         GameObject g;
         int ranNum = Random.Range(0, 24);
+
+        compOppTurn = true;
 
         if(blackUnplacedPieces != 0)
         {
@@ -576,6 +595,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -596,6 +616,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -617,6 +638,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -638,6 +660,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -659,6 +682,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -680,6 +704,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -701,6 +726,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -722,6 +748,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -743,6 +770,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -764,6 +792,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -785,6 +814,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -806,6 +836,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -827,6 +858,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -848,6 +880,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -869,6 +902,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -890,6 +924,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -911,6 +946,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -932,6 +968,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -953,6 +990,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -974,6 +1012,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -995,6 +1034,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -1016,6 +1056,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -1037,6 +1078,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -1058,6 +1100,7 @@ public class BoardManager : MonoBehaviour
                         if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
                         {
                             Phase1Placement(g, intersection.row, intersection.column);
+                            compOppActive = false;
                         }
 
                         else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
@@ -1134,10 +1177,7 @@ public class BoardManager : MonoBehaviour
 
         if (Input.GetKeyDown("o"))
         {
-            if(currentPlayer == Player.Black)
-            {
-                ComputerTurn();
-            }
+            compOppActive = true;
         }
 
         if (turn > 100)
