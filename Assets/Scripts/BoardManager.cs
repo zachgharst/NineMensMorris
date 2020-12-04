@@ -31,8 +31,10 @@ public class BoardManager : MonoBehaviour
     public static int turn = 0;
 
     public static Player currentPlayer = Player.White;
+
     public static Player computerPlayer = Player.Black;
-    public static bool computerIsActive = false;
+    public static bool computerIsActive = true;
+    public double computerTime = 1.5;
 
     public static bool millFormed = false;
     public static bool movingPiece = false;
@@ -77,6 +79,7 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+
         ResetBoard();
     }
 
@@ -127,7 +130,7 @@ public class BoardManager : MonoBehaviour
 
         turn = 0;
         currentPlayer = Player.White;
-        computerPlayer = Player.Black;
+        computerPlayer = Random.Range(0, 2) == 1 ? Player.White : Player.Black;
 
         millFormed = false;
         movingPiece = false;
@@ -661,9 +664,19 @@ public class BoardManager : MonoBehaviour
             computerIsActive = true;
         }
 
+
+
         if(computerIsActive && currentPlayer == computerPlayer)
         {
-            ComputerTurn();
+            if (computerTime > 0)
+            {
+                computerTime -= Time.deltaTime;
+            }
+            else
+            {
+                computerTime = 1.5;
+                ComputerTurn();
+            }
         }
 
         if (turn > 100)
