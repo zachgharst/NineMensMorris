@@ -65,7 +65,7 @@ public class BoardManager : MonoBehaviour
         {  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant },
     };
 
-    public  static void InitGame()
+    public static void InitGame()
     {
         GameObject g = GameObject.Find("BoardManager");
         BoardManager b = g.GetComponent<BoardManager>();
@@ -567,6 +567,31 @@ public class BoardManager : MonoBehaviour
         int randMove;
         Intersection intersection;
 
+        /* The computer has formed a mill and must pick a piece to remove. */
+        if (millFormed)
+        {
+            for (int i = 0; i < 7; i++)
+            {
+                for (int j = 0; j < 7; j++)
+                {
+                    if (BoardState[i, j] == humanPlayerCell)
+                    {
+                        moves.Add((char)(j + 97) + "" + (i + 1));
+                    }
+                }
+            }
+
+            if (moves.Count > 0)
+            {
+                randMove = Random.Range(0, moves.Count);
+
+                g = FindIntersection(moves[randMove]);
+                intersection = g.GetComponent<Intersection>();
+                intersection.JumpTable();
+                return;
+            }
+        }
+
         /* Priority 3: Blocking Mills
          * Iterate across the entire board and create a list of nodes that gives the player a mill next turn. */
         for (int i = 0; i < 7; i++)
@@ -663,8 +688,6 @@ public class BoardManager : MonoBehaviour
         {
             computerIsActive = true;
         }
-
-
 
         if(computerIsActive && currentPlayer == computerPlayer)
         {
