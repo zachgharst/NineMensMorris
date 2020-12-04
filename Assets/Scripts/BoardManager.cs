@@ -31,10 +31,11 @@ public class BoardManager : MonoBehaviour
     public static int turn = 0;
 
     public static Player currentPlayer = Player.White;
+    public static Player computerPlayer = Player.Black;
+    public static bool computerIsActive = false;
+
     public static bool millFormed = false;
     public static bool movingPiece = false;
-    public static bool compOppActive = false;
-    public static bool compOppTurn = false;
 
     public static int whiteUnplacedPieces = 9;
     public static int whiteRemainingPieces = 9;
@@ -368,11 +369,6 @@ public class BoardManager : MonoBehaviour
             BoardState[row, column] = Cell.White;
             s.color = new Color(1, 1, 1, 1);
             whiteUnplacedPieces--;
-
-            if (compOppTurn == true)
-            {
-                compOppActive = true;
-            }
         }
 
         else
@@ -397,11 +393,6 @@ public class BoardManager : MonoBehaviour
             {
                 GameOver(Player.Black);
             }
-        }
-
-        if (currentPlayer == Player.Black && compOppActive == true)
-        {
-            ComputerTurn();
         }
     }
 
@@ -565,11 +556,6 @@ public class BoardManager : MonoBehaviour
 
         currentPlayer = GetOppositePlayer();
         turn++;
-
-        if (compOppTurn == true)
-        {
-            ComputerTurn();
-        }
     }
 
     /* Computer AI Oppenent */
@@ -577,8 +563,6 @@ public class BoardManager : MonoBehaviour
     {
         GameObject g;
         List<string> moves = new List<string>();
-
-        compOppTurn = true;
 
         for (int i = 0; i < 7; i++)
         {
@@ -594,8 +578,7 @@ public class BoardManager : MonoBehaviour
         int randMove = Random.Range(0, moves.Count);
         g = FindIntersection(moves[randMove]);
         var intersection = g.GetComponent<Intersection>();
-        intersection.OnMouseDown();
-        compOppActive = false;
+        intersection.JumpTable();
     }
 
     /* Initiates game over sequence; draw if no player. */
@@ -639,7 +622,12 @@ public class BoardManager : MonoBehaviour
 
         if (Input.GetKeyDown("o"))
         {
-            compOppActive = true;
+            computerIsActive = true;
+        }
+
+        if(computerIsActive && currentPlayer == computerPlayer)
+        {
+            ComputerTurn();
         }
 
         if (turn > 100)

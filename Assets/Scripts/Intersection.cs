@@ -23,7 +23,7 @@ public class Intersection : MonoBehaviour
 {
     public int row;
     public int column;
-    
+
     /* Special pointer constructor. */
     public static Intersection CreateComponent(GameObject location, int c, int r)
     {
@@ -33,27 +33,22 @@ public class Intersection : MonoBehaviour
         return i;
     }
 
-    public void OnMouseDown()
+    public void JumpTable()
     {
         /* Get the cell equivalent for the opposite player. */
         Cell currentPlayerCell = BoardManager.currentPlayer == Player.White ? Cell.White : Cell.Black;
         Cell oppositePlayerCell = BoardManager.currentPlayer == Player.White ? Cell.Black : Cell.White;
 
-        if (BoardManager.gameOver == true)
-        {
-            // disables further moving of pieces
-        }
-
         /* A mill has been formed then this click represents the removal of a piece. */
-        else if (BoardManager.millFormed == true)
+        if (BoardManager.millFormed == true)
         {
             /* If a mill has been formed, then the click must be on an opposing cell. */
-            if(BoardManager.BoardState[row, column] == oppositePlayerCell)
+            if (BoardManager.BoardState[row, column] == oppositePlayerCell)
             {
                 /* Piece removed can't be part of a mill... */
                 if (!BoardManager.CheckMill(BoardManager.GetOppositePlayer(), row, column))
                 {
-                    BoardManager.Mill(gameObject, row, column);          
+                    BoardManager.Mill(gameObject, row, column);
                 }
                 /* ...unless all opposing pieces are part of mills. */
                 else
@@ -80,7 +75,7 @@ public class Intersection : MonoBehaviour
             if (BoardManager.BoardState[row, column] != Cell.Vacant)
             {
                 return;
-            }   
+            }
             BoardManager.Phase1Placement(gameObject, row, column);
         }
 
@@ -94,7 +89,7 @@ public class Intersection : MonoBehaviour
 
             BoardManager.PieceMovement(gameObject, row, column);
         }
-        
+
         /* Last possible combination: selecting a piece in phase 2/3. */
         else
         {
@@ -112,5 +107,16 @@ public class Intersection : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void OnMouseDown()
+    {
+        /* If it's the computer player's turn or the game is over, then the clicks do nothing! */
+        if((BoardManager.computerIsActive && BoardManager.currentPlayer == BoardManager.computerPlayer) || BoardManager.gameOver == true)
+        {
+            return;
+        }
+
+        JumpTable();
     }
 }
