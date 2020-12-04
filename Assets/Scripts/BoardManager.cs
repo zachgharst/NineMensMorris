@@ -1160,21 +1160,6 @@ public class BoardManager : MonoBehaviour
             ResetBoard();
         }
 
-        if (Input.GetKeyDown("c"))
-        {
-            GameObject g;
-
-            string[] moves = { "a1", "a4", "d1", "b4", "g1" };
-
-            for (int i = 0; i < moves.Length; i++)
-            {
-                g = FindIntersection(moves[i]);
-                var intersection = g.GetComponent<Intersection>();
-                print("(" + intersection.column + ", " + intersection.row + ")");
-                Phase1Placement(g, intersection.row, intersection.column);
-            }
-        }
-
         if (Input.GetKeyDown("o"))
         {
             compOppActive = true;
