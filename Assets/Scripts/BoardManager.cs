@@ -31,10 +31,13 @@ public class BoardManager : MonoBehaviour
     public static int turn = 0;
 
     public static Player currentPlayer = Player.White;
+
+    public static Player computerPlayer = Player.Black;
+    public static bool computerIsActive = true;
+    public double computerTime = 1.5;
+
     public static bool millFormed = false;
     public static bool movingPiece = false;
-    public static bool compOppActive = false;
-    public static bool compOppTurn = false;
 
     public static int whiteUnplacedPieces = 9;
     public static int whiteRemainingPieces = 9;
@@ -76,6 +79,7 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+
         ResetBoard();
     }
 
@@ -126,6 +130,8 @@ public class BoardManager : MonoBehaviour
 
         turn = 0;
         currentPlayer = Player.White;
+        computerPlayer = Random.Range(0, 2) == 1 ? Player.White : Player.Black;
+
         millFormed = false;
         movingPiece = false;
 
@@ -162,7 +168,6 @@ public class BoardManager : MonoBehaviour
                 if(BoardState[3, 0] == cellCast && BoardState[3, 1] == cellCast && BoardState[3, 2] == cellCast)
                 {
                     intersectionPartOfMill = true;
-                    print("Mill formed within the special row on the left");
                 }
             }
             else
@@ -170,7 +175,6 @@ public class BoardManager : MonoBehaviour
                 if (BoardState[3, 4] == cellCast && BoardState[3, 5] == cellCast && BoardState[3, 6] == cellCast)
                 {
                     intersectionPartOfMill = true;
-                    print("Mill formed within the special row on the right");
                 }
             }
         }
@@ -190,7 +194,6 @@ public class BoardManager : MonoBehaviour
             if (piecesInLine == 3)
             {
                 intersectionPartOfMill = true;
-                print("Mill formed within row");
             }
         }
 
@@ -202,7 +205,6 @@ public class BoardManager : MonoBehaviour
                 if (BoardState[0, 3] == cellCast && BoardState[1, 3] == cellCast && BoardState[2, 3] == cellCast)
                 {
                     intersectionPartOfMill = true;
-                    print("Mill formed within the special column on the bottom");
                 }
             }
             else
@@ -210,7 +212,6 @@ public class BoardManager : MonoBehaviour
                 if (BoardState[4, 3] == cellCast && BoardState[5, 3] == cellCast && BoardState[6, 3] == cellCast)
                 {
                     intersectionPartOfMill = true;
-                    print("Mill formed within the special column on the top");
                 }
             }
         }
@@ -230,7 +231,6 @@ public class BoardManager : MonoBehaviour
             if (piecesInLine == 3)
             {
                 intersectionPartOfMill = true;
-                print("Mill formed within column");
             }
         }
 
@@ -368,11 +368,6 @@ public class BoardManager : MonoBehaviour
             BoardState[row, column] = Cell.White;
             s.color = new Color(1, 1, 1, 1);
             whiteUnplacedPieces--;
-
-            if (compOppTurn == true)
-            {
-                compOppActive = true;
-            }
         }
 
         else
@@ -397,11 +392,6 @@ public class BoardManager : MonoBehaviour
             {
                 GameOver(Player.Black);
             }
-        }
-
-        if (currentPlayer == Player.Black && compOppActive == true)
-        {
-            ComputerTurn();
         }
     }
 
@@ -565,559 +555,69 @@ public class BoardManager : MonoBehaviour
 
         currentPlayer = GetOppositePlayer();
         turn++;
-
-        if (compOppTurn == true)
-        {
-            ComputerTurn();
-        }
     }
 
     /* Computer AI Oppenent */
     public static void ComputerTurn()
     {
         GameObject g;
-        int ranNum = Random.Range(0, 24);
+        Player humanPlayer = GetOppositePlayer();
+        Cell humanPlayerCell = humanPlayer == Player.White ? Cell.White : Cell.Black;
+        List<string> moves = new List<string>();
+        int randMove;
+        Intersection intersection;
 
-        compOppTurn = true;
-
-        if(blackUnplacedPieces != 0)
+        /* Priority 3: Blocking Mills
+         * Iterate across the entire board and create a list of nodes that gives the player a mill next turn. */
+        for (int i = 0; i < 7; i++)
         {
-            switch (ranNum)
+            for (int j = 0; j < 7; j++)
             {
-                case 1:
-                    string[] moveOne = { "a1" };
-
-                    for (int i = 0; i < moveOne.Length; i++)
+                if (BoardState[i, j] == Cell.Vacant)
+                {
+                    BoardState[i, j] = humanPlayerCell;
+                    bool possibleMillFormed = CheckMill(humanPlayer, i, j);
+                    /* Take the coordinate (i, j) and create the equivalent string a1 that refers to the intersection. */
+                    if(possibleMillFormed)
                     {
-                        g = FindIntersection(moveOne[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
+                        moves.Add((char)(j + 97) + "" + (i + 1));
                     }
-                    break;
-
-                case 2:
-                    string[] moveTwo = { "a4" };
-
-                    for (int i = 0; i < moveTwo.Length; i++)
-                    {
-                        g = FindIntersection(moveTwo[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 3:
-                    string[] moveThree = { "a7" };
-
-                    for (int i = 0; i < moveThree.Length; i++)
-                    {
-                        g = FindIntersection(moveThree[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 4:
-                    string[] moveFour = { "b2" };
-
-                    for (int i = 0; i < moveFour.Length; i++)
-                    {
-                        g = FindIntersection(moveFour[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 5:
-                    string[] moveFive = { "b4" };
-
-                    for (int i = 0; i < moveFive.Length; i++)
-                    {
-                        g = FindIntersection(moveFive[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 6:
-                    string[] moveSix = { "b6" };
-
-                    for (int i = 0; i < moveSix.Length; i++)
-                    {
-                        g = FindIntersection(moveSix[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 7:
-                    string[] moveSeven = { "c3" };
-
-                    for (int i = 0; i < moveSeven.Length; i++)
-                    {
-                        g = FindIntersection(moveSeven[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 8:
-                    string[] moveEight = { "c4" };
-
-                    for (int i = 0; i < moveEight.Length; i++)
-                    {
-                        g = FindIntersection(moveEight[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 9:
-                    string[] moveNine = { "c5" };
-
-                    for (int i = 0; i < moveNine.Length; i++)
-                    {
-                        g = FindIntersection(moveNine[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 10:
-                    string[] moveTen = { "d1" };
-
-                    for (int i = 0; i < moveTen.Length; i++)
-                    {
-                        g = FindIntersection(moveTen[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 11:
-                    string[] moveEleven = { "d2" };
-
-                    for (int i = 0; i < moveEleven.Length; i++)
-                    {
-                        g = FindIntersection(moveEleven[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 12:
-                    string[] moveTwelve = { "d3" };
-
-                    for (int i = 0; i < moveTwelve.Length; i++)
-                    {
-                        g = FindIntersection(moveTwelve[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 13:
-                    string[] moveThirteen = { "d5" };
-
-                    for (int i = 0; i < moveThirteen.Length; i++)
-                    {
-                        g = FindIntersection(moveThirteen[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 14:
-                    string[] moveFourteen = { "d6" };
-
-                    for (int i = 0; i < moveFourteen.Length; i++)
-                    {
-                        g = FindIntersection(moveFourteen[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 15:
-                    string[] moveFifteen = { "d7" };
-
-                    for (int i = 0; i < moveFifteen.Length; i++)
-                    {
-                        g = FindIntersection(moveFifteen[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 16:
-                    string[] moveSixteen = { "e3" };
-
-                    for (int i = 0; i < moveSixteen.Length; i++)
-                    {
-                        g = FindIntersection(moveSixteen[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 17:
-                    string[] moveSeventeen = { "e4" };
-
-                    for (int i = 0; i < moveSeventeen.Length; i++)
-                    {
-                        g = FindIntersection(moveSeventeen[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 18:
-                    string[] moveEighteen = { "e5" };
-
-                    for (int i = 0; i < moveEighteen.Length; i++)
-                    {
-                        g = FindIntersection(moveEighteen[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 19:
-                    string[] moveNineteen = { "f2" };
-
-                    for (int i = 0; i < moveNineteen.Length; i++)
-                    {
-                        g = FindIntersection(moveNineteen[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 20:
-                    string[] moveTwenty = { "f4" };
-
-                    for (int i = 0; i < moveTwenty.Length; i++)
-                    {
-                        g = FindIntersection(moveTwenty[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 21:
-                    string[] moveTwentyOne = { "f6" };
-
-                    for (int i = 0; i < moveTwentyOne.Length; i++)
-                    {
-                        g = FindIntersection(moveTwentyOne[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 22:
-                    string[] moveTwentyTwo = { "g1" };
-
-                    for (int i = 0; i < moveTwentyTwo.Length; i++)
-                    {
-                        g = FindIntersection(moveTwentyTwo[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 23:
-                    string[] moveTwentyThree = { "g4" };
-
-                    for (int i = 0; i < moveTwentyThree.Length; i++)
-                    {
-                        g = FindIntersection(moveTwentyThree[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
-
-                case 24:
-                    string[] moveTwentyFour = { "g7" };
-
-                    for (int i = 0; i < moveTwentyFour.Length; i++)
-                    {
-                        g = FindIntersection(moveTwentyFour[i]);
-                        var intersection = g.GetComponent<Intersection>();
-
-                        if (BoardState[intersection.row, intersection.column] == Cell.Vacant)
-                        {
-                            Phase1Placement(g, intersection.row, intersection.column);
-                            compOppActive = false;
-                        }
-
-                        else if (BoardState[intersection.row, intersection.column] == Cell.Invalid || BoardState[intersection.row, intersection.column] == Cell.White || BoardState[intersection.row, intersection.column] == Cell.Black)
-                        {
-                            ComputerTurn();
-                        }
-                    }
-
-                    break;
+                    BoardState[i, j] = Cell.Vacant;
+                }
             }
         }
 
-        if(whiteRemainingPieces != 3 || blackRemainingPieces != 3)
+        if(moves.Count > 0)
         {
+            randMove = Random.Range(0, moves.Count);
 
+            g = FindIntersection(moves[randMove]);
+            intersection = g.GetComponent<Intersection>();
+            intersection.JumpTable();
+            return;
         }
 
+        /* Priority 5: Randomly Move
+         * Iterate across the entire board and create a list of all vacant spaces. */
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                if (BoardState[i, j] == Cell.Vacant)
+                {
+                    /* Take the coordinate (i, j) and create the equivalent string a1 that refers to the intersection. */
+                    moves.Add((char)(j + 97) + "" + (i + 1));
+                }
+            }
+        }
+
+        /* Pick a random move from the list generated. */
+        randMove = Random.Range(0, moves.Count);
+
+        /* Make that move. */
+        g = FindIntersection(moves[randMove]);
+        intersection = g.GetComponent<Intersection>();
+        intersection.JumpTable();
     }
 
     /* Initiates game over sequence; draw if no player. */
@@ -1131,7 +631,6 @@ public class BoardManager : MonoBehaviour
     /* Initiates game over sequence; parameter p is the winning player. */
     private static void GameOver(Player p)
     {
-
         print("Game over! The winner is: " + p + ". Press R to start a new game.");
         gameOver = true;
 
@@ -1160,24 +659,24 @@ public class BoardManager : MonoBehaviour
             ResetBoard();
         }
 
-        if (Input.GetKeyDown("c"))
-        {
-            GameObject g;
-
-            string[] moves = { "a1", "a4", "d1", "b4", "g1" };
-
-            for (int i = 0; i < moves.Length; i++)
-            {
-                g = FindIntersection(moves[i]);
-                var intersection = g.GetComponent<Intersection>();
-                print("(" + intersection.column + ", " + intersection.row + ")");
-                Phase1Placement(g, intersection.row, intersection.column);
-            }
-        }
-
         if (Input.GetKeyDown("o"))
         {
-            compOppActive = true;
+            computerIsActive = true;
+        }
+
+
+
+        if(computerIsActive && currentPlayer == computerPlayer)
+        {
+            if (computerTime > 0)
+            {
+                computerTime -= Time.deltaTime;
+            }
+            else
+            {
+                computerTime = 1.5;
+                ComputerTurn();
+            }
         }
 
         if (turn > 100)
