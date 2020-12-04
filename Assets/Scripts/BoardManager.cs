@@ -562,22 +562,62 @@ public class BoardManager : MonoBehaviour
     public static void ComputerTurn()
     {
         GameObject g;
+        Player humanPlayer = GetOppositePlayer();
+        Cell humanPlayerCell = humanPlayer == Player.White ? Cell.White : Cell.Black;
         List<string> moves = new List<string>();
+        int randMove;
+        Intersection intersection;
 
+        /* Priority 3: Blocking Mills
+         * Iterate across the entire board and create a list of nodes that gives the player a mill next turn. */
         for (int i = 0; i < 7; i++)
         {
             for (int j = 0; j < 7; j++)
             {
                 if (BoardState[i, j] == Cell.Vacant)
                 {
+                    BoardState[i, j] = humanPlayerCell;
+                    bool possibleMillFormed = CheckMill(humanPlayer, i, j);
+                    /* Take the coordinate (i, j) and create the equivalent string a1 that refers to the intersection. */
+                    if(possibleMillFormed)
+                    {
+                        moves.Add((char)(j + 97) + "" + (i + 1));
+                    }
+                    BoardState[i, j] = Cell.Vacant;
+                }
+            }
+        }
+
+        if(moves.Count > 0)
+        {
+            randMove = Random.Range(0, moves.Count);
+
+            g = FindIntersection(moves[randMove]);
+            intersection = g.GetComponent<Intersection>();
+            intersection.JumpTable();
+            return;
+        }
+
+        /* Priority 5: Randomly Move
+         * Iterate across the entire board and create a list of all vacant spaces. */
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                if (BoardState[i, j] == Cell.Vacant)
+                {
+                    /* Take the coordinate (i, j) and create the equivalent string a1 that refers to the intersection. */
                     moves.Add((char)(j + 97) + "" + (i + 1));
                 }
             }
         }
 
-        int randMove = Random.Range(0, moves.Count);
+        /* Pick a random move from the list generated. */
+        randMove = Random.Range(0, moves.Count);
+
+        /* Make that move. */
         g = FindIntersection(moves[randMove]);
-        var intersection = g.GetComponent<Intersection>();
+        intersection = g.GetComponent<Intersection>();
         intersection.JumpTable();
     }
 
