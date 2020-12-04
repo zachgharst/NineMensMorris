@@ -127,6 +127,8 @@ public class BoardManager : MonoBehaviour
 
         turn = 0;
         currentPlayer = Player.White;
+        computerPlayer = Player.Black;
+
         millFormed = false;
         movingPiece = false;
 
@@ -163,7 +165,6 @@ public class BoardManager : MonoBehaviour
                 if(BoardState[3, 0] == cellCast && BoardState[3, 1] == cellCast && BoardState[3, 2] == cellCast)
                 {
                     intersectionPartOfMill = true;
-                    print("Mill formed within the special row on the left");
                 }
             }
             else
@@ -171,7 +172,6 @@ public class BoardManager : MonoBehaviour
                 if (BoardState[3, 4] == cellCast && BoardState[3, 5] == cellCast && BoardState[3, 6] == cellCast)
                 {
                     intersectionPartOfMill = true;
-                    print("Mill formed within the special row on the right");
                 }
             }
         }
@@ -191,7 +191,6 @@ public class BoardManager : MonoBehaviour
             if (piecesInLine == 3)
             {
                 intersectionPartOfMill = true;
-                print("Mill formed within row");
             }
         }
 
@@ -203,7 +202,6 @@ public class BoardManager : MonoBehaviour
                 if (BoardState[0, 3] == cellCast && BoardState[1, 3] == cellCast && BoardState[2, 3] == cellCast)
                 {
                     intersectionPartOfMill = true;
-                    print("Mill formed within the special column on the bottom");
                 }
             }
             else
@@ -211,7 +209,6 @@ public class BoardManager : MonoBehaviour
                 if (BoardState[4, 3] == cellCast && BoardState[5, 3] == cellCast && BoardState[6, 3] == cellCast)
                 {
                     intersectionPartOfMill = true;
-                    print("Mill formed within the special column on the top");
                 }
             }
         }
@@ -231,7 +228,6 @@ public class BoardManager : MonoBehaviour
             if (piecesInLine == 3)
             {
                 intersectionPartOfMill = true;
-                print("Mill formed within column");
             }
         }
 
