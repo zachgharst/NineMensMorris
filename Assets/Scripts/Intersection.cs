@@ -112,7 +112,7 @@ public class Intersection : MonoBehaviour
     public void OnMouseDown()
     {
         /* If it's the computer player's turn or the game is over, then the clicks do nothing! */
-        if((BoardManager.computerIsActive && BoardManager.currentPlayer == BoardManager.computerPlayer) || BoardManager.gameOver == true)
+        if((ComputerOpponent.isActive && BoardManager.currentPlayer == ComputerOpponent.computerPlayer) || BoardManager.gameOver == true)
         {
             return;
         }
