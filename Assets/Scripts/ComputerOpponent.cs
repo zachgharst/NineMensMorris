@@ -26,61 +26,107 @@ public class ComputerOpponent : MonoBehaviour
     public static bool isActive = true;
     public static double computerTime = 1.5;
 
+    /* Choose a new color for the computer and reset its turn timer. */
     public static void Reset()
     {
         computerPlayer = Random.Range(0, 2) == 1 ? Player.White : Player.Black;
         computerTime = 1.5;
     }
 
-    /* Computer AI Oppenent */
+    /* Takes in as input a list of moves then chooses one at random and performs a
+     * click on that intersection. It also returns the piece that was clicked on.
+     * If the list is empty, it returns the empty string. */
+    private string MakeRandomMoveFromList(List<string> moves)
+    {
+        if(moves.Count > 0)
+        {
+            /* Select a random move from the list of calculated moves. */
+            int selectRandomMove = Random.Range(0, moves.Count);
+
+            /* Perform a click on that piece. */
+            GameObject g = BoardManager.FindIntersection(moves[selectRandomMove]);
+            Intersection intersection = g.GetComponent<Intersection>();
+            intersection.JumpTable();
+            return moves[selectRandomMove];
+        }
+        else
+        {
+            return "";
+        }
+    }
+
+    /* Decide from the state of the game which action should happen next. */
+    private void DecisionTree()
+    {
+        /* Get the cell equivalent for the opposite player. */
+        Cell currentPlayerCell = BoardManager.currentPlayer == Player.White ? Cell.White : Cell.Black;
+        Cell oppositePlayerCell = BoardManager.currentPlayer == Player.White ? Cell.Black : Cell.White;
+
+        /* A mill has been formed then this click represents the removal of a piece. */
+        if (BoardManager.millFormed == true)
+        {
+            ComputerMill();
+        }
+
+        /* If black has unplayed pieces, still in phase 1. */
+        else if (BoardManager.blackUnplacedPieces > 0)
+        {
+            ComputerPhaseOne();
+        }
+
+        /* If moving piece is set to true, then pieces can be moved in phase 2. */
+        else if (BoardManager.movingPiece == true)
+        {
+        }
+
+        /* Last possible combination: selecting a piece in phase 2/3. */
+        else
+        {
+            ComputerPhaseTwo();
+        }
+    }
+
+    /* The computer has formed a mill and must remove a piece. */
+    private void ComputerMill()
+    {
+        bool allPlayerMenInMill = BoardManager.AllMenInMill();
+        bool isNodeNotPartOfMill;
+        Player humanPlayer = BoardManager.GetOppositePlayer();
+        Cell humanPlayerCell = humanPlayer == Player.White ? Cell.White : Cell.Black;
+        List<string> possibleMills = new List<string>();
+
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                if (BoardManager.BoardState[i, j] == humanPlayerCell)
+                {
+                    /* A piece can only be removed if it is not part of a mill
+                     * OR if all pieces of that player are in a mill. */
+                    isNodeNotPartOfMill = !BoardManager.CheckMill(humanPlayer, i, j);
+                    if (allPlayerMenInMill || isNodeNotPartOfMill)
+                    {
+                        /* Add the node to the list of possible mills. */
+                        possibleMills.Add((char)(j + 97) + "" + (i + 1));
+                    }
+                }
+            }
+        }
+
+        MakeRandomMoveFromList(possibleMills);
+    }
+
+    /* The computer is placing its pieces in phase 1. */
     private void ComputerPhaseOne()
     {
-        GameObject g;
         Player humanPlayer = BoardManager.GetOppositePlayer();
         Cell humanPlayerCell = humanPlayer == Player.White ? Cell.White : Cell.Black;
         Cell computerPlayerCell = computerPlayer == Player.White ? Cell.White : Cell.Black;
         List<string> moves = new List<string>();
-        List<string> selection = new List<string>();
-        int randMove;
-        Intersection intersection;
 
-        if (BoardManager.blackRemainingPieces == 3)
-        {
-            computerPhaseThree();
-            return;
-        }
+        bool possibleMillFormed;
 
-        if (BoardManager.blackUnplacedPieces == 0)
-        {
-            computerPhaseTwo();
-            return;
-        }
-
-        /* The computer has formed a mill and must pick a piece to remove. */
-        if (BoardManager.millFormed)
-        {
-            for (int i = 0; i < 7; i++)
-            {
-                for (int j = 0; j < 7; j++)
-                {
-                    if (BoardManager.BoardState[i, j] == humanPlayerCell)
-                    {
-                        moves.Add((char)(j + 97) + "" + (i + 1));
-                    }
-                }
-            }
-
-            if (moves.Count > 0)
-            {
-                randMove = Random.Range(0, moves.Count);
-
-                g = BoardManager.FindIntersection(moves[randMove]);
-                intersection = g.GetComponent<Intersection>();
-                intersection.JumpTable();
-                return;
-            }
-        }
-        /* Priority 3: Forming Mills
+        /* Priority 2: Forming Mills
         * Iterate across the entire board and create a list of nodes that gives the player a mill next turn. */
         for (int i = 0; i < 7; i++)
         {
@@ -89,7 +135,7 @@ public class ComputerOpponent : MonoBehaviour
                 if (BoardManager.BoardState[i, j] == Cell.Vacant)
                 {
                     BoardManager.BoardState[i, j] = computerPlayerCell;
-                    bool possibleMillFormed = BoardManager.CheckMill(computerPlayer, i, j);
+                    possibleMillFormed = BoardManager.CheckMill(computerPlayer, i, j);
                     /* Take the coordinate (i, j) and create the equivalent string a1 that refers to the intersection. */
                     if (possibleMillFormed)
                     {
@@ -100,17 +146,12 @@ public class ComputerOpponent : MonoBehaviour
             }
         }
 
-        if (moves.Count > 0)
+        if (MakeRandomMoveFromList(moves) != "")
         {
-            randMove = Random.Range(0, moves.Count);
-
-            g = BoardManager.FindIntersection(moves[randMove]);
-            intersection = g.GetComponent<Intersection>();
-            intersection.JumpTable();
             return;
         }
 
-        /* Priority 2: Blocking Mills
+        /* Priority 3: Blocking Mills
         * Iterate across the entire board and create a list of nodes that gives the player a mill next turn. */
         for (int i = 0; i < 7; i++)
         {
@@ -119,8 +160,7 @@ public class ComputerOpponent : MonoBehaviour
                 if (BoardManager.BoardState[i, j] == Cell.Vacant)
                 {
                     BoardManager.BoardState[i, j] = humanPlayerCell;
-                    bool possibleMillFormed = BoardManager.CheckMill(humanPlayer, i, j);
-                    /* Take the coordinate (i, j) and create the equivalent string a1 that refers to the intersection. */
+                    possibleMillFormed = BoardManager.CheckMill(humanPlayer, i, j);
                     if (possibleMillFormed)
                     {
                         moves.Add((char)(j + 97) + "" + (i + 1));
@@ -130,13 +170,8 @@ public class ComputerOpponent : MonoBehaviour
             }
         }
 
-        if (moves.Count > 0)
+        if (MakeRandomMoveFromList(moves) != "")
         {
-            randMove = Random.Range(0, moves.Count);
-
-            g = BoardManager.FindIntersection(moves[randMove]);
-            intersection = g.GetComponent<Intersection>();
-            intersection.JumpTable();
             return;
         }
 
@@ -154,66 +189,48 @@ public class ComputerOpponent : MonoBehaviour
             }
         }
 
-        /* Pick a random move from the list generated. */
-        randMove = Random.Range(0, moves.Count);
-
-        /* Make that move. */
-        g = BoardManager.FindIntersection(moves[randMove]);
-        intersection = g.GetComponent<Intersection>();
-        intersection.JumpTable();
+        MakeRandomMoveFromList(moves);
     }
 
-    private void computerPhaseTwo()
+    /* This will choose a piece to move then move it. We should probably
+     * separate this into two different functions; one that chooses a piece to move,
+     * and then one that actually makes that move. TODO */
+    private void ComputerPhaseTwo()
     {
-        GameObject g;
         Cell computerPlayerCell = computerPlayer == Player.White ? Cell.White : Cell.Black;
-        List<string> movesOfPieces = new List<string>();
-        int randomMove;
-        string randSelection;
-        List<string> selectionOfPiece = new List<string>();
-        Intersection intersection;
+        List<string> possiblePieceToSelect = new List<string>();
+        List<string> possibleMovesOfPiece = new List<string>();
 
         for (int i = 0; i < 7; i++)
         {
             for (int j = 0; j < 7; j++)
             {
-                if (BoardManager.BoardState[i, j] == computerPlayerCell)
+                if (BoardManager.BoardState[i, j] == computerPlayerCell && BoardManager.HasAvailableVacantNeighbor(i, j))
                 {
-                    /* Take the coordinate (i, j) and create the equivalent string a1 that refers to the intersection. */
-                    selectionOfPiece.Add((char)(j + 97) + "" + (i + 1));
+                    possiblePieceToSelect.Add((char)(j + 97) + "" + (i + 1));
                 }
             }
         }
 
-        /* Pick a random move from the list generated. */
-        randSelection = selectionOfPiece[Random.Range(0, selectionOfPiece.Count)];
-        g = BoardManager.FindIntersection(randSelection);
-        intersection = g.GetComponent<Intersection>();
-        intersection.JumpTable();
+        string pieceSelected = MakeRandomMoveFromList(possiblePieceToSelect);
+        Intersection intersectionSelected = BoardManager.FindIntersection(pieceSelected).GetComponent<Intersection>();
+        possibleMovesOfPiece = BoardManager.getAdjacencyList(intersectionSelected.row, intersectionSelected.column);
+        List<string> vacantNeighborsOfSelectedPiece = new List<string>();
 
-        movesOfPieces = BoardManager.getAdjacencyList(intersection.row, intersection.column);
-
-        /*Intersection eliminateOccupied;
-        foreach (string str in movesOfPieces)
+        Intersection eliminateOccupied;
+        foreach (string str in possibleMovesOfPiece)
         {
             eliminateOccupied = BoardManager.FindIntersection(str).GetComponent<Intersection>();
-            if (BoardManager.BoardState[eliminateOccupied.row, eliminateOccupied.column] != Cell.Vacant)
+            if (BoardManager.BoardState[eliminateOccupied.row, eliminateOccupied.column] == Cell.Vacant)
             {
-                movesOfPieces.Remove(str);
+                vacantNeighborsOfSelectedPiece.Add(str);
             }
-        }*/
+        }
 
-        /* Pick a random move from the list generated. */
-        randomMove = Random.Range(0, movesOfPieces.Count);
-
-        /* Make that move. */
-
-        g = BoardManager.FindIntersection(movesOfPieces[randomMove]);
-        intersection = g.GetComponent<Intersection>();
-        intersection.JumpTable();
+        MakeRandomMoveFromList(vacantNeighborsOfSelectedPiece);
     }
 
-    private void computerPhaseThree()
+    private void ComputerPhaseThree()
     {
         GameObject g;
         Cell computerPlayerCell = computerPlayer == Player.White ? Cell.White : Cell.Black;
@@ -263,7 +280,7 @@ public class ComputerOpponent : MonoBehaviour
 
     private void Update()
     {
-        if (isActive && BoardManager.currentPlayer == computerPlayer)
+        if (isActive && BoardManager.currentPlayer == computerPlayer && !BoardManager.gameOver)
         {
             if (computerTime > 0)
             {
@@ -272,7 +289,7 @@ public class ComputerOpponent : MonoBehaviour
             else
             {
                 computerTime = 1.5;
-                ComputerPhaseOne();
+                DecisionTree();
             }
         }
     }
