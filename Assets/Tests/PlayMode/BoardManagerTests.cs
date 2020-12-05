@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEditor.Experimental.GraphView;
@@ -211,6 +212,19 @@ namespace Tests
             Assert.AreEqual(BoardManager.BoardState[5, 5], Cell.White);
             Assert.AreEqual(BoardManager.BoardState[0, 0], Cell.Vacant);
             Assert.AreEqual(BoardManager.BoardState[0, 6], Cell.Vacant);
+        }
+
+        [Test]
+        public void GetAdjacencyList()
+        {
+            List<string> actual = BoardManager.getAdjacencyList(2, 3);
+
+            List<string> expected = new List<string>();
+            expected.Add("c3");
+            expected.Add("e3");
+            expected.Add("d2");
+
+            Assert.IsTrue(Enumerable.SequenceEqual(expected, actual));
         }
     }
 }
