@@ -79,6 +79,12 @@ public class ComputerOpponent : MonoBehaviour
         {
         }
 
+        else if (BoardManager.blackRemainingPieces == 3)
+        {
+            ComputerPhaseThree();
+            ComputerPhaseOne();
+        }
+
         /* Last possible combination: selecting a piece in phase 2/3. */
         else
         {
@@ -234,9 +240,7 @@ public class ComputerOpponent : MonoBehaviour
     {
         GameObject g;
         Cell computerPlayerCell = computerPlayer == Player.White ? Cell.White : Cell.Black;
-        List<string> movesOfPieces = new List<string>();
         List<string> selectionOfPiece = new List<string>();
-        int randMove;
         string randSelection;
         Intersection intersection;
 
@@ -254,26 +258,6 @@ public class ComputerOpponent : MonoBehaviour
 
         randSelection = selectionOfPiece[Random.Range(0, selectionOfPiece.Count)];
         g = BoardManager.FindIntersection(randSelection);
-        intersection = g.GetComponent<Intersection>();
-        intersection.JumpTable();
-
-        for (int i = 0; i < 7; i++)
-        {
-            for (int j = 0; j < 7; j++)
-            {
-                if (BoardManager.BoardState[i, j] == Cell.Vacant)
-                {
-                    /* Take the coordinate (i, j) and create the equivalent string a1 that refers to the intersection. */
-                    movesOfPieces.Add((char)(j + 97) + "" + (i + 1));
-                }
-            }
-        }
-
-        /* Pick a random move from the list generated. */
-        randMove = Random.Range(0, movesOfPieces.Count);
-
-        /* Make that move. */
-        g = BoardManager.FindIntersection(movesOfPieces[randMove]);
         intersection = g.GetComponent<Intersection>();
         intersection.JumpTable();
     }
