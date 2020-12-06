@@ -61,6 +61,27 @@ public class ComputerOpponent : MonoBehaviour
         }
     }
 
+    /* The computer has formed a mill and must remove a piece. */
+    private void ComputerMill()
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                if (BoardManager.BoardState[i, j] == humanPlayerCell)
+                {
+                    moves.Add((char)(j + 97) + "" + (i + 1));
+                }
+            }
+        }
+
+        selectRandomMove = Random.Range(0, moves.Count);
+
+        GameObject g = BoardManager.FindIntersection(moves[selectRandomMove]);
+        intersection = g.GetComponent<Intersection>();
+        intersection.JumpTable();
+    }
+
     /* Computer AI Oppenent */
     private void ComputerPhaseOne()
     {
@@ -73,30 +94,6 @@ public class ComputerOpponent : MonoBehaviour
         int randMove;
         Intersection intersection;
 
-        /* The computer has formed a mill and must pick a piece to remove. */
-        if (BoardManager.millFormed)
-        {
-            for (int i = 0; i < 7; i++)
-            {
-                for (int j = 0; j < 7; j++)
-                {
-                    if (BoardManager.BoardState[i, j] == humanPlayerCell)
-                    {
-                        moves.Add((char)(j + 97) + "" + (i + 1));
-                    }
-                }
-            }
-
-            if (moves.Count > 0)
-            {
-                randMove = Random.Range(0, moves.Count);
-
-                g = BoardManager.FindIntersection(moves[randMove]);
-                intersection = g.GetComponent<Intersection>();
-                intersection.JumpTable();
-                return;
-            }
-        }
         /* Priority 2: Forming Mills
         * Iterate across the entire board and create a list of nodes that gives the player a mill next turn. */
         for (int i = 0; i < 7; i++)
