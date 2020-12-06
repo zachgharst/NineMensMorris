@@ -37,7 +37,7 @@ public class ComputerOpponent : MonoBehaviour
      * click on that intersection. If the list is empty, it returns false. */
     private bool MakeRandomMoveFromList(List<string> moves)
     {
-        if(moves.Count > 1)
+        if(moves.Count > 0)
         {
             /* Select a random move from the list of calculated moves. */
             int selectRandomMove = Random.Range(0, moves.Count);
@@ -118,14 +118,12 @@ public class ComputerOpponent : MonoBehaviour
     /* The computer is placing its pieces in phase 1. */
     private void ComputerPhaseOne()
     {
-        GameObject g;
         Player humanPlayer = BoardManager.GetOppositePlayer();
         Cell humanPlayerCell = humanPlayer == Player.White ? Cell.White : Cell.Black;
         Cell computerPlayerCell = computerPlayer == Player.White ? Cell.White : Cell.Black;
         List<string> moves = new List<string>();
-        List<string> selection = new List<string>();
-        int randMove;
-        Intersection intersection;
+
+        bool possibleMillFormed;
 
         /* Priority 2: Forming Mills
         * Iterate across the entire board and create a list of nodes that gives the player a mill next turn. */
@@ -136,7 +134,7 @@ public class ComputerOpponent : MonoBehaviour
                 if (BoardManager.BoardState[i, j] == Cell.Vacant)
                 {
                     BoardManager.BoardState[i, j] = computerPlayerCell;
-                    bool possibleMillFormed = BoardManager.CheckMill(computerPlayer, i, j);
+                    possibleMillFormed = BoardManager.CheckMill(computerPlayer, i, j);
                     /* Take the coordinate (i, j) and create the equivalent string a1 that refers to the intersection. */
                     if (possibleMillFormed)
                     {
@@ -147,13 +145,8 @@ public class ComputerOpponent : MonoBehaviour
             }
         }
 
-        if (moves.Count > 0)
+        if (MakeRandomMoveFromList(moves))
         {
-            randMove = Random.Range(0, moves.Count);
-
-            g = BoardManager.FindIntersection(moves[randMove]);
-            intersection = g.GetComponent<Intersection>();
-            intersection.JumpTable();
             return;
         }
 
@@ -166,8 +159,7 @@ public class ComputerOpponent : MonoBehaviour
                 if (BoardManager.BoardState[i, j] == Cell.Vacant)
                 {
                     BoardManager.BoardState[i, j] = humanPlayerCell;
-                    bool possibleMillFormed = BoardManager.CheckMill(humanPlayer, i, j);
-                    /* Take the coordinate (i, j) and create the equivalent string a1 that refers to the intersection. */
+                    possibleMillFormed = BoardManager.CheckMill(humanPlayer, i, j);
                     if (possibleMillFormed)
                     {
                         moves.Add((char)(j + 97) + "" + (i + 1));
@@ -177,13 +169,8 @@ public class ComputerOpponent : MonoBehaviour
             }
         }
 
-        if (moves.Count > 0)
+        if (MakeRandomMoveFromList(moves))
         {
-            randMove = Random.Range(0, moves.Count);
-
-            g = BoardManager.FindIntersection(moves[randMove]);
-            intersection = g.GetComponent<Intersection>();
-            intersection.JumpTable();
             return;
         }
 
@@ -201,13 +188,10 @@ public class ComputerOpponent : MonoBehaviour
             }
         }
 
-        /* Pick a random move from the list generated. */
-        randMove = Random.Range(0, moves.Count);
-
-        /* Make that move. */
-        g = BoardManager.FindIntersection(moves[randMove]);
-        intersection = g.GetComponent<Intersection>();
-        intersection.JumpTable();
+        if (MakeRandomMoveFromList(moves))
+        {
+            return;
+        }
     }
 
     private void ComputerPhaseTwo()
