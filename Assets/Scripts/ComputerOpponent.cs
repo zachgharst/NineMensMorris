@@ -34,7 +34,7 @@ public class ComputerOpponent : MonoBehaviour
     }
 
     /* Decide from the state of the game which action should happen next. */
-    public void JumpTable()
+    public void DecisionTree()
     {
         /* Get the cell equivalent for the opposite player. */
         Cell currentPlayerCell = BoardManager.currentPlayer == Player.White ? Cell.White : Cell.Black;
@@ -43,6 +43,7 @@ public class ComputerOpponent : MonoBehaviour
         /* A mill has been formed then this click represents the removal of a piece. */
         if (BoardManager.millFormed == true)
         {
+            ComputerMill();
         }
 
         /* If black has unplayed pieces, still in phase 1. */
@@ -303,7 +304,7 @@ public class ComputerOpponent : MonoBehaviour
             else
             {
                 computerTime = 1.5;
-                ComputerPhaseOne();
+                DecisionTree();
             }
         }
     }
