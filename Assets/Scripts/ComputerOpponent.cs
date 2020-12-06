@@ -33,8 +33,29 @@ public class ComputerOpponent : MonoBehaviour
         computerTime = 1.5;
     }
 
+    /* Takes in as input a list of moves then chooses one at random and performs a
+     * click on that intersection. If the list is empty, it returns false. */
+    private bool MakeRandomMoveFromList(List<string> moves)
+    {
+        if(moves.Count > 1)
+        {
+            /* Select a random move from the list of calculated moves. */
+            int selectRandomMove = Random.Range(0, moves.Count);
+
+            /* Perform a click on that piece. */
+            GameObject g = BoardManager.FindIntersection(moves[selectRandomMove]);
+            Intersection intersection = g.GetComponent<Intersection>();
+            intersection.JumpTable();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     /* Decide from the state of the game which action should happen next. */
-    public void DecisionTree()
+    private void DecisionTree()
     {
         /* Get the cell equivalent for the opposite player. */
         Cell currentPlayerCell = BoardManager.currentPlayer == Player.White ? Cell.White : Cell.Black;
@@ -71,7 +92,7 @@ public class ComputerOpponent : MonoBehaviour
         bool isNodeNotPartOfMill;
         Player humanPlayer = BoardManager.GetOppositePlayer();
         Cell humanPlayerCell = humanPlayer == Player.White ? Cell.White : Cell.Black;
-        List<string> moves = new List<string>();
+        List<string> possibleMills = new List<string>();
 
         for (int i = 0; i < 7; i++)
         {
@@ -85,22 +106,16 @@ public class ComputerOpponent : MonoBehaviour
                     if (allPlayerMenInMill || isNodeNotPartOfMill)
                     {
                         /* Add the node to the list of possible mills. */
-                        moves.Add((char)(j + 97) + "" + (i + 1));
+                        possibleMills.Add((char)(j + 97) + "" + (i + 1));
                     }
                 }
             }
         }
 
-        /* Select a random move from the list of calculated moves. */
-        int selectRandomMove = Random.Range(0, moves.Count);
-
-        /* Perform a click on that piece. */
-        GameObject g = BoardManager.FindIntersection(moves[selectRandomMove]);
-        Intersection intersection = g.GetComponent<Intersection>();
-        intersection.JumpTable();
+        MakeRandomMoveFromList(possibleMills);
     }
 
-    /* Computer AI Oppenent */
+    /* The computer is placing its pieces in phase 1. */
     private void ComputerPhaseOne()
     {
         GameObject g;
