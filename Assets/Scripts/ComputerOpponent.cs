@@ -34,8 +34,9 @@ public class ComputerOpponent : MonoBehaviour
     }
 
     /* Takes in as input a list of moves then chooses one at random and performs a
-     * click on that intersection. If the list is empty, it returns false. */
-    private bool MakeRandomMoveFromList(List<string> moves)
+     * click on that intersection. It also returns the piece that was clicked on.
+     * If the list is empty, it returns the empty string. */
+    private string MakeRandomMoveFromList(List<string> moves)
     {
         if(moves.Count > 0)
         {
@@ -46,11 +47,11 @@ public class ComputerOpponent : MonoBehaviour
             GameObject g = BoardManager.FindIntersection(moves[selectRandomMove]);
             Intersection intersection = g.GetComponent<Intersection>();
             intersection.JumpTable();
-            return true;
+            return moves[selectRandomMove];
         }
         else
         {
-            return false;
+            return "";
         }
     }
 
@@ -145,7 +146,7 @@ public class ComputerOpponent : MonoBehaviour
             }
         }
 
-        if (MakeRandomMoveFromList(moves))
+        if (MakeRandomMoveFromList(moves) != "")
         {
             return;
         }
@@ -169,7 +170,7 @@ public class ComputerOpponent : MonoBehaviour
             }
         }
 
-        if (MakeRandomMoveFromList(moves))
+        if (MakeRandomMoveFromList(moves) != "")
         {
             return;
         }
@@ -188,60 +189,46 @@ public class ComputerOpponent : MonoBehaviour
             }
         }
 
-        if (MakeRandomMoveFromList(moves))
-        {
-            return;
-        }
+        MakeRandomMoveFromList(moves);
     }
 
     private void ComputerPhaseTwo()
     {
         GameObject g;
         Cell computerPlayerCell = computerPlayer == Player.White ? Cell.White : Cell.Black;
-        List<string> movesOfPieces = new List<string>();
+        List<string> possiblePieceToSelect = new List<string>();
+        List<string> possibleMovesOfPiece = new List<string>();
         int randomMove;
         string randSelection;
-        List<string> selectionOfPiece = new List<string>();
         Intersection intersection;
 
         for (int i = 0; i < 7; i++)
         {
             for (int j = 0; j < 7; j++)
             {
-                if (BoardManager.BoardState[i, j] == computerPlayerCell)
+                if (BoardManager.BoardState[i, j] == computerPlayerCell && BoardManager.HasAvailableVacantNeighbor(i, j))
                 {
-                    /* Take the coordinate (i, j) and create the equivalent string a1 that refers to the intersection. */
-                    selectionOfPiece.Add((char)(j + 97) + "" + (i + 1));
+                    possiblePieceToSelect.Add((char)(j + 97) + "" + (i + 1));
                 }
             }
         }
 
-        /* Pick a random move from the list generated. */
-        randSelection = selectionOfPiece[Random.Range(0, selectionOfPiece.Count)];
-        g = BoardManager.FindIntersection(randSelection);
-        intersection = g.GetComponent<Intersection>();
-        intersection.JumpTable();
+        string pieceSelected = MakeRandomMoveFromList(possiblePieceToSelect);
+        Intersection intersectionSelected = BoardManager.FindIntersection(pieceSelected).GetComponent<Intersection>();
+        possibleMovesOfPiece = BoardManager.getAdjacencyList(intersectionSelected.row, intersectionSelected.column);
+        List<string> vacantNeighborsOfSelectedPiece = new List<string>();
 
-        movesOfPieces = BoardManager.getAdjacencyList(intersection.row, intersection.column);
-
-        /*Intersection eliminateOccupied;
-        foreach (string str in movesOfPieces)
+        Intersection eliminateOccupied;
+        foreach (string str in possibleMovesOfPiece)
         {
             eliminateOccupied = BoardManager.FindIntersection(str).GetComponent<Intersection>();
-            if (BoardManager.BoardState[eliminateOccupied.row, eliminateOccupied.column] != Cell.Vacant)
+            if (BoardManager.BoardState[eliminateOccupied.row, eliminateOccupied.column] == Cell.Vacant)
             {
-                movesOfPieces.Remove(str);
+                vacantNeighborsOfSelectedPiece.Add(str);
             }
-        }*/
+        }
 
-        /* Pick a random move from the list generated. */
-        randomMove = Random.Range(0, movesOfPieces.Count);
-
-        /* Make that move. */
-
-        g = BoardManager.FindIntersection(movesOfPieces[randomMove]);
-        intersection = g.GetComponent<Intersection>();
-        intersection.JumpTable();
+        MakeRandomMoveFromList(vacantNeighborsOfSelectedPiece);
     }
 
     private void ComputerPhaseThree()
