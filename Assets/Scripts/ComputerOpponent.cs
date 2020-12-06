@@ -67,9 +67,10 @@ public class ComputerOpponent : MonoBehaviour
     private void ComputerMill()
     {
         bool allPlayerMenInMill = BoardManager.AllMenInMill();
-        bool isNodePartOfMill;
+        bool isNodeNotPartOfMill;
         Player humanPlayer = BoardManager.GetOppositePlayer();
         Cell humanPlayerCell = humanPlayer == Player.White ? Cell.White : Cell.Black;
+        List<string> moves = new List<string>();
 
         for (int i = 0; i < 7; i++)
         {
@@ -78,20 +79,23 @@ public class ComputerOpponent : MonoBehaviour
                 if (BoardManager.BoardState[i, j] == humanPlayerCell)
                 {
                     /* A piece can only be removed if it is not part of a mill
-                     * OR if all men of that player are in a mill. */
-                    isNodeNotPartOfMill = !CheckMill(humanPlayer, i, j);
+                     * OR if all pieces of that player are in a mill. */
+                    isNodeNotPartOfMill = !BoardManager.CheckMill(humanPlayer, i, j);
                     if (allPlayerMenInMill || isNodeNotPartOfMill)
                     {
+                        /* Add the node to the list of possible mills. */
                         moves.Add((char)(j + 97) + "" + (i + 1));
                     }
                 }
             }
         }
 
-        selectRandomMove = Random.Range(0, moves.Count);
+        /* Select a random move from the list of calculated moves. */
+        int selectRandomMove = Random.Range(0, moves.Count);
 
+        /* Perform a click on that piece. */
         GameObject g = BoardManager.FindIntersection(moves[selectRandomMove]);
-        intersection = g.GetComponent<Intersection>();
+        Intersection intersection = g.GetComponent<Intersection>();
         intersection.JumpTable();
     }
 
@@ -190,7 +194,7 @@ public class ComputerOpponent : MonoBehaviour
         intersection.JumpTable();
     }
 
-    private void computerPhaseTwo()
+    private void ComputerPhaseTwo()
     {
         GameObject g;
         Cell computerPlayerCell = computerPlayer == Player.White ? Cell.White : Cell.Black;
@@ -240,7 +244,7 @@ public class ComputerOpponent : MonoBehaviour
         intersection.JumpTable();
     }
 
-    private void computerPhaseThree()
+    private void ComputerPhaseThree()
     {
         GameObject g;
         Cell computerPlayerCell = computerPlayer == Player.White ? Cell.White : Cell.Black;
