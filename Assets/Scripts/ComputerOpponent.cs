@@ -192,15 +192,14 @@ public class ComputerOpponent : MonoBehaviour
         MakeRandomMoveFromList(moves);
     }
 
+    /* This will choose a piece to move then move it. We should probably
+     * separate this into two different functions; one that chooses a piece to move,
+     * and then one that actually makes that move. TODO */
     private void ComputerPhaseTwo()
     {
-        GameObject g;
         Cell computerPlayerCell = computerPlayer == Player.White ? Cell.White : Cell.Black;
         List<string> possiblePieceToSelect = new List<string>();
         List<string> possibleMovesOfPiece = new List<string>();
-        int randomMove;
-        string randSelection;
-        Intersection intersection;
 
         for (int i = 0; i < 7; i++)
         {
@@ -281,7 +280,7 @@ public class ComputerOpponent : MonoBehaviour
 
     private void Update()
     {
-        if (isActive && BoardManager.currentPlayer == computerPlayer)
+        if (isActive && BoardManager.currentPlayer == computerPlayer && !BoardManager.gameOver)
         {
             if (computerTime > 0)
             {
