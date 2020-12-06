@@ -26,12 +26,14 @@ public class ComputerOpponent : MonoBehaviour
     public static bool isActive = true;
     public static double computerTime = 1.5;
 
+    /* Choose a new color for the computer and reset its turn timer. */
     public static void Reset()
     {
         computerPlayer = Random.Range(0, 2) == 1 ? Player.White : Player.Black;
         computerTime = 1.5;
     }
 
+    /* Decide from the state of the game which action should happen next. */
     public void JumpTable()
     {
         /* Get the cell equivalent for the opposite player. */
@@ -64,13 +66,22 @@ public class ComputerOpponent : MonoBehaviour
     /* The computer has formed a mill and must remove a piece. */
     private void ComputerMill()
     {
+        bool allPlayerMenInMill = BoardManager.AllMenInMill();
+        bool isNodePartOfMill;
+        Player humanPlayer = BoardManager.GetOppositePlayer();
+        Cell humanPlayerCell = humanPlayer == Player.White ? Cell.White : Cell.Black;
+
         for (int i = 0; i < 7; i++)
         {
             for (int j = 0; j < 7; j++)
             {
                 if (BoardManager.BoardState[i, j] == humanPlayerCell)
                 {
-                    moves.Add((char)(j + 97) + "" + (i + 1));
+                    isNodeNotPartOfMill = !CheckMill(humanPlayer, i, j);
+                    if (allPlayerMenInMill || isNodePartOfMill)
+                    {
+                        moves.Add((char)(j + 97) + "" + (i + 1));
+                    }
                 }
             }
         }
