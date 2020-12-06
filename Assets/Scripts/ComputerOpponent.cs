@@ -77,8 +77,10 @@ public class ComputerOpponent : MonoBehaviour
             {
                 if (BoardManager.BoardState[i, j] == humanPlayerCell)
                 {
+                    /* A piece can only be removed if it is not part of a mill
+                     * OR if all men of that player are in a mill. */
                     isNodeNotPartOfMill = !CheckMill(humanPlayer, i, j);
-                    if (allPlayerMenInMill || isNodePartOfMill)
+                    if (allPlayerMenInMill || isNodeNotPartOfMill)
                     {
                         moves.Add((char)(j + 97) + "" + (i + 1));
                     }
