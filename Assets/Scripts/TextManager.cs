@@ -23,6 +23,8 @@ using UnityEngine.UI;
 public class TextManager : MonoBehaviour
 {
     public Text textTest;
+    public Text whiteText;
+    public Text blackText;
 
     void Start()
     {
