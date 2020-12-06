@@ -29,6 +29,8 @@ public class TextManager : MonoBehaviour
     void Start()
     {
         textTest = GetComponent<Text>();
+        whiteText.text = "White Player \n";     // placeholder for username (if wanted)
+        blackText.text = "Black Player \n";
     }
 
     void Update()
@@ -38,8 +40,8 @@ public class TextManager : MonoBehaviour
         {
             string playersTurn = BoardManager.currentPlayer == Player.White ? "White" : "Black";
             textTest.text = BoardManager.blackUnplacedPieces.ToString() + " pieces remaining for black" +
-                "\n\n\n\n\n\n\n\n\n\n\n\nPhase 1\n" +
-                playersTurn + "'s turn\n\n\n\n\n\n\n\n\n\n\n\n" +
+                "Phase 1\n" +
+                playersTurn + "'s turn\n" +
                 BoardManager.whiteUnplacedPieces.ToString() + " pieces remaining for white";
         }
 
@@ -48,8 +50,8 @@ public class TextManager : MonoBehaviour
         {
             string playersTurn = BoardManager.currentPlayer == Player.White ? "White" : "Black";
             textTest.text = BoardManager.blackRemainingPieces.ToString() + " pieces remaining for black" +
-                "\n\n\n\n\n\n\n\n\n\n\n\nPhase 2\n" +
-                playersTurn + "'s turn\n\n\n\n\n\n\n\n\n\n\n\n" +
+                "Phase 2\n" +
+                playersTurn + "'s turn\n" +
                 BoardManager.whiteRemainingPieces.ToString() + " pieces remaining for white";
         }
 
@@ -58,8 +60,8 @@ public class TextManager : MonoBehaviour
         {
             string playersTurn = BoardManager.currentPlayer == Player.White ? "White" : "Black";
             textTest.text = BoardManager.blackRemainingPieces.ToString() + " pieces remaining for black" +
-                "\n\n\n\n\n\n\n\n\n\n\n\nPhase 3\n" +
-                playersTurn + "'s turn\n\n\n\n\n\n\n\n\n\n\n\n" +
+                "Phase 3\n" +
+                playersTurn + "'s turn\n" +
                 BoardManager.whiteRemainingPieces.ToString() + " pieces remaining for white";
         }
 
