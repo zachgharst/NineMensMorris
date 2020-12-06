@@ -410,7 +410,6 @@ public class BoardManager : MonoBehaviour
 
         if(BoardState[row, column] == Cell.Black || BoardState[row, column] == Cell.White)
         {
-            BoardState[row, column] = Cell.Vacant;
             s.sprite = b.manSelected;
             movingPiece = true;
         }
@@ -442,6 +441,7 @@ public class BoardManager : MonoBehaviour
 
             else if (isWhitePhase3 || isAdjacent(tempRow, tempCol, row, column))
             {
+                BoardState[tempRow, tempCol] = Cell.Vacant;
                 BoardState[row, column] = Cell.White;
                 movingPiece = false;
 
@@ -482,6 +482,7 @@ public class BoardManager : MonoBehaviour
 
             else if (isBlackPhase3 || isAdjacent(tempRow, tempCol, row, column))
             {
+                BoardState[tempRow, tempCol] = Cell.Vacant;
                 BoardState[row, column] = Cell.Black;
                 movingPiece = false;
 
