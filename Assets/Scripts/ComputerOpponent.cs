@@ -74,15 +74,16 @@ public class ComputerOpponent : MonoBehaviour
             ComputerPhaseOne();
         }
 
-        /* If moving piece is set to true, then pieces can be moved in phase 2. */
-        else if (BoardManager.movingPiece == true)
-        {
-        }
-
         else if (BoardManager.blackRemainingPieces == 3)
         {
-            ComputerPhaseThree();
-            ComputerPhaseOne();
+            if (BoardManager.movingPiece == true)
+            {
+                ComputerPhaseOne();
+            }
+            else
+            {
+                ComputerPhaseThree();
+            }
         }
 
         /* Last possible combination: selecting a piece in phase 2/3. */
@@ -273,6 +274,7 @@ public class ComputerOpponent : MonoBehaviour
             else
             {
                 computerTime = 1.5;
+                print("I'm Thinking...");
                 DecisionTree();
             }
         }
