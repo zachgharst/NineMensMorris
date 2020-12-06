@@ -32,6 +32,35 @@ public class ComputerOpponent : MonoBehaviour
         computerTime = 1.5;
     }
 
+    public void JumpTable()
+    {
+        /* Get the cell equivalent for the opposite player. */
+        Cell currentPlayerCell = BoardManager.currentPlayer == Player.White ? Cell.White : Cell.Black;
+        Cell oppositePlayerCell = BoardManager.currentPlayer == Player.White ? Cell.Black : Cell.White;
+
+        /* A mill has been formed then this click represents the removal of a piece. */
+        if (BoardManager.millFormed == true)
+        {
+        }
+
+        /* If black has unplayed pieces, still in phase 1. */
+        else if (BoardManager.blackUnplacedPieces > 0)
+        {
+            ComputerPhaseOne();
+        }
+
+        /* If moving piece is set to true, then pieces can be moved in phase 2. */
+        else if (BoardManager.movingPiece == true)
+        {
+        }
+
+        /* Last possible combination: selecting a piece in phase 2/3. */
+        else
+        {
+            ComputerPhaseTwo();
+        }
+    }
+
     /* Computer AI Oppenent */
     private void ComputerPhaseOne()
     {
@@ -43,18 +72,6 @@ public class ComputerOpponent : MonoBehaviour
         List<string> selection = new List<string>();
         int randMove;
         Intersection intersection;
-
-        if (BoardManager.blackRemainingPieces == 3)
-        {
-            computerPhaseThree();
-            return;
-        }
-
-        if (BoardManager.blackUnplacedPieces == 0)
-        {
-            computerPhaseTwo();
-            return;
-        }
 
         /* The computer has formed a mill and must pick a piece to remove. */
         if (BoardManager.millFormed)
@@ -80,7 +97,7 @@ public class ComputerOpponent : MonoBehaviour
                 return;
             }
         }
-        /* Priority 3: Forming Mills
+        /* Priority 2: Forming Mills
         * Iterate across the entire board and create a list of nodes that gives the player a mill next turn. */
         for (int i = 0; i < 7; i++)
         {
@@ -110,7 +127,7 @@ public class ComputerOpponent : MonoBehaviour
             return;
         }
 
-        /* Priority 2: Blocking Mills
+        /* Priority 3: Blocking Mills
         * Iterate across the entire board and create a list of nodes that gives the player a mill next turn. */
         for (int i = 0; i < 7; i++)
         {
