@@ -23,14 +23,14 @@ using UnityEngine.UI;
 public class TextManager : MonoBehaviour
 {
     public Text textTest;
-    public Text whiteText;
-    public Text blackText;
+    //public Text whiteText;
+    //public Text blackText;
 
     void Start()
     {
         textTest = GetComponent<Text>();
-        whiteText.text = "White Player \n";     // placeholder for username (if wanted)
-        blackText.text = "Black Player \n";
+        //whiteText.text = "White Player \n";     // placeholder for username (if wanted)
+        //blackText.text = "Black Player \n";
     }
 
     void Update()
