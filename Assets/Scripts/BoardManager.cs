@@ -54,7 +54,7 @@ public class BoardManager : MonoBehaviour
 
     private Text whiteEventText;
     private Text blackEventText;
-    private TextManager textManager;
+    private TextManager tManager;
 
     public static Cell[,] BoardState = {
         {  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant },
@@ -421,7 +421,8 @@ public class BoardManager : MonoBehaviour
 
         else
         {
-            print("Invaild spot, please try again.");
+            //tManager.updateEventText("Invalid spot, please try again.", currentPlayer);
+         //   print("Invaild spot, please try again.");
         }
     }
 
@@ -598,7 +599,7 @@ public class BoardManager : MonoBehaviour
     {
         whiteEventText = GameObject.Find("WhiteEventText").GetComponent<Text>();
         blackEventText = GameObject.Find("BlackEventText").GetComponent<Text>();
-        textManager = GameObject.Find("StatusText").GetComponent<TextManager>();
+        tManager = GameObject.Find("StatusText").GetComponent<TextManager>();
 
         InitGame();
     }

@@ -26,14 +26,14 @@ public class Intersection : MonoBehaviour
     public int column;
     private Text whiteEventText;
     private Text blackEventText;
-    private TextManager textManager;
+    private TextManager tManager;
 
 
     void Start()
     {
         whiteEventText = GameObject.Find("WhiteEventText").GetComponent<Text>();
         blackEventText = GameObject.Find("BlackEventText").GetComponent<Text>();
-        textManager = GameObject.Find("StatusText").GetComponent<TextManager>();
+        tManager = GameObject.Find("StatusText").GetComponent<TextManager>();
     }
 
     /* Special pointer constructor. */
