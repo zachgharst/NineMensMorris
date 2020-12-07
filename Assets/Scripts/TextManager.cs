@@ -56,7 +56,9 @@ public class TextManager : MonoBehaviour
     void Update()
     {
         playersTurn = BoardManager.currentPlayer == Player.White ? player1 : player2;
-        
+        whiteEventText.text = BoardManager.whiteRemainingPieces.ToString() + " pieces remaining\n";
+        blackEventText.text = BoardManager.blackRemainingPieces.ToString() + " pieces remaining\n";
+
         /* Phase 1 text.*/
         if (BoardManager.blackUnplacedPieces > 0)
         {
@@ -105,11 +107,11 @@ public class TextManager : MonoBehaviour
     {
         if (player == Player.White)
         {
-            whiteEventText.text = text;
+            whiteEventText.text += text;
         }
         else
         {
-            blackEventText.text = text;
+            blackEventText.text += text;
         }
     }
 }
