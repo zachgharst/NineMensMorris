@@ -173,8 +173,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
-  m_Maskable: 1
+  m_RaycastTarget: 0
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -189,7 +189,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 0
     m_HorizontalOverflow: 1
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: this changes depending on player turn
 --- !u!222 &26756174
@@ -212,7 +212,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f5191474992d8f41a45d24c06356a03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  whiteEventText: {fileID: 0}
 --- !u!1 &228042637
 GameObject:
   m_ObjectHideFlags: 0
@@ -977,4 +976,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   man: {fileID: 21300000, guid: 8df33447b585ee34597105602c1ed7a8, type: 3}
   manSelected: {fileID: 21300000, guid: e083fe8a2ca45794593292b4997f29bb, type: 3}
-  tManager: {fileID: 26756175}

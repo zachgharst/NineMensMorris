@@ -52,9 +52,9 @@ public class BoardManager : MonoBehaviour
     public Sprite manSelected;
     public static GameObject lastSelected;
 
-    public Text whiteEventText;
-    public Text blackEventText;
-    public TextManager tManager;
+    private Text whiteEventText;
+    private Text blackEventText;
+    public static TextManager tManager;
 
     public static Cell[,] BoardState = {
         {  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant },
@@ -155,6 +155,7 @@ public class BoardManager : MonoBehaviour
 
     public static Player GetOppositePlayer()
     {
+        tManager.updateEventText("", currentPlayer);
         if (currentPlayer == Player.White)
         {
             return Player.Black;
@@ -421,8 +422,7 @@ public class BoardManager : MonoBehaviour
 
         else
         {
-            //tManager.updateEventText("Invalid spot, please try again.", currentPlayer);
-            print("Invaild spot, please try again.");
+            tManager.updateEventText("Invalid spot\nPlease try again", currentPlayer);
         }
     }
 
@@ -465,8 +465,7 @@ public class BoardManager : MonoBehaviour
 
             else
             {
-                //tManager.updateEventText("Invalidspot, please try again.", currentPlayer);
-                print("Invalid spot, please try again.");
+                tManager.updateEventText("Invalid spot\nPlease try again", currentPlayer);
             }
 
             /* After moving a piece, check if the opposing player has been locked in. */
@@ -507,7 +506,7 @@ public class BoardManager : MonoBehaviour
 
             else
             {
-                print("Invalid spot, please try again.");
+                tManager.updateEventText("Invalid spot\nPlease try again", currentPlayer);
             }
 
             /* After moving a piece, check if the opposing player has been locked in. */
@@ -572,7 +571,8 @@ public class BoardManager : MonoBehaviour
     /* Initiates game over sequence; draw if no player. */
     public static void GameOver()
     {
-        print("The game is a draw. Press R to start a new game.");
+        tManager.updateStatusText("\nThe game is a draw. Press R to start a new game.", currentPlayer);
+        print("game draw");
 
         return;
     }
@@ -580,8 +580,9 @@ public class BoardManager : MonoBehaviour
     /* Initiates game over sequence; parameter p is the winning player. */
     public static void GameOver(Player p)
     {
-        print("Game over! The winner is: " + p + ". Press R to start a new game.");
         gameOver = true;
+        tManager.updateStatusText("\nGame over! The winner is " + currentPlayer + "\nPress R to start a new game.", currentPlayer);
+        print("game over, the winner is:" + p);
 
         return;
     }
@@ -601,7 +602,6 @@ public class BoardManager : MonoBehaviour
         whiteEventText = GameObject.Find("WhiteEventText").GetComponent<Text>();
         blackEventText = GameObject.Find("BlackEventText").GetComponent<Text>();
         tManager = GameObject.Find("StatusText").GetComponent<TextManager>();
-        TextManager teMa = new TextManager();
 
         InitGame();
     }
