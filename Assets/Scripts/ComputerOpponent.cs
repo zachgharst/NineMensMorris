@@ -295,8 +295,7 @@ public class ComputerOpponent : MonoBehaviour
             else
             {
                 computerTime = 1.5;
-                blackEventText.text = "";
-                whiteEventText.text = "";
+                textManager.updateEventText("", computerPlayer);
                 //print("I'm Thinking...");
                 DecisionTree();
             }

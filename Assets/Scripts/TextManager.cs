@@ -42,8 +42,8 @@ public class TextManager : MonoBehaviour
         blackEventText = GameObject.Find("BlackEventText").GetComponent<Text>();
         whiteText.text = player1;     
         blackText.text = player2;
-        whiteEventText.text = "";
-        blackEventText.text = "";
+        whiteEventText.text = BoardManager.whiteRemainingPieces.ToString() + " pieces remaining\n";
+        blackEventText.text = BoardManager.blackRemainingPieces.ToString() + " pieces remaining\n";
 
         /*
         private Text whiteEventText;
@@ -56,8 +56,6 @@ public class TextManager : MonoBehaviour
     void Update()
     {
         playersTurn = BoardManager.currentPlayer == Player.White ? player1 : player2;
-        whiteEventText.text = BoardManager.whiteRemainingPieces.ToString() + " pieces remaining\n";
-        blackEventText.text = BoardManager.blackRemainingPieces.ToString() + " pieces remaining\n";
 
         /* Phase 1 text.*/
         if (BoardManager.blackUnplacedPieces > 0)
@@ -107,10 +105,12 @@ public class TextManager : MonoBehaviour
     {
         if (player == Player.White)
         {
+            whiteEventText.text = BoardManager.whiteRemainingPieces.ToString() + " pieces remaining\n";
             whiteEventText.text += text;
         }
         else
         {
+            blackEventText.text = BoardManager.blackRemainingPieces.ToString() + " pieces remaining\n";
             blackEventText.text += text;
         }
     }

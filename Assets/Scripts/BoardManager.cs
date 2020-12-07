@@ -52,9 +52,9 @@ public class BoardManager : MonoBehaviour
     public Sprite manSelected;
     public static GameObject lastSelected;
 
-    private Text whiteEventText;
-    private Text blackEventText;
-    private TextManager tManager;
+    public Text whiteEventText;
+    public Text blackEventText;
+    public TextManager tManager;
 
     public static Cell[,] BoardState = {
         {  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant },
@@ -422,7 +422,7 @@ public class BoardManager : MonoBehaviour
         else
         {
             //tManager.updateEventText("Invalid spot, please try again.", currentPlayer);
-         //   print("Invaild spot, please try again.");
+            print("Invaild spot, please try again.");
         }
     }
 
@@ -465,6 +465,7 @@ public class BoardManager : MonoBehaviour
 
             else
             {
+                //tManager.updateEventText("Invalidspot, please try again.", currentPlayer);
                 print("Invalid spot, please try again.");
             }
 
@@ -569,7 +570,7 @@ public class BoardManager : MonoBehaviour
 
 
     /* Initiates game over sequence; draw if no player. */
-    private static void GameOver()
+    public static void GameOver()
     {
         print("The game is a draw. Press R to start a new game.");
 
@@ -577,7 +578,7 @@ public class BoardManager : MonoBehaviour
     }
 
     /* Initiates game over sequence; parameter p is the winning player. */
-    private static void GameOver(Player p)
+    public static void GameOver(Player p)
     {
         print("Game over! The winner is: " + p + ". Press R to start a new game.");
         gameOver = true;
@@ -595,16 +596,17 @@ public class BoardManager : MonoBehaviour
         return false;
     }
 
-    private void Start()        // function called when we the scene is first loaded
+    public void Start()        // function called when we the scene is first loaded
     {
         whiteEventText = GameObject.Find("WhiteEventText").GetComponent<Text>();
         blackEventText = GameObject.Find("BlackEventText").GetComponent<Text>();
         tManager = GameObject.Find("StatusText").GetComponent<TextManager>();
+        TextManager teMa = new TextManager();
 
         InitGame();
     }
 
-    private void Update()       // called every frame
+    public void Update()       // called every frame
     {
         if (Input.GetKeyDown("r"))
         {

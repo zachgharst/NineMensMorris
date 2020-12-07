@@ -71,13 +71,14 @@ public class Intersection : MonoBehaviour
                     }
                     else
                     {
-                        print("There exists a piece not part of a mill. Please click on a piece not part of a mill.");
+                        tManager.updateEventText("There exists a piece not part of a mill. Please click on a piece not part of a mill.",
+                            BoardManager.currentPlayer);
                     }
                 }
             }
             else
             {
-                print("Please click on an opposing piece");
+                tManager.updateEventText("Please click on an opposing piece", BoardManager.currentPlayer);
             }
         }
 
@@ -115,7 +116,7 @@ public class Intersection : MonoBehaviour
                 }
                 else
                 {
-                    print("This piece has no vacant spaces to move to.");
+                    tManager.updateEventText("This piece has no vacant spaces to move to.", BoardManager.currentPlayer);
                 }
             }
         }
