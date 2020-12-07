@@ -23,14 +23,14 @@ using UnityEngine.UI;
 public class TextManager : MonoBehaviour
 {
     public Text textTest;
-    public Text whiteText;
-    public Text blackText;
+    //public Text whiteText;
+    //public Text blackText;
 
     void Start()
     {
         textTest = GetComponent<Text>();
-        whiteText.text = "White Player \n";     // placeholder for username (if wanted)
-        blackText.text = "Black Player \n";
+        //whiteText.text = "White Player \n";     // placeholder for username (if wanted)
+        //blackText.text = "Black Player \n";
     }
 
     void Update()
@@ -39,20 +39,20 @@ public class TextManager : MonoBehaviour
         if (BoardManager.blackUnplacedPieces > 0)
         {
             string playersTurn = BoardManager.currentPlayer == Player.White ? "White" : "Black";
-            textTest.text = BoardManager.blackUnplacedPieces.ToString() + " pieces remaining for black" +
+            textTest.text = BoardManager.blackUnplacedPieces.ToString() + " pieces remaining for black\n\n" +
                 "Phase 1\n" +
-                playersTurn + "'s turn\n" +
-                BoardManager.whiteUnplacedPieces.ToString() + " pieces remaining for white";
+                playersTurn + "'s turn\n\n" +
+                BoardManager.whiteUnplacedPieces.ToString() + " pieces remaining for white\n";
         }
 
         /* Phase 2 text.*/
         else if (BoardManager.blackRemainingPieces > 3 && BoardManager.whiteRemainingPieces > 3)
         {
             string playersTurn = BoardManager.currentPlayer == Player.White ? "White" : "Black";
-            textTest.text = BoardManager.blackRemainingPieces.ToString() + " pieces remaining for black" +
+            textTest.text = BoardManager.blackRemainingPieces.ToString() + " pieces remaining for black\n\n" +
                 "Phase 2\n" +
-                playersTurn + "'s turn\n" +
-                BoardManager.whiteRemainingPieces.ToString() + " pieces remaining for white";
+                playersTurn + "'s turn\n\n" +
+                BoardManager.whiteRemainingPieces.ToString() + " pieces remaining for white\n";
         }
 
         /* Phase 3 text.*/
