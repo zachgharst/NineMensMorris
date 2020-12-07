@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 26756173}
   - component: {fileID: 26756175}
   m_Layer: 5
-  m_Name: Text
+  m_Name: StatusText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -179,17 +179,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 25
+    m_Font: {fileID: 12800000, guid: 652f7165b7c30ab46af6c4aad90a639b, type: 2}
+    m_FontSize: 50
     m_FontStyle: 1
     m_BestFit: 0
-    m_MinSize: 1
-    m_MaxSize: 40
-    m_Alignment: 4
+    m_MinSize: 5
+    m_MaxSize: 100
+    m_Alignment: 7
     m_AlignByGeometry: 0
     m_RichText: 0
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 1
+    m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: testing....... ................................ .
 --- !u!222 &26756174
@@ -212,7 +212,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f5191474992d8f41a45d24c06356a03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textTest: {fileID: 0}
 --- !u!1 &228042637
 GameObject:
   m_ObjectHideFlags: 0
@@ -337,6 +336,8 @@ GameObject:
   - component: {fileID: 851907923}
   - component: {fileID: 851907925}
   - component: {fileID: 851907924}
+  - component: {fileID: 851907927}
+  - component: {fileID: 851907926}
   m_Layer: 5
   m_Name: WhiteText
   m_TagString: Untagged
@@ -360,7 +361,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 94.8, y: -71.5}
+  m_AnchoredPosition: {x: 100, y: -142}
   m_SizeDelta: {x: 168.20767, y: 44.287964}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &851907924
@@ -384,11 +385,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 652f7165b7c30ab46af6c4aad90a639b, type: 2}
-    m_FontSize: 26
+    m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 2
-    m_MaxSize: 202
+    m_MinSize: 5
+    m_MaxSize: 100
     m_Alignment: 2
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -404,6 +405,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 851907922}
   m_CullTransparentMesh: 0
+--- !u!114 &851907926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851907922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_UiScaleMode: 0
+  m_ReferencePixelsPerUnit: 100
+  m_ScaleFactor: 1
+  m_ReferenceResolution: {x: 800, y: 600}
+  m_ScreenMatchMode: 0
+  m_MatchWidthOrHeight: 0
+  m_PhysicalUnit: 3
+  m_FallbackScreenDPI: 96
+  m_DefaultSpriteDPI: 96
+  m_DynamicPixelsPerUnit: 1
+--- !u!223 &851907927
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851907922}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &1438306304
 GameObject:
   m_ObjectHideFlags: 0
@@ -687,7 +731,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -94.20001, y: -71.5}
+  m_AnchoredPosition: {x: -100, y: -142}
   m_SizeDelta: {x: 169.39215, y: 44.287964}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1615035349
@@ -711,11 +755,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 652f7165b7c30ab46af6c4aad90a639b, type: 2}
-    m_FontSize: 26
+    m_FontSize: 50
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 2
-    m_MaxSize: 40
+    m_MinSize: 5
+    m_MaxSize: 100
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -832,4 +876,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f5191474992d8f41a45d24c06356a03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textTest: {fileID: 0}

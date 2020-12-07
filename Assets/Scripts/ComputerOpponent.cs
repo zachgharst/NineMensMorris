@@ -18,6 +18,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class ComputerOpponent : MonoBehaviour
@@ -25,6 +26,16 @@ public class ComputerOpponent : MonoBehaviour
     public static Player computerPlayer;
     public static bool isActive = true;
     public static double computerTime = 1.5;
+    private Text whiteEventText;
+    private Text blackEventText;
+    private TextManager textManager;
+
+    void Start()
+    {
+        whiteEventText = GameObject.Find("WhiteEventText").GetComponent<Text>();
+        blackEventText = GameObject.Find("BlackEventText").GetComponent<Text>();
+        textManager = GameObject.Find("StatusText").GetComponent<TextManager>();
+    }
 
     /* Choose a new color for the computer and reset its turn timer. */
     public static void Reset()
@@ -269,12 +280,24 @@ public class ComputerOpponent : MonoBehaviour
         {
             if (computerTime > 0)
             {
+                textManager.updateEventText("I'm Thinking...", computerPlayer);
+
+                //if (computerPlayer == Player.White)
+                //{
+                //    whiteEventText.text = "I'm Thinking...";
+                //}
+                //else
+                //{
+                //    blackEventText.text = "I'm Thinking...";
+                //}
                 computerTime -= Time.deltaTime;
             }
             else
             {
                 computerTime = 1.5;
-                print("I'm Thinking...");
+                blackEventText.text = "";
+                whiteEventText.text = "";
+                //print("I'm Thinking...");
                 DecisionTree();
             }
         }

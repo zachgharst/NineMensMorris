@@ -18,11 +18,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Intersection : MonoBehaviour
 {
     public int row;
     public int column;
+    private Text whiteEventText;
+    private Text blackEventText;
+    private TextManager textManager;
+
+
+    void Start()
+    {
+        whiteEventText = GameObject.Find("WhiteEventText").GetComponent<Text>();
+        blackEventText = GameObject.Find("BlackEventText").GetComponent<Text>();
+        textManager = GameObject.Find("StatusText").GetComponent<TextManager>();
+    }
 
     /* Special pointer constructor. */
     public static Intersection CreateComponent(GameObject location, int c, int r)

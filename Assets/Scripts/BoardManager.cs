@@ -20,6 +20,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Linq;
 using Random = UnityEngine.Random;
 
@@ -50,6 +51,10 @@ public class BoardManager : MonoBehaviour
     public Sprite man;
     public Sprite manSelected;
     public static GameObject lastSelected;
+
+    private Text whiteEventText;
+    private Text blackEventText;
+    private TextManager textManager;
 
     public static Cell[,] BoardState = {
         {  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant },
@@ -591,6 +596,10 @@ public class BoardManager : MonoBehaviour
 
     private void Start()        // function called when we the scene is first loaded
     {
+        whiteEventText = GameObject.Find("WhiteEventText").GetComponent<Text>();
+        blackEventText = GameObject.Find("BlackEventText").GetComponent<Text>();
+        textManager = GameObject.Find("StatusText").GetComponent<TextManager>();
+
         InitGame();
     }
 
