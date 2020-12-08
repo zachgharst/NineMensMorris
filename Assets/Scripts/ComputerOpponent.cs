@@ -85,7 +85,8 @@ public class ComputerOpponent : MonoBehaviour
             ComputerPhaseOne();
         }
 
-        else if (BoardManager.blackRemainingPieces == 3)
+        else if ( (BoardManager.whiteRemainingPieces == 3 && computerPlayer == Player.White) ||
+            (BoardManager.blackRemainingPieces == 3 && computerPlayer == Player.Black) )
         {
             if (BoardManager.movingPiece == true)
             {
