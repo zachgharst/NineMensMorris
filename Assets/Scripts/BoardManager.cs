@@ -66,6 +66,15 @@ public class BoardManager : MonoBehaviour
         {  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant },
     };
 
+    public void Start()        // function called when we the scene is first loaded
+    {
+        whiteEventText = GameObject.Find("WhiteEventText").GetComponent<Text>();
+        blackEventText = GameObject.Find("BlackEventText").GetComponent<Text>();
+        tManager = GameObject.Find("StatusText").GetComponent<TextManager>();
+
+        InitGame();
+    }
+
     public static void InitGame()
     {
         GameObject g = GameObject.Find("BoardManager");
@@ -595,15 +604,6 @@ public class BoardManager : MonoBehaviour
         }
 
         return false;
-    }
-
-    public void Start()        // function called when we the scene is first loaded
-    {
-        whiteEventText = GameObject.Find("WhiteEventText").GetComponent<Text>();
-        blackEventText = GameObject.Find("BlackEventText").GetComponent<Text>();
-        tManager = GameObject.Find("StatusText").GetComponent<TextManager>();
-
-        InitGame();
     }
 
     public void Update()       // called every frame

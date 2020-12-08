@@ -9,10 +9,12 @@ public class TitleSceneManager : MonoBehaviour
     public Button onePlayerButton;
     public Button twoPlayerButton;
 
+    public static ComputerOpponent comOpp;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        comOpp = GameObject.Find("ComputerOpponent").GetComponent<ComputerOpponent>();
     }
 
     // Update is called once per frame
@@ -21,8 +23,15 @@ public class TitleSceneManager : MonoBehaviour
         
     }
 
-    public void startGame()
+    public void start1PGame()
     {
-        SceneManager.LoadScene(1)
+        //comOpp.isActive = true;
+        
+        SceneManager.LoadScene(1);
+    }
+
+    public void start2PGame()
+    {
+
     }
 }

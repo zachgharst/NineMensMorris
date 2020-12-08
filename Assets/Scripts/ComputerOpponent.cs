@@ -24,7 +24,7 @@ using Random = UnityEngine.Random;
 public class ComputerOpponent : MonoBehaviour
 {
     public static Player computerPlayer;
-    public static bool isActive = true;
+    public static bool isActive;
     public static double computerTime = 1.5;
     private Text whiteEventText;
     private Text blackEventText;
@@ -281,22 +281,12 @@ public class ComputerOpponent : MonoBehaviour
             if (computerTime > 0)
             {
                 textManager.updateEventText("I'm Thinking...", computerPlayer);
-
-                //if (computerPlayer == Player.White)
-                //{
-                //    whiteEventText.text = "I'm Thinking...";
-                //}
-                //else
-                //{
-                //    blackEventText.text = "I'm Thinking...";
-                //}
                 computerTime -= Time.deltaTime;
             }
             else
             {
                 computerTime = 1.5;
                 textManager.updateEventText("", computerPlayer);
-                //print("I'm Thinking...");
                 DecisionTree();
             }
         }
