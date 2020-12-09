@@ -98,10 +98,16 @@ public class ComputerOpponent : MonoBehaviour
             }
         }
 
-        /* Last possible combination: selecting a piece in phase 2/3. */
+        /* If moving a piece and more than three remaining pieces, phase 2 movement. */
+        else if(BoardManager.movingPiece == true)
+        {
+            ComputerPhaseTwoMove();
+        }
+
+        /* Last possible combination: phase 2. */
         else
         {
-            ComputerSelection();
+            ComputerPhaseTwoSelect();
         }
     }
 
@@ -241,12 +247,54 @@ public class ComputerOpponent : MonoBehaviour
     /* This will choose a piece to move then move it. We should probably
      * separate this into two different functions; one that chooses a piece to move,
      * and then one that actually makes that move. TODO */
-    private void ComputerSelection()
+    private void ComputerPhaseTwoSelect()
     {
         Cell computerPlayerCell = computerPlayer == Player.White ? Cell.White : Cell.Black;
         List<string> possiblePieceToSelect = new List<string>();
-        List<string> possibleMovesOfPiece = new List<string>();
 
+        /* Priority 2: Forming Mills
+         * Iterate across the entire board and create a list of nodes that gives the player a mill next turn. */
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                if (BoardManager.BoardState[i, j] == Cell.Vacant)
+                {
+                    BoardManager.BoardState[i, j] = computerPlayerCell;
+                    if (BoardManager.CheckMill(computerPlayer, i, j))
+                    {
+                        List<string> possibleMoves = BoardManager.getAdjacencyList(i, j);
+
+                        foreach (string possibleMove in possibleMoves)
+                        {
+                            int row = (int)(possibleMove[1] - '1');
+                            int column = (int)(possibleMove[0] - 'a');
+
+                            if(BoardManager.BoardState[row, column] == computerPlayerCell)
+                            {
+                                BoardManager.BoardState[row, column] = Cell.Vacant;
+
+                                if (BoardManager.CheckMill(computerPlayer, i, j))
+                                {
+                                    possiblePieceToSelect.Add((char)(column + 97) + "" + (row + 1));
+                                }
+
+                                BoardManager.BoardState[row, column] = computerPlayerCell;
+                            }
+                        }
+                    }
+                    BoardManager.BoardState[i, j] = Cell.Vacant;
+                }
+            }
+        }
+
+        if (MakeRandomMoveFromList(possiblePieceToSelect) != "")
+        {
+            return;
+        }
+
+        /* Priority 5: Randomly Move
+         * Iterate across the entire board and create a list of all vacant spaces. */
         for (int i = 0; i < 7; i++)
         {
             for (int j = 0; j < 7; j++)
@@ -258,16 +306,47 @@ public class ComputerOpponent : MonoBehaviour
             }
         }
 
-        string pieceSelected = MakeRandomMoveFromList(possiblePieceToSelect);
-        Intersection intersectionSelected = BoardManager.FindIntersection(pieceSelected).GetComponent<Intersection>();
-        possibleMovesOfPiece = BoardManager.getAdjacencyList(intersectionSelected.row, intersectionSelected.column);
+        MakeRandomMoveFromList(possiblePieceToSelect);
+    }
+
+    private void ComputerPhaseTwoMove()
+    {
+        Cell computerPlayerCell = computerPlayer == Player.White ? Cell.White : Cell.Black;
+        int row = BoardManager.tempRow;
+        int column = BoardManager.tempCol;
+        List<string> possibleMovesOfPiece = BoardManager.getAdjacencyList(row, column);
         List<string> vacantNeighborsOfSelectedPiece = new List<string>();
 
-        Intersection eliminateOccupied;
+        /* Priority 2: Forming Mills
+         * Iterate across the entire board and create a list of nodes that gives the player a mill next turn. */
         foreach (string str in possibleMovesOfPiece)
         {
-            eliminateOccupied = BoardManager.FindIntersection(str).GetComponent<Intersection>();
-            if (BoardManager.BoardState[eliminateOccupied.row, eliminateOccupied.column] == Cell.Vacant)
+            int adjacentRow = (int)(str[1] - '1');
+            int adjacentColumn = (int)(str[0] - 'a');
+            if (BoardManager.BoardState[adjacentRow, adjacentColumn] == Cell.Vacant)
+            {
+                BoardManager.BoardState[adjacentRow, adjacentColumn] = computerPlayerCell;
+                if(BoardManager.CheckMill(computerPlayer, adjacentRow, adjacentColumn))
+                {
+                    vacantNeighborsOfSelectedPiece.Add(str);
+                }
+                BoardManager.BoardState[adjacentRow, adjacentColumn] = Cell.Vacant;
+            }
+        }
+
+        if (MakeRandomMoveFromList(vacantNeighborsOfSelectedPiece) != "")
+        {
+            return;
+        }
+
+        /* Priority 5: Randomly Move
+         * Iterate across the entire board and create a list of all vacant spaces. */
+        foreach (string str in possibleMovesOfPiece)
+        {
+            int adjacentRow = (int)(str[1] - '1');
+            int adjacentColumn = (int)(str[0] - 'a');
+
+            if (BoardManager.BoardState[adjacentRow, adjacentColumn] == Cell.Vacant)
             {
                 vacantNeighborsOfSelectedPiece.Add(str);
             }
