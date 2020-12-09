@@ -597,7 +597,7 @@ public class BoardManager : MonoBehaviour
         gameOver = true;
         //tManager.updateStatusText("\nGame over! The winner is " + currentPlayer + "\nPress R to start a new game.", currentPlayer);
         print("game over, the winner is:" + p);
-        tManager.updateStatusText("\nGame over! The winner is " + currentPlayer + "\nPress R to start a new game.", currentPlayer);
+        //tManager.updateStatusText("\nGame over! The winner is " + currentPlayer + "\nPress R to start a new game.", currentPlayer);
 
         return;
     }
