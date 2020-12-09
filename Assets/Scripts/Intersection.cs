@@ -78,7 +78,7 @@ public class Intersection : MonoBehaviour
             }
             else
             {
-                tManager.updateEventText("Please click on an opposing piece", BoardManager.currentPlayer);
+                //tManager.updateEventText("Please click on an opposing piece", BoardManager.currentPlayer);
             }
         }
 

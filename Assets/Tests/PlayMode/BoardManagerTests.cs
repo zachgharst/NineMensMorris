@@ -59,6 +59,8 @@ namespace Tests
         [Test]
         public void CheckMill()
         {
+            BoardManager.InitGame();
+
             GameObject g;
 
             string[] moves = { "a1", "a4", "d1", "b4", "g1" };
@@ -67,7 +69,7 @@ namespace Tests
             {
                 g = BoardManager.FindIntersection(moves[i]);
                 Intersection intersection = g.GetComponent<Intersection>();
-                intersection.OnMouseDown();
+                intersection.JumpTable();
             }
 
             Assert.IsTrue(BoardManager.millFormed);
@@ -84,7 +86,7 @@ namespace Tests
             {
                 g = BoardManager.FindIntersection(moves[i]);
                 Intersection intersection = g.GetComponent<Intersection>();
-                intersection.OnMouseDown();
+                intersection.JumpTable();
             }
 
             Assert.IsFalse(BoardManager.millFormed);
@@ -106,7 +108,7 @@ namespace Tests
             {
                 g = BoardManager.FindIntersection(moves[i]);
                 Intersection intersection = g.GetComponent<Intersection>();
-                intersection.OnMouseDown();
+                intersection.JumpTable();
             }
 
             Assert.IsTrue(BoardManager.gameOver);
