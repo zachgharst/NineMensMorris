@@ -8,6 +8,9 @@ public class TitleSceneManager : MonoBehaviour
 {
     public Button onePlayerButton;
     public Button twoPlayerButton;
+    public GameObject start;
+    public GameObject inputField1;
+    public GameObject inputField2;
 
     // Start is called before the first frame update
     void Start()
@@ -24,12 +27,26 @@ public class TitleSceneManager : MonoBehaviour
     public void start1PGame()
     {
         ComputerOpponent.isActive = true;
-        SceneManager.LoadScene(1);
+        inputField1.SetActive(true);
+        inputField2.SetActive(false);
+        start.SetActive(true);
     }
 
     public void start2PGame()
     {
         ComputerOpponent.isActive = false;
+        inputField1.SetActive(true);
+        inputField2.SetActive(true);
+        start.SetActive(true);
+    }
+
+    public void loadGame()
+    {
         SceneManager.LoadScene(1);
+    }
+
+    public void updateUsernames()
+    {
+
     }
 }
