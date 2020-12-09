@@ -595,12 +595,9 @@ public class BoardManager : MonoBehaviour
     public static void GameOver(Player p)
     {
         gameOver = true;
-<<<<<<< HEAD
         //tManager.updateStatusText("\nGame over! The winner is " + currentPlayer + "\nPress R to start a new game.", currentPlayer);
         print("game over, the winner is:" + p);
-=======
         tManager.updateStatusText("\nGame over! The winner is " + currentPlayer + "\nPress R to start a new game.", currentPlayer);
->>>>>>> ed5d84693be9053f7c963e356c25065979c25458
 
         return;
     }
