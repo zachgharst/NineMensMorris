@@ -82,7 +82,7 @@ public class ComputerOpponent : MonoBehaviour
         /* If black has unplayed pieces, still in phase 1. */
         else if (BoardManager.blackUnplacedPieces > 0)
         {
-            ComputerPhaseOne();
+            ComputerPlacement();
         }
 
         else if ( (BoardManager.whiteRemainingPieces == 3 && computerPlayer == Player.White) ||
@@ -90,7 +90,7 @@ public class ComputerOpponent : MonoBehaviour
         {
             if (BoardManager.movingPiece == true)
             {
-                ComputerPhaseOne();
+                ComputerPlacement();
             }
             else
             {
@@ -101,7 +101,7 @@ public class ComputerOpponent : MonoBehaviour
         /* Last possible combination: selecting a piece in phase 2/3. */
         else
         {
-            ComputerPhaseTwo();
+            ComputerSelection();
         }
     }
 
@@ -136,7 +136,7 @@ public class ComputerOpponent : MonoBehaviour
     }
 
     /* The computer is placing its pieces in phase 1. */
-    private void ComputerPhaseOne()
+    private void ComputerPlacement()
     {
         Player humanPlayer = BoardManager.GetOppositePlayer();
         Cell humanPlayerCell = humanPlayer == Player.White ? Cell.White : Cell.Black;
@@ -194,6 +194,33 @@ public class ComputerOpponent : MonoBehaviour
             return;
         }
 
+        /* Priority 4: Placing Near Other Pieces
+         * Iterate across the entire board and create a list of adjacent nodes that the computer should start building mills next to. */
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                if (BoardManager.BoardState[i, j] == computerPlayerCell)
+                {
+                    List<string> possibleMoves = BoardManager.getAdjacencyList(i, j);
+                    foreach(string possibleMove in possibleMoves)
+                    {
+                        int row = (int)(possibleMove[1] - '1');
+                        int column = (int)(possibleMove[0] - 'a');
+                        if (BoardManager.BoardState[row, column] == Cell.Vacant)
+                        {
+                            moves.Add(possibleMove);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (MakeRandomMoveFromList(moves) != "")
+        {
+            return;
+        }
+
         /* Priority 5: Randomly Move
          * Iterate across the entire board and create a list of all vacant spaces. */
         for (int i = 0; i < 7; i++)
@@ -214,7 +241,7 @@ public class ComputerOpponent : MonoBehaviour
     /* This will choose a piece to move then move it. We should probably
      * separate this into two different functions; one that chooses a piece to move,
      * and then one that actually makes that move. TODO */
-    private void ComputerPhaseTwo()
+    private void ComputerSelection()
     {
         Cell computerPlayerCell = computerPlayer == Player.White ? Cell.White : Cell.Black;
         List<string> possiblePieceToSelect = new List<string>();
@@ -257,6 +284,7 @@ public class ComputerOpponent : MonoBehaviour
         string randSelection;
         Intersection intersection;
 
+        
         for (int i = 0; i < 7; i++)
         {
             for (int j = 0; j < 7; j++)
@@ -269,10 +297,7 @@ public class ComputerOpponent : MonoBehaviour
             }
         }
 
-        randSelection = selectionOfPiece[Random.Range(0, selectionOfPiece.Count)];
-        g = BoardManager.FindIntersection(randSelection);
-        intersection = g.GetComponent<Intersection>();
-        intersection.JumpTable();
+        MakeRandomMoveFromList(selectionOfPiece);
     }
 
     private void Update()
