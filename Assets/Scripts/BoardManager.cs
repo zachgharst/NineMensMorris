@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Linq;
 using Random = UnityEngine.Random;
 
@@ -56,6 +57,10 @@ public class BoardManager : MonoBehaviour
     private Text blackEventText;
     public static TextManager tManager;
 
+    public static Button mainMenuButton;
+    public static Button restartGameButton;
+
+
     public static Cell[,] BoardState = {
         {  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant },
         { Cell.Invalid,  Cell.Vacant, Cell.Invalid,  Cell.Vacant, Cell.Invalid,  Cell.Vacant, Cell.Invalid },
@@ -71,6 +76,7 @@ public class BoardManager : MonoBehaviour
         whiteEventText = GameObject.Find("WhiteEventText").GetComponent<Text>();
         blackEventText = GameObject.Find("BlackEventText").GetComponent<Text>();
         tManager = GameObject.Find("StatusText").GetComponent<TextManager>();
+
 
         InitGame();
     }
@@ -581,7 +587,6 @@ public class BoardManager : MonoBehaviour
     public static void GameOver()
     {
         tManager.updateStatusText("\nThe game is a draw. Press R to start a new game.", currentPlayer);
-        print("game draw");
 
         return;
     }
@@ -591,7 +596,6 @@ public class BoardManager : MonoBehaviour
     {
         gameOver = true;
         tManager.updateStatusText("\nGame over! The winner is " + currentPlayer + "\nPress R to start a new game.", currentPlayer);
-        print("game over, the winner is:" + p);
 
         return;
     }
@@ -706,5 +710,15 @@ public class BoardManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void ResetButton()
+    {
+        ResetBoard();
     }
 }
