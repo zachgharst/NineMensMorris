@@ -278,13 +278,48 @@ public class ComputerOpponent : MonoBehaviour
 
     private void ComputerPhaseThree()
     {
-        GameObject g;
         Cell computerPlayerCell = computerPlayer == Player.White ? Cell.White : Cell.Black;
         List<string> selectionOfPiece = new List<string>();
-        string randSelection;
-        Intersection intersection;
 
-        
+        /* Priority 2: Forming Mills
+        * Iterate across the entire board and create a list of nodes that gives the player a mill next turn. */
+        for (int i = 0; i < 7; i++)
+        {
+            for (int j = 0; j < 7; j++)
+            {
+                if (BoardManager.BoardState[i, j] == Cell.Vacant)
+                {
+                    BoardManager.BoardState[i, j] = computerPlayerCell;
+                    if(BoardManager.CheckMill(computerPlayer, i, j))
+                    {
+                        for (int i2 = 0; i2 < 7; i2++)
+                        {
+                            for (int j2 = 0; j2 < 7; j2++)
+                            {
+                                if(BoardManager.BoardState[i2, j2] == computerPlayerCell && i != i2 && j != j2)
+                                {
+                                    BoardManager.BoardState[i2, j2] = Cell.Vacant;
+                                    if (BoardManager.CheckMill(computerPlayer, i, j))
+                                    {
+                                        selectionOfPiece.Add((char)(j2 + 97) + "" + (i2 + 1));
+                                    }
+                                    BoardManager.BoardState[i2, j2] = computerPlayerCell;
+                                }
+                            }
+                        }
+                    }
+                    BoardManager.BoardState[i, j] = Cell.Vacant;
+                }
+            }
+        }
+
+        if (MakeRandomMoveFromList(selectionOfPiece) != "")
+        {
+            return;
+        }
+
+        /* Priority 5: Randomly Move
+         * Iterate across the entire board and create a list of all vacant spaces. */
         for (int i = 0; i < 7; i++)
         {
             for (int j = 0; j < 7; j++)
