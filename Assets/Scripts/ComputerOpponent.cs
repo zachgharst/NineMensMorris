@@ -34,7 +34,7 @@ public class ComputerOpponent : MonoBehaviour
     {
         whiteEventText = GameObject.Find("WhiteEventText").GetComponent<Text>();
         blackEventText = GameObject.Find("BlackEventText").GetComponent<Text>();
-        textManager = GameObject.Find("StatusText").GetComponent<TextManager>();
+        textManager = new TextManager();
     }
 
     /* Choose a new color for the computer and reset its turn timer. */

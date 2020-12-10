@@ -170,7 +170,7 @@ public class BoardManager : MonoBehaviour
 
     public static Player GetOppositePlayer()
     {
-        //tManager.updateEventText("", currentPlayer);
+        tManager.updateEventText("", currentPlayer);
         if (currentPlayer == Player.White)
         {
             return Player.Black;
@@ -595,10 +595,9 @@ public class BoardManager : MonoBehaviour
     public static void GameOver(Player p)
     {
         gameOver = true;
-        //tManager.updateStatusText("\nGame over! The winner is " + currentPlayer + "\nPress R to start a new game.", currentPlayer);
+        tManager.updateStatusText("\nGame over! The winner is " + currentPlayer, currentPlayer);
         print("game over, the winner is:" + p);
-        //tManager.updateStatusText("\nGame over! The winner is " + currentPlayer + "\nPress R to start a new game.", currentPlayer);
-
+        
         return;
     }
 

@@ -22,11 +22,11 @@ using UnityEngine.UI;
 
 public class TextManager : MonoBehaviour
 {
-    private Text statusText;
+    private static Text statusText;
     public static Text whiteText;
-    private Text whiteEventText;
+    private static Text whiteEventText;
     public static Text blackText;
-    private Text blackEventText;
+    private static Text blackEventText;
 
     private string playersTurn;
     private string phase;
