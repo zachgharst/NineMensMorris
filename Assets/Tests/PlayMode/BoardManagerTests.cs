@@ -67,7 +67,7 @@ namespace Tests
             {
                 g = BoardManager.FindIntersection(moves[i]);
                 Intersection intersection = g.GetComponent<Intersection>();
-                intersection.OnMouseDown();
+                intersection.JumpTable();
             }
 
             Assert.IsTrue(BoardManager.millFormed);
@@ -84,7 +84,7 @@ namespace Tests
             {
                 g = BoardManager.FindIntersection(moves[i]);
                 Intersection intersection = g.GetComponent<Intersection>();
-                intersection.OnMouseDown();
+                intersection.JumpTable();
             }
 
             Assert.IsFalse(BoardManager.millFormed);
@@ -106,7 +106,7 @@ namespace Tests
             {
                 g = BoardManager.FindIntersection(moves[i]);
                 Intersection intersection = g.GetComponent<Intersection>();
-                intersection.OnMouseDown();
+                intersection.JumpTable();
             }
 
             Assert.IsTrue(BoardManager.gameOver);
@@ -123,7 +123,7 @@ namespace Tests
             {
                 g = BoardManager.FindIntersection(moves[i]);
                 Intersection intersection = g.GetComponent<Intersection>();
-                intersection.OnMouseDown();
+                intersection.JumpTable();
             }
 
             Assert.IsTrue(BoardManager.gameOver);
@@ -139,7 +139,7 @@ namespace Tests
             {
                 g = BoardManager.FindIntersection(moves[i]);
                 Intersection intersection = g.GetComponent<Intersection>();
-                intersection.OnMouseDown();
+                intersection.JumpTable();
             }
 
             Assert.IsFalse(BoardManager.gameOver);
@@ -152,7 +152,7 @@ namespace Tests
 
             GameObject g = BoardManager.FindIntersection("a1");
             Intersection intersection = g.GetComponent<Intersection>();
-            intersection.OnMouseDown();
+            intersection.JumpTable();
 
             Assert.AreEqual(BoardManager.whiteUnplacedPieces, 8);
             Assert.AreNotEqual(BoardManager.BoardState[0, 0], Cell.Vacant);
@@ -170,7 +170,7 @@ namespace Tests
             {
                 g = BoardManager.FindIntersection(moves[i]);
                 Intersection intersection = g.GetComponent<Intersection>();
-                intersection.OnMouseDown();
+                intersection.JumpTable();
             }
 
             Assert.AreNotEqual(BoardManager.BoardState[0, 6], Cell.Vacant);
@@ -205,7 +205,7 @@ namespace Tests
             {
                 g = BoardManager.FindIntersection(moves[i]);
                 Intersection intersection = g.GetComponent<Intersection>();
-                intersection.OnMouseDown();
+                intersection.JumpTable();
             }
 
             Assert.AreEqual(BoardManager.BoardState[6, 6], Cell.Black);
