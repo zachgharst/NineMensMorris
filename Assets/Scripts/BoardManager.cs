@@ -20,7 +20,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Linq;
+using Random = UnityEngine.Random;
 
 public enum Cell { Invalid, Vacant, White, Black };
 public enum Player { White, Black };
@@ -30,6 +33,7 @@ public class BoardManager : MonoBehaviour
     public static int turn = 0;
 
     public static Player currentPlayer = Player.White;
+
     public static bool millFormed = false;
     public static bool movingPiece = false;
 
@@ -49,6 +53,14 @@ public class BoardManager : MonoBehaviour
     public Sprite manSelected;
     public static GameObject lastSelected;
 
+    private Text whiteEventText;
+    private Text blackEventText;
+    public static TextManager tManager;
+
+    public static Button mainMenuButton;
+    public static Button restartGameButton;
+
+
     public static Cell[,] BoardState = {
         {  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant },
         { Cell.Invalid,  Cell.Vacant, Cell.Invalid,  Cell.Vacant, Cell.Invalid,  Cell.Vacant, Cell.Invalid },
@@ -59,7 +71,17 @@ public class BoardManager : MonoBehaviour
         {  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant, Cell.Invalid, Cell.Invalid,  Cell.Vacant },
     };
 
-    public  static void InitGame()
+    public void Start()        // function called when we the scene is first loaded
+    {
+        whiteEventText = GameObject.Find("WhiteEventText").GetComponent<Text>();
+        blackEventText = GameObject.Find("BlackEventText").GetComponent<Text>();
+        tManager = GameObject.Find("StatusText").GetComponent<TextManager>();
+
+
+        InitGame();
+    }
+
+    public static void InitGame()
     {
         GameObject g = GameObject.Find("BoardManager");
         BoardManager b = g.GetComponent<BoardManager>();
@@ -73,6 +95,7 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+
         ResetBoard();
     }
 
@@ -101,6 +124,11 @@ public class BoardManager : MonoBehaviour
         return GameObject.Find(str);
     }
 
+    public static string CreateIntersectionName(int row, int col)
+    {
+        return (char)(col + 97) + "" + (row + 1);
+    }
+
     /* Reset the game back to a fresh start. */
     public static void ResetBoard()
     {
@@ -123,6 +151,7 @@ public class BoardManager : MonoBehaviour
 
         turn = 0;
         currentPlayer = Player.White;
+
         millFormed = false;
         movingPiece = false;
 
@@ -135,10 +164,13 @@ public class BoardManager : MonoBehaviour
         isBlackPhase3 = false;
 
         gameOver = false;
+
+        ComputerOpponent.Reset();
     }
 
     public static Player GetOppositePlayer()
     {
+        tManager.updateEventText("", currentPlayer);
         if (currentPlayer == Player.White)
         {
             return Player.Black;
@@ -159,7 +191,6 @@ public class BoardManager : MonoBehaviour
                 if(BoardState[3, 0] == cellCast && BoardState[3, 1] == cellCast && BoardState[3, 2] == cellCast)
                 {
                     intersectionPartOfMill = true;
-                    print("Mill formed within the special row on the left");
                 }
             }
             else
@@ -167,7 +198,6 @@ public class BoardManager : MonoBehaviour
                 if (BoardState[3, 4] == cellCast && BoardState[3, 5] == cellCast && BoardState[3, 6] == cellCast)
                 {
                     intersectionPartOfMill = true;
-                    print("Mill formed within the special row on the right");
                 }
             }
         }
@@ -187,7 +217,6 @@ public class BoardManager : MonoBehaviour
             if (piecesInLine == 3)
             {
                 intersectionPartOfMill = true;
-                print("Mill formed within row");
             }
         }
 
@@ -199,7 +228,6 @@ public class BoardManager : MonoBehaviour
                 if (BoardState[0, 3] == cellCast && BoardState[1, 3] == cellCast && BoardState[2, 3] == cellCast)
                 {
                     intersectionPartOfMill = true;
-                    print("Mill formed within the special column on the bottom");
                 }
             }
             else
@@ -207,7 +235,6 @@ public class BoardManager : MonoBehaviour
                 if (BoardState[4, 3] == cellCast && BoardState[5, 3] == cellCast && BoardState[6, 3] == cellCast)
                 {
                     intersectionPartOfMill = true;
-                    print("Mill formed within the special column on the top");
                 }
             }
         }
@@ -227,7 +254,6 @@ public class BoardManager : MonoBehaviour
             if (piecesInLine == 3)
             {
                 intersectionPartOfMill = true;
-                print("Mill formed within column");
             }
         }
 
@@ -405,14 +431,13 @@ public class BoardManager : MonoBehaviour
 
         if(BoardState[row, column] == Cell.Black || BoardState[row, column] == Cell.White)
         {
-            BoardState[row, column] = Cell.Vacant;
             s.sprite = b.manSelected;
             movingPiece = true;
         }
 
         else
         {
-            print("Invaild spot, please try again.");
+            tManager.updateEventText("Invalid spot\nPlease try again", currentPlayer);
         }
     }
 
@@ -437,6 +462,7 @@ public class BoardManager : MonoBehaviour
 
             else if (isWhitePhase3 || isAdjacent(tempRow, tempCol, row, column))
             {
+                BoardState[tempRow, tempCol] = Cell.Vacant;
                 BoardState[row, column] = Cell.White;
                 movingPiece = false;
 
@@ -454,7 +480,7 @@ public class BoardManager : MonoBehaviour
 
             else
             {
-                print("Invalid spot, please try again.");
+                tManager.updateEventText("Invalid spot\nPlease try again", currentPlayer);
             }
 
             /* After moving a piece, check if the opposing player has been locked in. */
@@ -477,6 +503,7 @@ public class BoardManager : MonoBehaviour
 
             else if (isBlackPhase3 || isAdjacent(tempRow, tempCol, row, column))
             {
+                BoardState[tempRow, tempCol] = Cell.Vacant;
                 BoardState[row, column] = Cell.Black;
                 movingPiece = false;
 
@@ -494,7 +521,7 @@ public class BoardManager : MonoBehaviour
 
             else
             {
-                print("Invalid spot, please try again.");
+                tManager.updateEventText("Invalid spot\nPlease try again", currentPlayer);
             }
 
             /* After moving a piece, check if the opposing player has been locked in. */
@@ -525,9 +552,9 @@ public class BoardManager : MonoBehaviour
         millFormed = false;
 
         /* Check phase 3 and game over conditions. */
-        if(currentPlayer == Player.White)
+        if (currentPlayer == Player.White)
         {
-            if(blackRemainingPieces == 3)
+            if (blackRemainingPieces == 3)
             {
                 isBlackPhase3 = true;
             }
@@ -554,21 +581,23 @@ public class BoardManager : MonoBehaviour
         turn++;
     }
 
+
+
     /* Initiates game over sequence; draw if no player. */
-    private static void GameOver()
+    public static void GameOver()
     {
-        print("The game is a draw. Press R to start a new game.");
+        tManager.updateStatusText("\nThe game is a draw. Press R to start a new game.", currentPlayer);
 
         return;
     }
 
     /* Initiates game over sequence; parameter p is the winning player. */
-    private static void GameOver(Player p)
+    public static void GameOver(Player p)
     {
-
-        print("Game over! The winner is: " + p + ". Press R to start a new game.");
         gameOver = true;
-
+        tManager.updateStatusText("\nGame over! The winner is " + currentPlayer, currentPlayer);
+        print("game over, the winner is:" + p);
+        
         return;
     }
 
@@ -582,31 +611,16 @@ public class BoardManager : MonoBehaviour
         return false;
     }
 
-    private void Start()        // function called when we the scene is first loaded
-    {
-        InitGame();
-    }
-
-    private void Update()       // called every frame
+    public void Update()       // called every frame
     {
         if (Input.GetKeyDown("r"))
         {
             ResetBoard();
         }
 
-        if (Input.GetKeyDown("c"))
+        if (Input.GetKeyDown("o"))
         {
-            GameObject g;
-
-            string[] moves = { "a1", "a4", "d1", "b4", "g1" };
-
-            for (int i = 0; i < moves.Length; i++)
-            {
-                g = FindIntersection(moves[i]);
-                var intersection = g.GetComponent<Intersection>();
-                print("(" + intersection.column + ", " + intersection.row + ")");
-                Phase1Placement(g, intersection.row, intersection.column);
-            }
+            ComputerOpponent.isActive = true;
         }
 
         if (turn > 100)
@@ -615,265 +629,97 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-            // PLEASE ignore this thing, I couldn't think of a way to get it working with multi-dimensional arrays
+    public static List<string> getAdjacencyList(int row, int col)
+    {
+        List<string> adjacencyList = new List<string>();
+        string intersectionName;
+
+        /* Find the neighbor to the left. */
+        for (int i = col - 1; i > -1; i--)
+        {
+            if (row == 3 && i == 3)
+            {
+                break;
+            }
+            if (BoardState[row, i] != Cell.Invalid)
+            {
+                intersectionName = CreateIntersectionName(row, i);
+                adjacencyList.Add(intersectionName);
+                break;
+            }
+        }
+
+        /* Find the neighbor to the right. */
+        for (int i = col + 1; i < 7; i++)
+        {
+            if (row == 3 && i == 3)
+            {
+                break;
+            }
+            if (BoardState[row, i] != Cell.Invalid)
+            {
+                intersectionName = CreateIntersectionName(row, i);
+                adjacencyList.Add(intersectionName);
+                break;
+            }
+        }
+
+        /* Find the neighbor above. */
+        for (int i = row + 1; i < 7; i++)
+        {
+            if (i == 3 && col == 3)
+            {
+                break;
+            }
+            if (BoardState[i, col] != Cell.Invalid)
+            {
+                intersectionName = CreateIntersectionName(i, col);
+                adjacencyList.Add(intersectionName);
+                break;
+            }
+        }
+
+        /* Find the neighbor below. */
+        for (int i = row - 1; i > -1; i--)
+        {
+            if (i == 3 && col == 3)
+            {
+                break;
+            }
+            if (BoardState[i, col] != Cell.Invalid)
+            {
+                intersectionName = CreateIntersectionName(i, col);
+                adjacencyList.Add(intersectionName);
+                break;
+            }
+        }
+
+        return adjacencyList;
+    }
+    
     public static bool isAdjacent(int row, int column, int tarRow, int tarCol)
     {
-        if (tarRow == 6 && tarCol == 0)                 // a7
+        List<string> adjacencies = getAdjacencyList(row, column);
+        string targetName = CreateIntersectionName(tarRow, tarCol);
+
+        for (int i = 0; i < adjacencies.Count; i++)
         {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 6, 3 };
-            int[] neighbor2 = new int[] { 3, 0 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
+            if (adjacencies[i] == targetName)
             {
                 return true;
             }
         }
-        if (tarRow == 6 && tarCol == 3)                 // d7
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 6, 0 };
-            int[] neighbor2 = new int[] { 6, 6 };
-            int[] neighbor3 = new int[] { 5, 3 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 6 && tarCol == 6)                 // g7
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 6, 3 };
-            int[] neighbor2 = new int[] { 3, 6 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 5 && tarCol == 1)                 // b6
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 5, 3 };
-            int[] neighbor2 = new int[] { 3, 1 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 5 && tarCol == 3)                 // d6
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 6, 3 };
-            int[] neighbor2 = new int[] { 5, 1 };
-            int[] neighbor3 = new int[] { 5, 5 };
-            int[] neighbor4 = new int[] { 4, 3 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3) || src.SequenceEqual(neighbor4))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 5 && tarCol == 5)                 // f6
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 5, 3 };
-            int[] neighbor2 = new int[] { 3, 5 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 4 && tarCol == 2)                 // c5
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 4, 3 };
-            int[] neighbor2 = new int[] { 3, 2 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 4 && tarCol == 3)                 // d5
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 5, 3 };
-            int[] neighbor2 = new int[] { 4, 2 };
-            int[] neighbor3 = new int[] { 4, 4 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 4 && tarCol == 4)                 // e5
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 4, 3 };
-            int[] neighbor2 = new int[] { 3, 4 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 3 && tarCol == 0)                 // a4
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 6, 0};
-            int[] neighbor2 = new int[] { 3, 1};
-            int[] neighbor3 = new int[] { 0, 0};
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 3 && tarCol == 1)                 // b4
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 5, 1 };
-            int[] neighbor2 = new int[] { 3, 0 };
-            int[] neighbor3 = new int[] { 3, 2 };
-            int[] neighbor4 = new int[] { 1, 1 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3) || src.SequenceEqual(neighbor4))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 3 && tarCol == 2)                 // c4
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 4, 2 };
-            int[] neighbor2 = new int[] { 3, 1 };
-            int[] neighbor3 = new int[] { 2, 2 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 3 && tarCol == 4)                 // e4
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 4, 4 };
-            int[] neighbor2 = new int[] { 3, 5};
-            int[] neighbor3 = new int[] { 2, 4};
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 3 && tarCol == 5)                 // f4
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 5, 5};
-            int[] neighbor2 = new int[] { 3, 4};
-            int[] neighbor3 = new int[] { 3, 6};
-            int[] neighbor4 = new int[] { 1, 5};
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3) || src.SequenceEqual(neighbor4))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 3 && tarCol == 6)                 // g4
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 6, 6 };
-            int[] neighbor2 = new int[] { 3, 5 };
-            int[] neighbor3 = new int[] { 0, 6 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 2 && tarCol == 2)                 // c3
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 3, 2 };
-            int[] neighbor2 = new int[] { 2, 3 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 2 && tarCol == 3)                 // d3
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 2, 2 };
-            int[] neighbor2 = new int[] { 2, 4 };
-            int[] neighbor3 = new int[] { 1, 3 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 2 && tarCol == 4)                 // e3
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 2, 3 };
-            int[] neighbor2 = new int[] { 3, 4 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 1 && tarCol == 1)                 // b2
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 3, 1 };
-            int[] neighbor2 = new int[] { 1, 3};
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 1 && tarCol == 3)                 // d2
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 2, 3 };
-            int[] neighbor2 = new int[] { 1, 1 };
-            int[] neighbor3 = new int[] { 1, 5 };
-            int[] neighbor4 = new int[] { 0, 3 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3) || src.SequenceEqual(neighbor4))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 1 && tarCol == 5)                 // f2
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 3, 5 };
-            int[] neighbor2 = new int[] { 1, 3 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 0 && tarCol == 0)                 // a1
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 3, 0 };
-            int[] neighbor2 = new int[] { 0, 3 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 0 && tarCol == 3)                 // d1
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 1, 3 };
-            int[] neighbor2 = new int[] { 0, 0 };
-            int[] neighbor3 = new int[] { 0, 6 };
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2) || src.SequenceEqual(neighbor3))
-            {
-                return true;
-            }
-        }
-        if (tarRow == 0 && tarCol == 6)                 // g1
-        {
-            int[] src = new int[] { row, column };
-            int[] neighbor1 = new int[] { 3, 6};
-            int[] neighbor2 = new int[] { 0, 3};
-            if (src.SequenceEqual(neighbor1) || src.SequenceEqual(neighbor2))
-            {
-                return true;
-            }
-        }
+
         return false;
+    }
+
+    public void LoadMainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void ResetButton()
+    {
+        ResetBoard();
     }
 }

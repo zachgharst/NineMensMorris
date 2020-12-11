@@ -22,44 +22,80 @@ using UnityEngine.UI;
 
 public class TextManager : MonoBehaviour
 {
-    public Text textTest;
+    private static Text statusText;
+    public static Text whiteText;
+    private static Text whiteEventText;
+    public static Text blackText;
+    private static Text blackEventText;
+
+    private string playersTurn;
+    private string phase;
+    public string player1 = "White Player";     // placeholder for username (if wanted)
+    public string player2 = "Black Player";
 
     void Start()
     {
-        textTest = GetComponent<Text>();
+        statusText = GameObject.Find("StatusText").GetComponent<Text>();
+        whiteText = GameObject.Find("WhiteText").GetComponent<Text>();
+        whiteEventText = GameObject.Find("WhiteEventText").GetComponent<Text>();
+        blackText = GameObject.Find("BlackText").GetComponent<Text>();
+        blackEventText = GameObject.Find("BlackEventText").GetComponent<Text>();
+        whiteText.text = player1;     
+        blackText.text = player2;
+        whiteEventText.text = BoardManager.whiteRemainingPieces.ToString() + " pieces remaining\n";
+        blackEventText.text = BoardManager.blackRemainingPieces.ToString() + " pieces remaining\n";
     }
 
     void Update()
     {
+        playersTurn = BoardManager.currentPlayer == Player.White ? player1 : player2;
+
         /* Phase 1 text.*/
         if (BoardManager.blackUnplacedPieces > 0)
         {
-            string playersTurn = BoardManager.currentPlayer == Player.White ? "White" : "Black";
-            textTest.text = BoardManager.blackUnplacedPieces.ToString() + " pieces remaining for black" +
-                "\n\n\n\n\n\n\n\n\n\n\n\nPhase 1\n" +
-                playersTurn + "'s turn\n\n\n\n\n\n\n\n\n\n\n\n" +
-                BoardManager.whiteUnplacedPieces.ToString() + " pieces remaining for white";
+            phase = "Phase 1";
+            updateStatusText("", BoardManager.currentPlayer);
         }
 
         /* Phase 2 text.*/
         else if (BoardManager.blackRemainingPieces > 3 && BoardManager.whiteRemainingPieces > 3)
         {
-            string playersTurn = BoardManager.currentPlayer == Player.White ? "White" : "Black";
-            textTest.text = BoardManager.blackRemainingPieces.ToString() + " pieces remaining for black" +
-                "\n\n\n\n\n\n\n\n\n\n\n\nPhase 2\n" +
-                playersTurn + "'s turn\n\n\n\n\n\n\n\n\n\n\n\n" +
-                BoardManager.whiteRemainingPieces.ToString() + " pieces remaining for white";
+            phase = "Phase 2";
+            updateStatusText("", BoardManager.currentPlayer);
         }
 
         /* Phase 3 text.*/
         else
         {
-            string playersTurn = BoardManager.currentPlayer == Player.White ? "White" : "Black";
-            textTest.text = BoardManager.blackRemainingPieces.ToString() + " pieces remaining for black" +
-                "\n\n\n\n\n\n\n\n\n\n\n\nPhase 3\n" +
-                playersTurn + "'s turn\n\n\n\n\n\n\n\n\n\n\n\n" +
-                BoardManager.whiteRemainingPieces.ToString() + " pieces remaining for white";
+            phase = "Phase 3";
+            updateStatusText("", BoardManager.currentPlayer);
         }
 
+    }
+
+    // Updates the Status text box.
+    public void updateStatusText(string text, Player player)
+    {
+        if (!BoardManager.gameOver)
+        {
+            statusText.text = player + "'s turn";
+        }
+        else
+        {
+            statusText.text += text;    // (the current line works but 'statusText.text = text;' does not)
+        }
+    }
+    public void updateEventText(string text, Player player)
+    {
+        if (player == Player.White)
+        {
+            whiteEventText.text = BoardManager.whiteRemainingPieces.ToString() + " pieces remaining\n";
+            whiteEventText.text += text;
+        }
+        else
+        {
+            blackEventText.text = BoardManager.blackRemainingPieces.ToString() + " pieces remaining\n";
+            blackEventText.text += text;
+        }
     }
 }
