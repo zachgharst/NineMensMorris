@@ -22,16 +22,16 @@ using UnityEngine.UI;
 
 public class TextManager : MonoBehaviour
 {
-    private Text statusText;
-    private Text whiteText;
-    private Text whiteEventText;
-    private Text blackText;
-    private Text blackEventText;
+    private static Text statusText;
+    public static Text whiteText;
+    private static Text whiteEventText;
+    public static Text blackText;
+    private static Text blackEventText;
 
     private string playersTurn;
     private string phase;
-    private string player1 = "White Player";     // placeholder for username (if wanted)
-    private string player2 = "Black Player";
+    public string player1 = "White Player";     // placeholder for username (if wanted)
+    public string player2 = "Black Player";
 
     void Start()
     {

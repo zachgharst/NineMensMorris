@@ -34,7 +34,7 @@ public class ComputerOpponent : MonoBehaviour
     {
         whiteEventText = GameObject.Find("WhiteEventText").GetComponent<Text>();
         blackEventText = GameObject.Find("BlackEventText").GetComponent<Text>();
-        textManager = GameObject.Find("StatusText").GetComponent<TextManager>();
+        textManager = new TextManager();
     }
 
     /* Choose a new color for the computer and reset its turn timer. */
@@ -42,6 +42,17 @@ public class ComputerOpponent : MonoBehaviour
     {
         computerPlayer = Random.Range(0, 2) == 1 ? Player.White : Player.Black;
         computerTime = 1.5;
+        if (computerPlayer == Player.White)
+        {
+            TextManager.whiteText.text = "Computer";
+            //TextManager.blackText.text = TitleSceneManager.User1Text.text;
+        }
+        else
+        {
+            TextManager.blackText.text = "Computer";
+            //TextManager.whiteText.text = TitleSceneManager.User1Text.text;
+
+        }
     }
 
     /* Takes in as input a list of moves then chooses one at random and performs a
